@@ -20,7 +20,7 @@ class CompassSensorSystem {
     var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
     var accumulatedTime = self.fastUpdate + 1 as Long;
 
-    function initialize(components as Dictionary<Symbol, Engine or CompassSensorComponent>) {
+    function initialize(components) {
         self.engine = components[:engine] as Engine;
         self.compass = components[:compass] as CompassSensorComponent;
         self.stats = components[:stats];

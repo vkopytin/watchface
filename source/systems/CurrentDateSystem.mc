@@ -19,7 +19,7 @@ class CurrentDateSystem {
     var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
     var accumulatedTime = self.fastUpdate + 1 as Long;
 
-    function initialize(components as Dictionary<Symbol, Engine or DateComponent>) {
+    function initialize(components) {
         self.engine = components[:engine];
         self.date = components[:date];
         self.stats = components[:stats];

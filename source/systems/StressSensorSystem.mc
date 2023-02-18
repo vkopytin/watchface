@@ -19,7 +19,7 @@ class StressSensorSystem {
     var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 secs
     var accumulatedTime = self.fastUpdate + 1 as Long;
 
-    function initialize(components as Dictionary<Symbol, Engine or StressSensorComponent>) {
+    function initialize(components) {
         self.engine = components[:engine] as Engine;
         self.stress = components[:stress] as StressSensorComponent;
         self.stats = components[:stats];

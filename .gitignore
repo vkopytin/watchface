@@ -1,0 +1,8 @@
+/bin/
+/internal-mir/
+/mir/
+
+*.prg
+*.debug.xml
+
+.DS_Store

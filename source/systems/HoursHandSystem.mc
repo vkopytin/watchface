@@ -45,7 +45,7 @@ class HoursHandSystem {
 
         var angle = Math.PI/6 * (1.0*self.time.hours + self.time.minutes / 60.0);
 
-        var length = hoursCoords.size();
+        var length = self.hand.coordinates.size();
         var result = new [length];
 
         var transformMatrix = [
@@ -54,8 +54,9 @@ class HoursHandSystem {
         ];
         var moveMatrix = [screenCenterPoint];
 
+        var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            var oldPoint = [hoursCoords[index]];
+            oldPoint[0] = self.hand.coordinates[index];
             var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
             result[index] = point[0];
         }
@@ -64,7 +65,7 @@ class HoursHandSystem {
         self.polygon.mesh = [result];
     }
 
-    function render(dc) {
+    function render(dc, context) {
 
     }
 }

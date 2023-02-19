@@ -1,35 +1,18 @@
 import Toybox.Lang;
 import Toybox.Graphics;
 
-var secondsCoords = [
-    [-4, 20],
-    [-2, 2],
-    [0, -130],
-    [2, 2],
-    [4, 20],
-];
-
-var minutesCoords = [
-    [-3, 0],
-    [-7, -70],
-    [0, -115],
-    [7, -70],
-    [3, 0],
-];
-
-var hoursCoords = [
-    [-3, 0],
-    [-10, -60],
-    [0, -100],
-    [10, -60],
-    [3, 0],
-];
-
 function secondsHandComponentCreate() {
     var inst = new HandComponent();
 
+    inst.coordinates = [
+        [-4, 20],
+        [-2, 2],
+        [0, -130],
+        [2, 2],
+        [4, 20],
+    ];
     inst.color = 0xff5500;
-    inst.mesh = secondsCoords;
+    inst.mesh = inst.coordinates;
 
     return inst;
 }
@@ -37,8 +20,15 @@ function secondsHandComponentCreate() {
 function minutesHandComponentCreate() {
     var inst = new HandComponent();
 
+    inst.coordinates = [
+        [-3, 0],
+        [-7, -70],
+        [0, -115],
+        [7, -70],
+        [3, 0],
+    ];
     inst.color = Graphics.COLOR_DK_GREEN;
-    inst.mesh = minutesCoords;
+    inst.mesh = inst.coordinates;
 
     return inst;
 }
@@ -46,8 +36,15 @@ function minutesHandComponentCreate() {
 function hoursHandComponentCreate() {
     var inst = new HandComponent();
 
+    inst.coordinates = [
+        [-3, 0],
+        [-10, -60],
+        [0, -100],
+        [10, -60],
+        [3, 0],
+    ];
     inst.color = Graphics.COLOR_DK_GREEN;
-    inst.mesh = hoursCoords;
+    inst.mesh = inst.coordinates;
 
     return inst;
 }

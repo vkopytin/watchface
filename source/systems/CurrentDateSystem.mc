@@ -47,7 +47,7 @@ class CurrentDateSystem {
         self.date.point = add([self.date.position], moveMatrix)[0];
     }
 
-    function render(dc) {
+    function render(dc, context) {
         var dateStr = Lang.format("$1$, $3$", [
             self.date.dayOfWeek, self.date.month, self.date.day
         ]);

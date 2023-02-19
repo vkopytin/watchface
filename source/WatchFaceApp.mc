@@ -18,7 +18,7 @@ class WatchFaceApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new WatchFaceView() ] as Array<Views or InputDelegates>;
+        return [ new WatchFaceView(), partialDelegateCreate() ] as Array<Views or InputDelegates>;
     }
 
 }

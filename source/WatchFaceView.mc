@@ -39,7 +39,9 @@ class WatchFaceView extends WatchUi.WatchFace {
     // loading resources into memory.
     function onShow() as Void {
         self.timer.nextTick();
-        self.timer.start();
+        if (self.sleepMode == false) {
+            self.timer.start();
+        }
     }
 
     function engineTick(deltaTime) as Void {
@@ -62,6 +64,12 @@ class WatchFaceView extends WatchUi.WatchFace {
         //self.debugClipArea(dc);
 
         self.engine.render(dc);
+
+        var stats = Lang.format("u$1$-r$2$", [
+            self.engine.averageTickMs, self.engine.averageRenderMs
+        ]);
+        dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(130, 90, Graphics.FONT_XTINY, stats, Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     function debugClipArea(dc) {
@@ -99,7 +107,7 @@ class WatchFaceView extends WatchUi.WatchFace {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() as Void {
-
+        self.timer.stop();
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.

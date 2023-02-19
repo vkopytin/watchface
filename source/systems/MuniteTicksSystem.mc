@@ -70,7 +70,7 @@ class MinuteTicksSystem {
         self.polygon.mesh = polygons;
     }
     
-    function render(dc) {
+    function render(dc, context) {
 
     }
 }

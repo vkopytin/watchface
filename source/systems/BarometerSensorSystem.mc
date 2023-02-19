@@ -63,7 +63,7 @@ class BarometerSensorSystem {
         self.barometer.pressure = pressure;
     }
 
-    function render(dc) {
+    function render(dc, context) {
         var point = self.barometer.point;
         var pressureStr = self.barometer.pressure.format("%.1f");
 
@@ -74,29 +74,25 @@ class BarometerSensorSystem {
         var degrees = 1.0 * self.barometer.pressure;
         var radius = 100;
 
-        drawGauge(dc, point2, degrees, 100, -120, 120);
+        drawGauge(dc, point2, degrees, 100, -120, 120, self.barometer.ranges, self.barometer.colors);
     }
 }
 
-function drawGauge(dc, point, value, radius, start, end) {
-    var ranges = [930.0, 966.0, 984.0, 1000.0, 1027.0, 1041.0, 1055.0, 1070.0];
-    var colors = [Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLUE, Graphics.COLOR_DK_BLUE, Graphics.COLOR_YELLOW, Graphics.COLOR_ORANGE, Graphics.COLOR_RED, Graphics.COLOR_PINK];
+function drawGauge(dc, point, value, radius, start, end, gaugeRanges, gaugeColors) {
+    var colorsLength = gaugeColors.size();
     var minValue = 930.0;
     var maxValue = 1070.0;
     var range = maxValue - minValue;
     var stroke = 6;
-
     var minDegree = 120;
     var maxRangeDegree = 120;
 
-    var length = ranges.size() - 1;
-
-    dc.setPenWidth(stroke);
-    for (var index = length; index > 0; index -= 1) {
-        var color = colors[index - 1];
-        var currentValue = ranges[index];
+    for (var index = colorsLength; index > 0; index -= 1) {
+        dc.setPenWidth(stroke);
+        var color = gaugeColors[index - 1];
+        var currentValue = gaugeRanges[index];
         var valueToDegree = maxRangeDegree / range * (currentValue - minValue);
-        var minToDegree = maxRangeDegree / range * (ranges[index - 1] - minValue);
+        var minToDegree = maxRangeDegree / range * (gaugeRanges[index - 1] - minValue);
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         dc.drawArc(
             point[0], point[1],
@@ -107,12 +103,12 @@ function drawGauge(dc, point, value, radius, start, end) {
 
     dc.setPenWidth(1);
 
-    var arrowCoords = [
+    var gaugeArrowCoords = [
         [-2, radius - 10],
         [0, radius + 10],
         [2, radius - 10],
     ];
-    var arrowLength = arrowCoords.size();
+    var arrowLength = gaugeArrowCoords.size();
     var arrowDegree = 30 + maxRangeDegree / range * (value - minValue);
     var angle = Math.PI * arrowDegree / 180;
     var transformMatrix = [
@@ -123,7 +119,7 @@ function drawGauge(dc, point, value, radius, start, end) {
 
     var arrowMesh = new [arrowLength];
     for (var index = 0; index < arrowLength; index += 1) {
-        arrowMesh[index] = add(multiply([arrowCoords[index]], transformMatrix), moveMatrix)[0];
+        arrowMesh[index] = add(multiply([gaugeArrowCoords[index]], transformMatrix), moveMatrix)[0];
     }
 
     dc.setColor(Graphics.COLOR_DK_RED, Graphics.COLOR_TRANSPARENT);

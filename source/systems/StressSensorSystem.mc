@@ -48,7 +48,7 @@ class StressSensorSystem {
         }
     }
 
-    function render(dc) {
+    function render(dc, context) {
         var stressStr = self.stress.value.format("%d");
         var point = self.stress.point;
         dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, stressStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font

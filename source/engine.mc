@@ -95,6 +95,8 @@ class Engine {
     var systemsLength = 0;
     var timeSec = 0;
     var clipArea = [[100,100],[200,200]];
+    var averageTickMs = 0;
+    var averageRenderMs = 0;
 
     var entities = [{
         :name => "minute ticks",
@@ -176,17 +178,102 @@ class Engine {
         var deltaTime = currentTime - self.lastTime;
         self.lastTime = currentTime;
         var length = self.systemsLength;
-        for (var index = 0; index < length; index += 1) {
-            var current = systems[index];
-            current.update(deltaTime);
+        var index = 0;
+        var n = length % 8;
+
+        if (n > 0) {
+            do {
+                var current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here
         }
+
+        n = Math.floor(length / 8);
+        if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
+            do {
+                var current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here also
+        }
+
+        var delta = System.getTimer() - self.lastTime;
+        self.averageTickMs = (self.averageTickMs + delta) / 2;
     }
 
     function render(dc) {
-        var length = self.systems.size();
-        for (var index = 0; index < length; index += 1) {
-            var current = systems[index];
-            current.render(dc);
+        var currentTime = System.getTimer();
+        var length = self.systemsLength;
+        var context = renderContextCreate();
+        var index = 0;
+        var n = length % 8;
+
+        if (n > 0) {
+            do {
+                var current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here
+        }
+
+        n = Math.floor(length / 8);
+        if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
+            do {
+                var current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                current = systems[index];
+                current.render(dc, context);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here also
         }
 
         var handWidth = 10;
@@ -199,5 +286,8 @@ class Engine {
 		dc.fillCircle(self.width / 2, self.height / 2, handWidth*0.65-offsetOuterCircle); // *0.65
 		dc.setColor(arborColor, Graphics.COLOR_WHITE);
 		dc.fillCircle(self.width / 2, self.height / 2, handWidth*0.65-offsetInnerCircle); // -4
+
+        var delta = System.getTimer() - self.lastTime;
+        self.averageRenderMs = (self.averageRenderMs + delta) / 2;
     }
 }

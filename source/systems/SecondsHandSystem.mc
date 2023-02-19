@@ -54,7 +54,7 @@ class SecondsHandSystem {
 
         var angle = (self.time.seconds / 30.0) * Math.PI;
 
-        var length = secondsCoords.size();
+        var length = self.hand.coordinates.size();
         var result = new [length];
 
         var transformMatrix = [
@@ -62,8 +62,9 @@ class SecondsHandSystem {
             [-Math.sin(angle), Math.cos(angle)],
         ];
         var moveMatrix = [screenCenterPoint];
+        var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            var oldPoint = [secondsCoords[index]];
+            oldPoint[0] = self.hand.coordinates[index];
             var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
             result[index] = point[0];
         }
@@ -94,7 +95,7 @@ class SecondsHandSystem {
         self.accumulatedTime = 0;
     }
 
-    function render(dc) {
+    function render(dc, context) {
         
     }
 }

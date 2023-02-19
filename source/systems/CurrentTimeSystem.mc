@@ -75,7 +75,7 @@ class CurrentTimeSystem {
         self.engine.timeSec = self.time.seconds;
     }
 
-    function render(dc) {
+    function render(dc, context) {
 
     }
 }

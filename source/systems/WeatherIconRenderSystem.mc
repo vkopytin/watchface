@@ -181,7 +181,7 @@ class WeatherIconRenderSystem {
         }
     }
 
-    function render(dc) {
+    function render(dc, context) {
         var point = self.weather.point;
 
         dc.setColor(self.weather.color, Graphics.COLOR_TRANSPARENT);

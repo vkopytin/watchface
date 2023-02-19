@@ -26,7 +26,7 @@ class MultilineRenderSystem {
     function update(deltaTime) {
     }
     
-    function render(dc) {
+    function render(dc, context) {
         dc.setColor(0xaaffaa, Graphics.COLOR_TRANSPARENT);
         var length = self.polygon.mesh.size();
         for (var index = 0; index < length; index += 1) {

@@ -111,9 +111,11 @@ function drawGauge(dc, point, value, radius, start, end, gaugeRanges, gaugeColor
     var arrowLength = gaugeArrowCoords.size();
     var arrowDegree = 30 + maxRangeDegree / range * (value - minValue);
     var angle = Math.PI * arrowDegree / 180;
+    
+    var sinCos = [Math.cos(angle), Math.sin(angle)];
     var transformMatrix = [
-        [Math.cos(angle), Math.sin(angle)],
-        [-Math.sin(angle), Math.cos(angle)],
+        sinCos,
+        [-sinCos[1], sinCos[0]],
     ];
     var moveMatrix = [point];
 

@@ -48,9 +48,10 @@ class HoursHandSystem {
         var length = self.hand.coordinates.size();
         var result = new [length];
 
+        var sinCos = [Math.cos(angle), Math.sin(angle)];
         var transformMatrix = [
-            [Math.cos(angle), Math.sin(angle)],
-            [-Math.sin(angle), Math.cos(angle)],
+            sinCos,
+            [-sinCos[1], sinCos[0]],
         ];
         var moveMatrix = [screenCenterPoint];
 

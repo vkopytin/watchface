@@ -1,5 +1,5 @@
 import Toybox.Lang;
-using Toybox.Math;
+import Toybox.Math;
 
 function hoursHandSystemCreate(components) {
     var inst = new HoursHandSystem(components);
@@ -69,4 +69,48 @@ class HoursHandSystem {
     function render(dc, context) {
 
     }
+}
+
+class UpdateHoursHand {
+function exec(entity, components) {
+    var context = components[:context];
+    var time = components[:time];
+    var hand = components[:hoursHand];
+    var polygons = components[:polygon];
+
+    hand.accumulatedTime -= context.deltaTime;
+    if (hand.accumulatedTime > 0) {
+        return;
+    }
+
+    hand.accumulatedTime = hand.fastUpdate;
+
+    var screenCenterPoint = context.centerPoint;
+
+    var angle = Math.PI/6 * (1.0 * time.hours + time.minutes / 60.0);
+
+    var length = hand.coordinates.size();
+    var result = new [length];
+
+    var sinCos = [Math.cos(angle), Math.sin(angle)];
+    var transformMatrix = [
+        sinCos,
+        [-sinCos[1], sinCos[0]],
+    ];
+    var moveMatrix = [screenCenterPoint];
+
+    var oldPoint = new [1];
+    for (var index = 0; index < length; index += 1) {
+        oldPoint[0] = hand.coordinates[index];
+        var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+        result[index] = point[0];
+    }
+
+    polygons.color = hand.color;
+    polygons.mesh = [result];
+}
+}
+
+function makeUpdateHoursHandDelegate() {
+    return new UpdateHoursHand();
 }

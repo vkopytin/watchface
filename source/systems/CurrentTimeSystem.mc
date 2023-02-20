@@ -1,5 +1,6 @@
 import Toybox.Lang;
 import Toybox.Math;
+import Toybox.System;
 
 function currentTimeSystemCreate(components) as CurrentTimeSystem {
     var inst = new CurrentTimeSystem(components);
@@ -78,4 +79,39 @@ class CurrentTimeSystem {
     function render(dc, context) {
 
     }
+}
+
+class UpdateTime {
+    function exec(entity, components) {
+        var time = components[:time];
+        var context = components[:context];
+
+        var currentTime = System.getTimer();
+        var deltaTime = currentTime - context.lastTime;
+        context.deltaTime = deltaTime;
+        context.lastTime = currentTime;
+
+        time.accumulatedTime += deltaTime;
+        if (time.accumulatedTime < time.fastUpdate) {
+            var delta = deltaTime / 1000.0;
+            time.seconds = time.seconds + delta;
+            time.minutes = time.minutes + delta / 60.0;
+            time.hours = (time.hours + delta / 60.0 / 60.0);
+
+            return;
+        }
+
+        time.accumulatedTime = 0;
+        var clockTime = System.getClockTime();
+
+        time.hours = 1.0 * clockTime.hour;
+        time.minutes = 1.0 * clockTime.min;
+        time.seconds = 1.0 * clockTime.sec;
+    }
+}
+
+function makeUpdateTimeDelegate() {
+    var inst = new UpdateTime();
+
+    return inst;
 }

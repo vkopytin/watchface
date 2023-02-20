@@ -100,3 +100,65 @@ class SecondsHandSystem {
         
     }
 }
+
+class UpdateSecondsHand {
+function exec(entity, components) {
+    var context = components[:context];
+    var hand = components[:secondsHand];
+    var polygon = components[:polygon];
+    var time = components[:time];
+    var deltaTime = components[:deltaTime];
+
+    hand.accumulatedTime -= deltaTime;
+
+    var screenCenterPoint = context.centerPoint;
+
+    var angle = (time.seconds / 30.0) * Math.PI;
+
+    var length = hand.coordinates.size();
+    var result = new [length];
+
+    var sinCos = [Math.cos(angle), Math.sin(angle)];
+    var transformMatrix = [
+        sinCos,
+        [-sinCos[1], sinCos[0]],
+    ];
+    var moveMatrix = [screenCenterPoint];
+    var oldPoint = new [1];
+    for (var index = 0; index < length; index += 1) {
+        oldPoint[0] = hand.coordinates[index];
+        var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+        result[index] = point[0];
+    }
+
+    polygon.color = hand.color;
+    polygon.mesh = [result];
+
+    if (hand.accumulatedTime > 0) {
+        return;
+    }
+    hand.accumulatedTime = hand.fastUpdate;
+
+    var minX = context.width;
+    var minY = context.height;
+    var maxX = 0;
+    var maxY = 0;
+    for (var index = 0; index < length; index += 1) {
+        var point = polygon.mesh[0][index];
+        minX = min(minX, point[0]);
+        minY = min(minY, point[1]);
+        maxX = max(maxX, point[0]);
+        maxY = max(maxY, point[1]);
+    }
+    context.clipArea[0][0] = max(0, minX - 15);
+    context.clipArea[0][1] = max(0, minY - 15);
+    context.clipArea[1][0] = min(context.width, maxX - context.clipArea[0][0] + 15);
+    context.clipArea[1][1] = min(context.height, maxY - context.clipArea[0][1] + 15);
+}
+}
+
+function makeUpdateSecondsHandDelegate() {
+    var inst = new UpdateSecondsHand();
+
+    return inst;
+}

@@ -71,3 +71,46 @@ class MinutesHandSystem {
         
     }
 }
+
+class UpdateMinutesHand {
+function exec(entity, components) {
+    var context = components[:context];
+    var time = components[:time];
+    var hand = components[:minutesHand];
+    var polygons = components[:polygon];
+
+    hand.accumulatedTime -= context.deltaTime;
+    if (hand.accumulatedTime > 0) {
+        return;
+    }
+
+    hand.accumulatedTime = hand.fastUpdate;
+    var screenCenterPoint = context.centerPoint;
+
+    var angle = (time.minutes / 30.0 + time.seconds / 60.0 / 30.0) * Math.PI;
+
+    var length = hand.coordinates.size();
+    var result = new [length];
+
+    var sinCos = [Math.cos(angle), Math.sin(angle)];
+    var transformMatrix = [
+        sinCos,
+        [-sinCos[1], sinCos[0]],
+    ];
+    var moveMatrix = [screenCenterPoint];
+
+    var oldPoint = new [1];
+    for (var index = 0; index < length; index += 1) {
+        oldPoint[0] = hand.coordinates[index];
+        var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+        result[index] = point[0];
+    }
+
+    polygons.color = hand.color;
+    polygons.mesh = [result];
+}
+}
+
+function makeUpdateMinutesHandDelegate() {
+    return new UpdateMinutesHand();
+}

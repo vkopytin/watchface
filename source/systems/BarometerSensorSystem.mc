@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.Math;
 import Toybox.Activity;
 import Toybox.Graphics;
+import Toybox.System;
 
 function barometerSensorSystemCreate(components) as BarometerSensorSystem {
     var inst = new BarometerSensorSystem(components);
@@ -126,4 +127,60 @@ function drawGauge(dc, point, value, radius, start, end, gaugeRanges, gaugeColor
 
     dc.setColor(Graphics.COLOR_DK_RED, Graphics.COLOR_TRANSPARENT);
     dc.fillPolygon(arrowMesh);
+}
+
+class UpdateBarometerSensor {
+    function exec(entitiy, components) {
+        var context = components[:context];
+        var barometer = components[:barometer];
+        var gauge = components[:gauge];
+        var titles = components[:titles];
+
+        barometer.accumulatedTime -= context.deltaTime;
+        if (barometer.accumulatedTime > 0) {
+            return;
+        }
+
+        barometer.accumulatedTime = barometer.fastUpdate;
+
+        var screenCenterPoint = context.centerPoint;
+        var moveMatrix = [screenCenterPoint];
+        barometer.point = add([barometer.position], moveMatrix)[0];
+
+        var pressure = barometer.pressure;
+        if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getPressureHistory)) {
+            var pressureHistory = Toybox.SensorHistory.getPressureHistory({});
+            var sample = pressureHistory.next();
+            pressure = sample.data;
+        } else if (Activity.getActivityInfo().rawAmbientPressure != null) {
+            pressure = Activity.getActivityInfo().rawAmbientPressure;
+        } else if (Activity.getActivityInfo().ambientPressure != null) {
+            pressure = Activity.getActivityInfo().ambientPressure;
+        }
+
+        if (System.getDeviceSettings().temperatureUnits == System.UNIT_METRIC) {
+            pressure = pressure / 100.0;
+        } else {
+            pressure = pressure / 100.0 * 0.02953; // inches of mercury
+        }
+
+        barometer.pressure = pressure;
+        barometer.pressureStr = barometer.pressure.format("%.1f");
+
+        titles.color = barometer.color;
+        titles.titles = [
+            [barometer.point[0], barometer.point[1], Graphics.FONT_SYSTEM_XTINY, barometer.pressureStr, Graphics.TEXT_JUSTIFY_LEFT]
+        ]; // pressure in hPa
+
+        gauge.color = barometer.color;
+        gauge.point = context.centerPoint;
+        gauge.value = 1.0 * barometer.pressure;
+        gauge.radius = 100;
+        gauge.ranges = barometer.ranges;
+        gauge.colors = barometer.colors;
+    }
+}
+
+function makeUpdateBarometerSensorDelegate() {
+    return new UpdateBarometerSensor();
 }

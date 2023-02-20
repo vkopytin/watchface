@@ -1,7 +1,8 @@
 import Toybox.Lang;
-using Toybox.System;
-using Toybox.Application;
-using Toybox.Weather;
+import Toybox.Graphics;
+import Toybox.System;
+import Toybox.Application;
+import Toybox.Weather;
 
 function weatherIconRenderSystemCreate(components) as WeatherIconRenderSystem {
     var inst = new WeatherIconRenderSystem(components);
@@ -197,6 +198,89 @@ class WeatherIconRenderSystem {
         dc.drawText(point[0] + 10, point[1] + 28, self.weatherFont, self.weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT);
         dc.drawText(point[0] + 1, point[1] + 30, Graphics.FONT_SYSTEM_TINY, self.weather.temperature, Graphics.TEXT_JUSTIFY_CENTER);
     }
+}
+
+class UpdateWeather {
+function exec(entity, components) {
+    var context = components[:context] as EngineContextComponent;
+    var weather = components[:weather] as WeatherComponent;
+    var titles = components[:titles];
+
+    weather.accumulatedTime -= context.deltaTime;
+    if (weather.accumulatedTime > 0) {
+        return;
+    }
+
+    weather.accumulatedTime = weather.updateEvery;
+
+    var screenCenterPoint = context.centerPoint;
+    var moveMatrix = [screenCenterPoint];
+    weather.point = add([weather.position], moveMatrix)[0];
+
+    var cond = Toybox.Weather.getCurrentConditions();
+    if (cond == null) {
+        return;
+    }
+
+    if (cond.condition != null) {
+        weather.weatherChar = weatherConditionToChar(cond.condition);
+    }
+
+    try {
+        weather.temperature = temperatureInCelcius(cond.temperature);
+        weather.temperatureChar = temperatureToChar(weather.temperature);
+        weather.temperatureUnitChar = temperatureUnitToChar(System.getDeviceSettings().temperatureUnits);
+
+        titles.color = weather.color;
+        titles.titles = [];
+        if (weather.weatherChar != "-") {
+            titles.titles.add([weather.point[0], weather.point[1], weather.weatherFont, weather.weatherChar, Graphics.TEXT_JUSTIFY_CENTER]);
+        }
+
+        if (weather.temperatureChar != "-") {
+            titles.titles.add([weather.point[0] - 10, weather.point[1] + 28, weather.weatherFont, weather.temperatureChar, Graphics.TEXT_JUSTIFY_RIGHT]);
+        }
+
+        titles.titles.add([weather.point[0] + 10, weather.point[1] + 28, weather.weatherFont, weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT]);
+        titles.titles.add([weather.point[0] + 1, weather.point[1] + 30, Graphics.FONT_SYSTEM_TINY, weather.temperature, Graphics.TEXT_JUSTIFY_CENTER]);
+    } catch (ex) {
+
+    }
+}
+}
+
+function makeUpdateWeatherDelegate() {
+    return new UpdateWeather();
+}
+
+class RenderWeather {
+function exec(entity, components) {
+    var weather = components[:weather];
+    var context = components[:context];
+    var dc = context.dc;
+
+    if (dc == null) {
+        return;
+    }
+
+    var point = weather.point;
+    dc.setColor(weather.color, Graphics.COLOR_TRANSPARENT);
+
+    if (weather.weatherChar != "-") {
+        dc.drawText(point[0], point[1], weather.weatherFont, weather.weatherChar, Graphics.TEXT_JUSTIFY_CENTER);
+    }
+
+    if (weather.temperatureChar != "-") {
+        dc.drawText(point[0] - 10, point[1] + 28, weather.weatherFont, weather.temperatureChar, Graphics.TEXT_JUSTIFY_RIGHT);
+    }
+
+    dc.drawText(point[0] + 10, point[1] + 28, weather.weatherFont, weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT);
+    dc.drawText(point[0] + 1, point[1] + 30, Graphics.FONT_SYSTEM_TINY, weather.temperature, Graphics.TEXT_JUSTIFY_CENTER);
+}
+}
+
+function makeRenderWeatherDelegate() {
+    return new RenderWeather();
 }
 
 /*

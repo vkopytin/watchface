@@ -8,6 +8,9 @@ function dateComponentCreate() {
 }
 
 class DateComponent {
+    var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
+    var accumulatedTime = 0 as Long;
+
     var color = Graphics.COLOR_GREEN;
     var dayOfWeek = 0;
     var month = 0;

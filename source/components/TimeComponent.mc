@@ -13,6 +13,9 @@ function timeComponentCreate() {
 }
 
 class TimeComponent {
+    var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 secs
+    var accumulatedTime = 0 as Long;
+
     var hours = 0.0 as Float;
     var minutes = 0.0 as Float;
     var seconds = 0.0 as Float;

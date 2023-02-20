@@ -12,22 +12,6 @@ function makeSystemsFromEntites(entities) {
     var systems = [];
     var length = entities.size();
 
-    /*systems.add(minuteTicksSystemCreate(entities[0]));
-    systems.add(hourTicksSystemCreate(entities[1]));
-    systems.add(weatherIconRenderSystemCreate(entities[2]));
-    systems.add(currentTimeSystemCreate(entities[3]));
-    systems.add(currentTimeSystemCreate(entities[4]));
-    systems.add(currentTimeSystemCreate(entities[5]));
-    systems.add(hoursHandSystemCreate(entities[3]));
-    systems.add(minutesHandSystemCreate(entities[4]));
-    systems.add(secondsHandSystemCreate(entities[5]));
-    systems.add(polygonRenderSystemCreate(entities[3]));
-    systems.add(multilineRenderSystemCreate(entities[3]));
-    systems.add(polygonRenderSystemCreate(entities[4]));
-    systems.add(multilineRenderSystemCreate(entities[4]));
-    systems.add(polygonRenderSystemCreate(entities[5]));
-*/
-
     for (var index = 0; index < length; index++) {
         var entity = entities[index];
         if (currentTymeSystemIsCompatible(entity)) {

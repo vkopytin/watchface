@@ -1,5 +1,6 @@
 import Toybox.Lang;
 import Toybox.Math;
+import Toybox.Graphics;
 
 function stressSensorSystemCreate(components) as StressSensorSystem {
     var inst = new StressSensorSystem(components);
@@ -53,4 +54,40 @@ class StressSensorSystem {
         var point = self.stress.point;
         dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, stressStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font
     }
+}
+
+class UpdateStressSensor {
+function exec(entity, components) {
+    var stress = components[:stress];
+    var context = components[:context];
+    var titles = components[:titles];
+
+    stress.accumulatedTime -= context.deltaTime;
+    if (stress.accumulatedTime > 0) {
+        return;
+    }
+
+    stress.accumulatedTime = context.deltaTime;
+
+    var screenCenterPoint = context.centerPoint;
+    var moveMatrix = [screenCenterPoint];
+    stress.point = add([stress.position], moveMatrix)[0];
+
+    var stressIterator = Toybox.SensorHistory.getStressHistory({:period => 1});
+    var sample = stressIterator.next();
+    if (sample != null) {
+        stress.value = sample.data;
+    }
+
+    var stressStr = stress.value.format("%d");
+    var point = stress.point;
+    titles.color = stress.color;
+    titles.titles = [
+        [point[0], point[1], Graphics.FONT_SYSTEM_XTINY, stressStr, Graphics.TEXT_JUSTIFY_CENTER]
+    ];
+}
+}
+
+function makeUpdateStressSensorDelegate() {
+    return new UpdateStressSensor();
 }

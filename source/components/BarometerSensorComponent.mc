@@ -1,3 +1,6 @@
+import Toybox.Lang;
+import Toybox.Graphics;
+
 function barometerSensorComponentCreate() as BarometerSensorComponent {
     var inst = new BarometerSensorComponent();
 
@@ -5,6 +8,9 @@ function barometerSensorComponentCreate() as BarometerSensorComponent {
 }
 
 class BarometerSensorComponent {
+    var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
+    var accumulatedTime = 0 as Long;
+
     var color = Graphics.COLOR_GREEN;
     var position = [-80, -10];
     

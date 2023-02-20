@@ -1,5 +1,7 @@
 import Toybox.Lang;
 import Toybox.Math;
+import Toybox.Time;
+import Toybox.Graphics;
 
 function currentDateSystemCreate(components) as CurrentDateSystem {
     var inst = new CurrentDateSystem(components);
@@ -57,4 +59,40 @@ class CurrentDateSystem {
         dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, dateStr, Graphics.TEXT_JUSTIFY_CENTER);
     }
+}
+
+class UpdateCurrentDate {
+function exec(entity, components) {
+    var context = components[:context];
+    var date = components[:date];
+    var titles = components[:titles];
+
+    date.accumulatedTime -= context.deltaTime;
+    if (date.accumulatedTime > 0) {
+        return;
+    }
+
+    date.accumulatedTime = date.fastUpdate;
+
+    var info = Time.Gregorian.info(Time.now(), Time.FORMAT_LONG);
+    date.dayOfWeek = info.day_of_week;
+    date.month = info.month;
+    date.day = info.day;
+
+    var screenCenterPoint = context.centerPoint;
+    var moveMatrix = [screenCenterPoint];
+    date.point = add([date.position], moveMatrix)[0];
+    var dateStr = Lang.format("$1$, $3$", [
+        date.dayOfWeek, date.month, date.day
+    ]);
+
+    titles.color = date.color;
+    titles.titles = [
+        [date.point[0], date.point[1], Graphics.FONT_SYSTEM_XTINY, dateStr, Graphics.TEXT_JUSTIFY_CENTER]
+    ];
+}
+}
+
+function makeUpdateCurrentDateDelegate() {
+    return new UpdateCurrentDate();
 }

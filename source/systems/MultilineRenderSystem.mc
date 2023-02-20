@@ -1,4 +1,5 @@
-using Toybox.Lang;
+import Toybox.Lang;
+import Toybox.Graphics;
 
 function multilineRenderSystemCreate(components) as MultilineRenderSystem {
     var inst = new MultilineRenderSystem(components);
@@ -52,4 +53,30 @@ function drawMultiLine(dc, polygon as Lang.Array<Lang.Array<Lang.Numeric>>) as V
 
     dc.setPenWidth(1);
     dc.drawLine(pointTo[0], pointTo[1], polygon[0][0], polygon[0][1]);
+}
+
+class RenderMultiline {
+function exec(entity, components) {
+    var context = components[:context];
+    var polygons = components[:polygon];
+    var multiline = components[:multiline];
+    if (context.dc == null) {
+        return;
+    }
+
+    var dc = context.dc;
+    
+    dc.setColor(0xaaffaa, Graphics.COLOR_TRANSPARENT);
+    var length = polygons.mesh.size();
+    for (var index = 0; index < length; index += 1) {
+        var mesh = polygons.mesh[index];
+        drawMultiLine(dc, mesh);
+    }
+}
+}
+
+function makeRenderMultilineDelegate() {
+    var inst = new RenderMultiline();
+
+    return inst;
 }

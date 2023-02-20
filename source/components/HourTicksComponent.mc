@@ -1,3 +1,5 @@
+import Toybox.Lang;
+
 function hourTicksCreate() as HourTicksComponent {
     var inst = new HourTicksComponent();
 
@@ -5,6 +7,9 @@ function hourTicksCreate() as HourTicksComponent {
 }
 
 class HourTicksComponent {
+    var fastUpdate = (60 * 60 * 1000) as Long; // skip updates for hour
+    var accumulatedTime = 1000 as Long;
+    
     var color = Graphics.COLOR_DK_GREEN;
 
     var mesh = [

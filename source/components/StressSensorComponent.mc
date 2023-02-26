@@ -9,6 +9,8 @@ class StressSensorComponent {
     var position = [0, 80];
     
     var value = 0;
+    var strValue = "";
+    var deltaIndex = 0;
 
     var point = [0, 0];
 }

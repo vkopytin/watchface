@@ -34,6 +34,38 @@ function makeSystemsFromEntites(entities) {
             var system = currentTimeSystemCreate(entity);
             systems.add(system);
         }
+        if (SecondsRulerSystem.isCompatible(entity)) {
+            var system = SecondsRulerSystem.create(entity);
+            systems.add(system);
+        }
+        if (MinutesRulerSystem.isCompatible(entity)) {
+            var system = MinutesRulerSystem.create(entity);
+            systems.add(system);
+        }
+        if (HoursRulerSystem.isCompatible(entity)) {
+            var system = HoursRulerSystem.create(entity);
+            systems.add(system);
+        }
+        if (RenderBackgroundSystem.isCompatible(entity)) {
+            var system = RenderBackgroundSystem.create(entity);
+            systems.add(system);
+        }
+        if (RenderDigitalTimeSystem.isCompatible(entity)) {
+            var system = RenderDigitalTimeSystem.create(entity);
+            systems.add(system);
+        }
+        if (SecondsRulerRenderSystem.isCompatible(entity)) {
+            var system = SecondsRulerRenderSystem.create(entity);
+            systems.add(system);
+        }
+        if (MinutesRulerRenderSystem.isCompatible(entity)) {
+            var system = MinutesRulerRenderSystem.create(entity);
+            systems.add(system);
+        }
+        if (HoursRulerRenderSystem.isCompatible(entity)) {
+            var system = HoursRulerRenderSystem.create(entity);
+            systems.add(system);
+        }
         if (weatherIconRenderSystemIsCompatible(entity)) {
             var system = weatherIconRenderSystemCreate(entity);
             systems.add(system);
@@ -82,9 +114,26 @@ function makeSystemsFromEntites(entities) {
             var system = multilineRenderSystemCreate(entity);
             systems.add(system);
         }
+        if (ChargeSystem.isCompatible(entity)) {
+            var system = ChargeSystem.create(entity);
+            systems.add(system);
+        }
     }
 
     return systems;
+}
+
+function systemsFilter(arr, byProp) {
+    var res = [];
+    var length = arr.size();
+    for (var index = 0; index < length; index++) {
+        var item = arr[index];
+        if (item has :components && item.components.hasKey(byProp)) {
+            res.add(item);
+        }
+    }
+
+    return res;
 }
 
 class Engine {
@@ -98,34 +147,41 @@ class Engine {
     var averageTickMs = 0;
     var averageRenderMs = 0;
 
+    var sharedTimeComponent = timeComponentCreate();
+
     var entities = [{
-        :name => "minute ticks",
+        :name => "update time",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :polygon => shapeComponentCreate(),
-        :minuteTicks => minuteTicksCreate(),
+        :time => sharedTimeComponent,
+        :oneTime => {},
+        :light => {},
     }, {
-        :name => "hour ticks",
+        :name => "seconds ruler",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :polygon => shapeComponentCreate(),
-        :hourTicks => hourTicksCreate(),
+        :time => sharedTimeComponent,
+        :ruler => RulerComponent.create(),
+        :light => {},
     }, {
-        :name => "hour hand",
+        :name => "minutes ruler",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :time => timeComponentCreate(),
-        :hoursHand => hoursHandComponentCreate(),
-        :polygon => shapeComponentCreate(),
-        :multiline => {},
+        :time => sharedTimeComponent,
+        :minutesRuler => RulerComponent.create(),
+        :light => {},
     }, {
-        :name => "minute hand",
+        :name => "hours ruler",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :time => timeComponentCreate(),
-        :minutesHand => minutesHandComponentCreate(),
-        :polygon => shapeComponentCreate(),
-        :multiline => {},
+        :time => sharedTimeComponent,
+        :hoursRuler => RulerComponent.create(),
+        :light => {},
+    }, {
+        :name => "background",
+        :engine => self,
+        :background => {},
+        :light => {},
+    }, {
+        :name => "charge battery",
+        :engine => self,
+        :charge => ChargeComponent.create(),
     }, {
         :name => "weather",
         :engine => self,
@@ -147,30 +203,46 @@ class Engine {
         :stats => performanceStatisticsComponentCreate(),
         :barometer => barometerSensorComponentCreate(),
     }, {
+        :name => "digital time",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :digitalTime => DigitalTimeComponent.create(),
+        :light => {},
+    }, {
         :name => "compass",
         :engine => self,
         :stats => performanceStatisticsComponentCreate(),
         :compass => compassSensorComponentCreate(),
-    }, {
-        :name => "seconds hand",
-        :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :time => timeComponentCreate(),
-        :secondsHand => secondsHandComponentCreate(),
-        :polygon => shapeComponentCreate(),
     }];
 
-    var systems = makeSystemsFromEntites(entities);
+    var systemsAll = makeSystemsFromEntites(entities);
+    var systemsLight = systemsFilter(self.systemsAll, :light);
+    var systems = self.systemsAll;
 
     function init(width, height) {
         self.width = width;
         self.height = height;
         self.centerPoint = [width / 2, height / 2];
-        self.systemsLength = self.systems.size();
+        self.systemsLength = self.systemsAll.size();
         for (var index = 0; index < self.systemsLength; index += 1) {
-            var current = systems[index];
+            var current = systemsAll[index];
             current.init();
         }
+        var length = self.systemsLight.size();
+        for (var index = 0; index < length; index += 1) {
+            var current = systemsLight[index];
+            current.init();
+        }
+    }
+
+    function switchToLight() {
+        self.systems = self.systemsLight;
+        self.systemsLength = self.systems.size();
+    }
+
+    function switchToNormal() {
+        self.systems = self.systemsAll;
+        self.systemsLength = self.systems.size();
     }
 
     function tick() {
@@ -275,17 +347,6 @@ class Engine {
             }
             while (n > 0); // n must be greater than 0 here also
         }
-
-        var handWidth = 10;
-        var borderColor=Graphics.COLOR_BLACK;
-        var arborColor=Graphics.COLOR_LT_GRAY;
-        var offsetInnerCircle = 1;
-		var offsetOuterCircle = -1;
-
-        dc.setColor(borderColor,Graphics.COLOR_BLACK);
-		dc.fillCircle(self.width / 2, self.height / 2, handWidth*0.65-offsetOuterCircle); // *0.65
-		dc.setColor(arborColor, Graphics.COLOR_WHITE);
-		dc.fillCircle(self.width / 2, self.height / 2, handWidth*0.65-offsetInnerCircle); // -4
 
         var delta = System.getTimer() - self.lastTime;
         self.averageRenderMs = (self.averageRenderMs + delta) / 2;

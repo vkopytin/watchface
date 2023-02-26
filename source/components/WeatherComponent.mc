@@ -6,7 +6,7 @@ function weatherComponentCreate() as WeatherComponent {
 
 class WeatherComponent {
     var color = Graphics.COLOR_GREEN;
-    var position = [0, -100];
+    var position = [0, -120];
 
     var weatherChar = "-";
     var temperature = 0;

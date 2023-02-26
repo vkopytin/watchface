@@ -18,7 +18,7 @@ class MinuteTicksSystem {
     var stats as PerformanceStatisticsComponent;
 
     var fastUpdate = (60 * 1000) as Long; // skip updates for min
-    var accumulatedTime = self.fastUpdate + 1 as Long;
+    var accumulatedTime = 0 as Long;
 
     function initialize(components) {
         self.engine = components[:engine];
@@ -32,12 +32,12 @@ class MinuteTicksSystem {
     }
 
     function update(deltaTime) {
-        self.accumulatedTime += deltaTime;
-        if (self.accumulatedTime < self.fastUpdate) {
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
             return;
         }
 
-        self.accumulatedTime = 0;
+        self.accumulatedTime = self.fastUpdate;
 
         var screenCenterPoint = self.engine.centerPoint;
         var increment = 1;
@@ -46,6 +46,7 @@ class MinuteTicksSystem {
         var polygons = new [ticksCount];
         var length = coords.size();
 
+        var oldPoint = new [1];
         for (var i = 0; i < ticksCount; i += 1) {
             var angle = increment * i * Math.PI / 30;
 
@@ -59,7 +60,6 @@ class MinuteTicksSystem {
             var moveMatrix = [screenCenterPoint];
 
             for (var index = 0; index < length; index += 1) {
-                var oldPoint = new [1];
                 oldPoint[0] = coords[index];
                 var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
                 result[index] = point[0];

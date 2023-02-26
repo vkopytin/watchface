@@ -4,4 +4,5 @@
     <font id="weather32" filename="weather32.fnt" />
     <font id="weather36" filename="weather36.fnt" />
     <font id="weather64" filename="weather64.fnt" />
+    <font id="lcdDisplay" filename="lcd-display-16.fnt" />
 </fonts>

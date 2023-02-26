@@ -18,7 +18,7 @@ class CompassSensorSystem {
     var stats as PerformanceStatisticsComponent;
 
     var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
-    var accumulatedTime = self.fastUpdate + 1 as Long;
+    var accumulatedTime = 0 as Long;
 
     function initialize(components) {
         self.engine = components[:engine] as Engine;
@@ -31,12 +31,12 @@ class CompassSensorSystem {
     }
 
     function update(deltaTime as Long) {
-        self.accumulatedTime += deltaTime;
-        if (self.accumulatedTime < self.fastUpdate) {
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
             return;
         }
 
-        self.accumulatedTime = 0;
+        self.accumulatedTime = self.fastUpdate;
 
         var screenCenterPoint = self.engine.centerPoint;
         var moveMatrix = [screenCenterPoint];

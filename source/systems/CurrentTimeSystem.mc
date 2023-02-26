@@ -8,7 +8,7 @@ function currentTimeSystemCreate(components) as CurrentTimeSystem {
 }
 
 function currentTymeSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:time);
+    return entity.hasKey(:time) and entity.hasKey(:oneTime);
 }
 
 function remainder(a as Float, b as Float) as Float {
@@ -36,14 +36,16 @@ function remainder(a as Float, b as Float) as Float {
 }
 
 class CurrentTimeSystem {
+    var components;
     var engine as Engine;
     var time as TimeComponent;
     var stats as PerformanceStatisticsComponent;
 
     var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 secs
-    var accumulatedTime = self.fastUpdate + 1 as Long;
+    var accumulatedTime = 0 as Long;
 
     function initialize(components) {
+        self.components = components;
         self.engine = components[:engine];
         self.time = components[:time];
         self.stats = components[:stats];
@@ -54,19 +56,22 @@ class CurrentTimeSystem {
     }
 
     function update(deltaTime as Long) {
-        self.accumulatedTime += deltaTime;
-        if (self.accumulatedTime < self.fastUpdate) {
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
             var delta = deltaTime.toFloat() / 1000.0;
             self.time.seconds = self.time.seconds + delta;
             self.time.minutes = self.time.minutes + delta / 60.0;
             self.time.hours = (self.time.hours + delta / 60.0 / 60.0);
             self.engine.timeSec = self.time.seconds;
 
+            if (self.time.seconds > 59) {
+                self.accumulatedTime = 0;
+            }
+
             return;
         }
+        self.accumulatedTime = self.fastUpdate;
 
-        self.accumulatedTime = 0;
-        self.accumulatedTime = 0;
         var clockTime = System.getClockTime();
 
         self.time.hours = 1.0 * clockTime.hour;

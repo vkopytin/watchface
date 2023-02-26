@@ -9,6 +9,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     private var font as FontResource?;
     private var background;
+    private var ruler;
     private var timer = mainTimerCreate(method(:engineTick));
     private var sleepMode = false;
 
@@ -16,14 +17,11 @@ class WatchFaceView extends WatchUi.WatchFace {
         WatchFace.initialize();
 
         self.font = WatchUi.loadResource(Rez.Fonts.weather32) as FontResource;
-        self.background = WatchUi.loadResource( Rez.Drawables.background );
     }
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
-
-        dc.drawBitmap(0, 0, background);
 
         var width = dc.getWidth();
         var height = dc.getHeight();
@@ -55,21 +53,20 @@ class WatchFaceView extends WatchUi.WatchFace {
             dc.clearClip();
             self.sleepMode = false;
         }
+        self.engine.switchToNormal();
         self.engine.tick();
 
-        //dc.drawBitmap(0, 0, background);
-        dc.setColor(0, Graphics.COLOR_BLACK);
-        dc.clear();
-
-        //self.debugClipArea(dc);
+        //dc.clear();
 
         self.engine.render(dc);
+
+        //self.debugClipArea(dc);
 
         var stats = Lang.format("u$1$-r$2$", [
             self.engine.averageTickMs, self.engine.averageRenderMs
         ]);
-        dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(130, 90, Graphics.FONT_XTINY, stats, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(0x555555, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(130, 235, Graphics.FONT_XTINY, stats, Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     function debugClipArea(dc) {
@@ -84,6 +81,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Handle the partial update event
     function onPartialUpdate( dc ) {
+        self.engine.switchToLight();
         self.sleepMode = true;
         self.engine.tick();
         // If we're not doing a full screen refresh we need to re-draw the background
@@ -97,8 +95,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             self.engine.clipArea[1][1]
         );
 
-        dc.setColor(0, Graphics.COLOR_BLACK);
-        dc.clear();
+        //dc.clear();
 
         self.engine.render(dc);
     }

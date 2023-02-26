@@ -1,4 +1,27 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
     <bitmap id="background" filename="background.png" />
+    <bitmap id="watchBackground" filename="watch-background.png" />
+    <bitmap id="ruler" filename="ruler.png">
+        <palette>
+            <color>00ff00</color>
+        </palette>
+    </bitmap>
+    <bitmap id="minutesOncesRuler" filename="minutes-onces-ruler.png">
+        <palette>
+            <color>00ff00</color>
+        </palette>
+    </bitmap>
+    <bitmap id="minutesDescRuler" filename="minutes-dec-ruler.png">
+        <palette>
+            <color>00ff00</color>
+        </palette>
+    </bitmap>
+    <bitmap id="hoursRuler" filename="hours-ruler.png">
+        <palette>
+            <color>00ff00</color>
+        </palette>
+    </bitmap>
+    <bitmap id="chargeAmount" filename="battery-ruler.png" />
+    <bitmap id="stressRuler" filename="stress-ruler.png" />
 </drawables>

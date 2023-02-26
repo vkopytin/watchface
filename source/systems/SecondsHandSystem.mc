@@ -33,7 +33,7 @@ class SecondsHandSystem {
     var stats as PerformanceStatisticsComponent;
 
     var fastUpdate = (1 * 1000) as Long; // keep fast updates for 1 secs
-    var accumulatedTime = self.fastUpdate + 1 as Long;
+    var accumulatedTime = 0 as Long;
 
     function initialize(components) {
         self.engine = components[:engine];
@@ -48,8 +48,6 @@ class SecondsHandSystem {
     }
 
     function update(deltaTime) {
-        self.accumulatedTime += deltaTime;
-
         var screenCenterPoint = self.engine.centerPoint;
 
         var angle = (self.time.seconds / 30.0) * Math.PI;
@@ -73,9 +71,11 @@ class SecondsHandSystem {
         self.polygon.color = self.hand.color;
         self.polygon.mesh = [result];
 
-        if (self.accumulatedTime < self.fastUpdate) {
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
             return;
         }
+        self.accumulatedTime = self.fastUpdate;
 
         var minX = self.engine.width;
         var minY = self.engine.height;
@@ -92,8 +92,6 @@ class SecondsHandSystem {
         self.engine.clipArea[0][1] = max(0, minY - 15);
         self.engine.clipArea[1][0] = min(self.engine.width, maxX - self.engine.clipArea[0][0] + 15);
         self.engine.clipArea[1][1] = min(self.engine.height, maxY - self.engine.clipArea[0][1] + 15);
-
-        self.accumulatedTime = 0;
     }
 
     function render(dc, context) {

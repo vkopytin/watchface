@@ -132,12 +132,12 @@ function temperatureInCelcius(temperature) {
 }
 
 class WeatherIconRenderSystem {
-    var engine;
+    var engine as Engine;
     var weather as WeatherComponent;
     var stats as PerformanceStatisticsComponent;
 
     var fastUpdate = (5 * 1000) as Long; // skip updates for 5 secs
-    var accumulatedTime = self.fastUpdate + 1 as Long;
+    var accumulatedTime = 0 as Long;
 
     var weatherFont;
 
@@ -152,12 +152,12 @@ class WeatherIconRenderSystem {
     }
 
     function update(deltaTime) {
-        self.accumulatedTime += deltaTime;
-        if (self.accumulatedTime < self.fastUpdate) {
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
             return;
         }
 
-        self.accumulatedTime = 0;
+        self.accumulatedTime = self.fastUpdate;
 
         var screenCenterPoint = self.engine.centerPoint;
         var moveMatrix = [screenCenterPoint];

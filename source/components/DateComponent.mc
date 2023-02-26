@@ -8,10 +8,12 @@ function dateComponentCreate() {
 }
 
 class DateComponent {
-    var color = Graphics.COLOR_GREEN;
+    var color = 0x00ff00;
     var dayOfWeek = 0;
     var month = 0;
     var day = 0;
-    var position = [90, -10];
+    var position = [-50, -72];
+
     var point = [0, 0];
+    var strValue = "";
 }

@@ -17,11 +17,11 @@ function weatherConditionToChar(condition) {
     switch (condition) {
         case Weather.CONDITION_CLEAR:
         case Weather.CONDITION_MOSTLY_CLEAR:
-        case Weather.CONDITION_PARTLY_CLEAR:
             return "{";
-        case Weather.CONDITION_MOSTLY_CLOUDY:
         case Weather.CONDITION_PARTLY_CLOUDY:
+        case Weather.CONDITION_PARTLY_CLEAR:
             return "B";
+        case Weather.CONDITION_MOSTLY_CLOUDY:
         case Weather.CONDITION_CLOUDY:
             return "F";
         case Weather.CONDITION_CHANCE_OF_RAIN_SNOW:

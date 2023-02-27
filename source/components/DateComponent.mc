@@ -12,6 +12,7 @@ class DateComponent {
     var dayOfWeek = 0;
     var month = 0;
     var day = 0;
+    var year = 0;
     var position = [-50, -72];
 
     var point = [0, 0];

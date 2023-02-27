@@ -8,7 +8,7 @@ function EngineCreate() {
     return inst;
 }
 
-function makeSystemsFromEntites(entities) {
+function makeSystemsFromEntites(entities, api as API_Functions) {
     var systems = [];
     var length = entities.size();
 
@@ -82,6 +82,10 @@ function makeSystemsFromEntites(entities) {
             var system = barometerSensorSystemCreate(entity);
             systems.add(system);
         }
+        if (BodyBatterySystem.isCompatible(entity)) {
+            var system = BodyBatterySystem.create(entity);
+            systems.add(system);
+        }
         if (compassSensorSystemIsCompatible(entity)) {
             var system = compassSensorSystemCreate(entity);
             systems.add(system);
@@ -114,8 +118,24 @@ function makeSystemsFromEntites(entities) {
             var system = multilineRenderSystemCreate(entity);
             systems.add(system);
         }
+        if (SunPositionSystem.isCompatible(entity)) {
+            var system = SunPositionSystem.create(entity, api);
+            systems.add(system);
+        }
         if (ChargeSystem.isCompatible(entity)) {
             var system = ChargeSystem.create(entity);
+            systems.add(system);
+        }
+        if (AltTimeSystem.isCompatible(entity)) {
+            var system = AltTimeSystem.create(entity, api);
+            systems.add(system);
+        }
+        if (StepsSystem.isCompatible(entity)) {
+            var system = StepsSystem.create(entity, api);
+            systems.add(system);
+        }
+        if (HeartRateSystem.isCompatible(entity)) {
+            var system = HeartRateSystem.create(entity, api);
             systems.add(system);
         }
     }
@@ -137,6 +157,7 @@ function systemsFilter(arr, byProp) {
 }
 
 class Engine {
+    var api = API_Functions.create();
     var width = 240;
     var height = 240;
     var centerPoint = [120, 120];
@@ -148,6 +169,7 @@ class Engine {
     var averageRenderMs = 0;
 
     var sharedTimeComponent = timeComponentCreate();
+    var sharedDateComponent = dateComponentCreate();
 
     var entities = [{
         :name => "update time",
@@ -185,22 +207,22 @@ class Engine {
     }, {
         :name => "weather",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
         :weather => weatherComponentCreate(),
     }, {
         :name => "current date",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
-        :date => dateComponentCreate(),
+        :date => sharedDateComponent,
+    }, {
+        :name => "body battery",
+        :engine => self,
+        :bodyBattery => BodyBatteryComponent.create(),
     }, {
         :name => "stress",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
         :stress => stressSensorComponentCreate(),
     }, {
         :name => "barometer",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
         :barometer => barometerSensorComponentCreate(),
     }, {
         :name => "digital time",
@@ -209,13 +231,36 @@ class Engine {
         :digitalTime => DigitalTimeComponent.create(),
         :light => {},
     }, {
+        :name => "sun position",
+        :engine => self,
+        :sunPosition => SunPositionComponent.create(),
+    }, {
         :name => "compass",
         :engine => self,
-        :stats => performanceStatisticsComponentCreate(),
         :compass => compassSensorComponentCreate(),
+    }, {
+        :name => "alt time in New York",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :date => sharedDateComponent,
+        :altTime => AltTimeComponent.createInNewYork(),
+    }, {
+        :name => "alt time in Kyiv",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :date => sharedDateComponent,
+        :altTime => AltTimeComponent.createInKyiv(),
+    }, {
+        :name => "steps count",
+        :engine => self,
+        :steps => StepsComponent.create(),
+    }, {
+        :name => "heart rate",
+        :engine => self,
+        :heartRate => HeartRateComponent.create(),
     }];
 
-    var systemsAll = makeSystemsFromEntites(entities);
+    var systemsAll = makeSystemsFromEntites(entities, self.api);
     var systemsLight = systemsFilter(self.systemsAll, :light);
     var systems = self.systemsAll;
 

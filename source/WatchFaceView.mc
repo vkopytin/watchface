@@ -4,7 +4,6 @@ import Toybox.System;
 import Toybox.WatchUi;
 
 class WatchFaceView extends WatchUi.WatchFace {
-    private var api = API_Functions.Create();
     private var engine = EngineCreate();
 
     private var font as FontResource?;

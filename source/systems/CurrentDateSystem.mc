@@ -39,6 +39,7 @@ class CurrentDateSystem {
 
         var info = Time.Gregorian.info(Time.now(), Time.FORMAT_LONG);
         self.date.dayOfWeek = info.day_of_week;
+        self.date.year = info.year;
         self.date.month = info.month;
         self.date.day = info.day;
 
@@ -54,6 +55,6 @@ class CurrentDateSystem {
         var point = self.date.point;
 
         dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(point[0], point[1], Graphics.FONT_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

@@ -74,9 +74,10 @@ class CurrentTimeSystem {
 
         var clockTime = System.getClockTime();
 
-        self.time.hours = 1.0 * clockTime.hour;
-        self.time.minutes = 1.0 * clockTime.min;
-        self.time.seconds = 1.0 * clockTime.sec;
+        self.time.hours = clockTime.hour.toFloat();
+        self.time.minutes = clockTime.min.toFloat();
+        self.time.seconds = clockTime.sec.toFloat();
+        self.time.offset = clockTime.timeZoneOffset;;
         self.engine.timeSec = self.time.seconds;
     }
 

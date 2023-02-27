@@ -1,8 +1,9 @@
 <fonts>
     <font id="id_font_black_diamond" filename="blackdiamond.fnt" filter="0123456789" />
-    <font id="weather24" filename="weather24.fnt" />
-    <font id="weather32" filename="weather32.fnt" />
-    <font id="weather36" filename="weather36.fnt" />
-    <font id="weather64" filename="weather64.fnt" />
-    <font id="lcdDisplay" filename="lcd-display-16.fnt" />
+    <font id="weather24" filename="weather24.fnt" antialias="true" />
+    <font id="weather32" filename="weather32.fnt" antialias="true" />
+    <font id="weather36" filename="weather36.fnt" antialias="true" />
+    <font id="weather64" filename="weather64.fnt" antialias="true" />
+    <font id="lcdDisplay" filename="lcd-display-16.fnt" antialias="true" />
+    <font id="lcdDisplay12" filename="lcd-display-12.fnt" antialias="true" />
 </fonts>

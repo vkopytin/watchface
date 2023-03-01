@@ -5,6 +5,7 @@ class BodyBatteryComponent {
         return new BodyBatteryComponent();
     }
     var value = "";
-    var color = Graphics.COLOR_GREEN;
+    var deltaIndex = 0;
+    var color = 0x005555;
     var position = [130, 220];
 }

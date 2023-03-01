@@ -48,10 +48,13 @@ class BarometerSensorSystem {
             var pressureHistory = Toybox.SensorHistory.getPressureHistory({});
             var sample = pressureHistory.next();
             pressure = sample.data;
-        } else if (Activity.getActivityInfo().rawAmbientPressure != null) {
-            pressure = Activity.getActivityInfo().rawAmbientPressure;
-        } else if (Activity.getActivityInfo().ambientPressure != null) {
-            pressure = Activity.getActivityInfo().ambientPressure;
+        } else {
+            var activity = Activity.getActivityInfo();
+            if (activity.rawAmbientPressure != null) {
+                pressure = activity.rawAmbientPressure;
+            } else if (activity.ambientPressure != null) {
+                pressure = activity.ambientPressure;
+            }
         }
 
         if (System.getDeviceSettings().temperatureUnits == System.UNIT_METRIC) {
@@ -109,8 +112,8 @@ function drawArrow(dc, point, value, radius) {
 
     dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
     dc.fillPolygon(arrowMesh);
-    //dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-    //drawMultiLine(dc, arrowMesh);
+    dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
+    drawMultiLine(dc, arrowMesh);
 }
 
 function drawGauge(dc, point, value, radius, startDegree, rangeDegree, gaugeRanges, gaugeColors) {

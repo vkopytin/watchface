@@ -4,9 +4,9 @@ class AltTimeComponent {
     function createInNewYork() as AltTimeComponent {
         var inst = new AltTimeComponent();
 
-        inst.position = [50, 200];
+        inst.position = [172, 60];
         inst.location = [40.730610, -73.935242];
-        inst.format = "NY hh:mm";
+        inst.format = "NYhh:mm";
 
         return inst;
     }
@@ -14,14 +14,14 @@ class AltTimeComponent {
     function createInKyiv() as AltTimeComponent {
         var inst = new AltTimeComponent();
 
-        inst.position = [50, 214];
+        inst.position = [32, 60];
         inst.location = [50.450001, 30.523333];
-        inst.format = "KY hh:mm";
+        inst.format = "KYhh:mm";
 
         return inst;
     }
 
-    var color = Graphics.COLOR_GREEN;
+    var color = 0x005555;
     var format = "NY hh:mm";
     var position = [50, 200];
     var location = [40.730610, -73.935242]; // New York

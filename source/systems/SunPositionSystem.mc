@@ -27,7 +27,7 @@ class SunPositionSystem {
 
     var chargeAmount;
 
-    var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 sec
+    var fastUpdate = (60 * 60 * 1000) as Long; // keep fast updates for 5 sec
     var accumulatedTime = 0 as Long;
 
     function initialize(components, api) {

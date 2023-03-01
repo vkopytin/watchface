@@ -71,15 +71,19 @@ class MinutesRulerSystem {
         self.pid.setTarget(minutesOnce);
         if (minutesOnce < self.ruler.lastStep) {
             self.pid.reset();
+            self.ruler.lastStep = minutesOnce - 2;
+        } else {
+            self.ruler.lastStep = minutesOnce;
         }
-        self.ruler.lastStep = minutesOnce;
 
         var minutesDec = Math.floor(minutes / 10) * 10;
         self.pidDec.setTarget(minutesDec);
         if (minutesDec < self.ruler.lastDecStep) {
             self.pidDec.reset();
+            self.ruler.lastDecStep = minutesDec - 2;
+        } else {
+            self.ruler.lastDecStep = minutesDec;
         }
-        self.ruler.lastDecStep = minutesDec;
     }
 
     function render(dc, context) {

@@ -19,7 +19,7 @@ class HeartRateSystem {
     var engine as Engine;
     var heartRate as HeartRateComponent;
 
-    var fastUpdate = (2 * 1000) as Long; // keep fast updates for minute
+    var fastUpdate = (5 * 1000) as Long; // keep fast updates for minute
     var accumulatedTime = 0 as Long;
 
     function initialize(components, api as API_Functions) {
@@ -37,6 +37,8 @@ class HeartRateSystem {
         if (self.accumulatedTime > 0) {
             return;
         }
+
+        self.accumulatedTime = self.fastUpdate;
 
         var heartRate = Activity.getActivityInfo().currentHeartRate; 
         if (heartRate == null) {

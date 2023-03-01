@@ -50,24 +50,24 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = RenderBackgroundSystem.create(entity);
             systems.add(system);
         }
-        if (RenderDigitalTimeSystem.isCompatible(entity)) {
-            var system = RenderDigitalTimeSystem.create(entity);
+        if (DigitalTimeSystem.isCompatible(entity)) {
+            var system = DigitalTimeSystem.create(entity);
             systems.add(system);
         }
-        if (SecondsRulerRenderSystem.isCompatible(entity)) {
-            var system = SecondsRulerRenderSystem.create(entity);
+        if (RenderSecondsRulerSystem.isCompatible(entity)) {
+            var system = RenderSecondsRulerSystem.create(entity);
             systems.add(system);
         }
-        if (MinutesRulerRenderSystem.isCompatible(entity)) {
-            var system = MinutesRulerRenderSystem.create(entity);
+        if (RenderMinutesRulerSystem.isCompatible(entity)) {
+            var system = RenderMinutesRulerSystem.create(entity);
             systems.add(system);
         }
-        if (HoursRulerRenderSystem.isCompatible(entity)) {
-            var system = HoursRulerRenderSystem.create(entity);
+        if (RenderHoursRulerSystem.isCompatible(entity)) {
+            var system = RenderHoursRulerSystem.create(entity);
             systems.add(system);
         }
-        if (weatherIconRenderSystemIsCompatible(entity)) {
-            var system = weatherIconRenderSystemCreate(entity);
+        if (WeatherIconSystem.isCompatible(entity)) {
+            var system = WeatherIconSystem.create(entity);
             systems.add(system);
         }
         if (currentDateSystemIsCompatible(entity)) {
@@ -110,8 +110,8 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = secondsHandSystemCreate(entity);
             systems.add(system);
         }
-        if (polygonRenderSystemCreateIsCompatible(entity)) {
-            var system = polygonRenderSystemCreate(entity);
+        if (RenderPolygonSystem.isCompatible(entity)) {
+            var system = RenderPolygonSystem.create(entity);
             systems.add(system);
         }
         if (multilineRenderSystemIsCompatible(entity)) {
@@ -136,6 +136,14 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
         }
         if (HeartRateSystem.isCompatible(entity)) {
             var system = HeartRateSystem.create(entity, api);
+            systems.add(system);
+        }
+        if (WatchStatusSystem.isCompatible(entity)) {
+            var system = WatchStatusSystem.create(entity, api);
+            systems.add(system);
+        }
+        if (RenderWatchStatusSystem.isCompatible(entity)) {
+            var system = RenderWatchStatusSystem.create(entity, api);
             systems.add(system);
         }
     }
@@ -163,13 +171,14 @@ class Engine {
     var centerPoint = [120, 120];
     var lastTime = System.getTimer();
     var systemsLength = 0;
-    var timeSec = 0;
     var clipArea = [[100,100],[200,200]];
     var averageTickMs = 0;
     var averageRenderMs = 0;
 
+    var context = renderContextCreate();
     var sharedTimeComponent = timeComponentCreate();
     var sharedDateComponent = dateComponentCreate();
+    var sharedWatchStatus = WatchStatusComponent.create();
 
     var entities = [{
         :name => "update time",
@@ -178,11 +187,20 @@ class Engine {
         :oneTime => {},
         :light => {},
     }, {
+        :name => "watch status",
+        :engine => self,
+        :watchStatus => sharedWatchStatus,
+    }, {
         :name => "seconds ruler",
         :engine => self,
         :time => sharedTimeComponent,
         :ruler => RulerComponent.create(),
         :light => {},
+    }, {
+        :name => "charge battery",
+        :engine => self,
+        :watchStatus => sharedWatchStatus,
+        :charge => ChargeComponent.create(),
     }, {
         :name => "minutes ruler",
         :engine => self,
@@ -200,10 +218,6 @@ class Engine {
         :engine => self,
         :background => {},
         :light => {},
-    }, {
-        :name => "charge battery",
-        :engine => self,
-        :charge => ChargeComponent.create(),
     }, {
         :name => "weather",
         :engine => self,
@@ -235,10 +249,6 @@ class Engine {
         :engine => self,
         :sunPosition => SunPositionComponent.create(),
     }, {
-        :name => "compass",
-        :engine => self,
-        :compass => compassSensorComponentCreate(),
-    }, {
         :name => "alt time in New York",
         :engine => self,
         :time => sharedTimeComponent,
@@ -258,6 +268,11 @@ class Engine {
         :name => "heart rate",
         :engine => self,
         :heartRate => HeartRateComponent.create(),
+    }, {
+        :name => "watch status render",
+        :engine => self,
+        :watchStatus => sharedWatchStatus,
+        :render => {},
     }];
 
     var systemsAll = makeSystemsFromEntites(entities, self.api);
@@ -340,21 +355,20 @@ class Engine {
             while (n > 0); // n must be greater than 0 here also
         }
 
-        var delta = System.getTimer() - self.lastTime;
+        var delta = System.getTimer() - currentTime;
         self.averageTickMs = (self.averageTickMs + delta) / 2;
     }
 
     function render(dc) {
         var currentTime = System.getTimer();
         var length = self.systemsLength;
-        var context = renderContextCreate();
         var index = 0;
         var n = length % 8;
 
         if (n > 0) {
             do {
                 var current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 n -= 1;
             }
@@ -365,35 +379,35 @@ class Engine {
         if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
             do {
                 var current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 current = systems[index];
-                current.render(dc, context);
+                current.render(dc, self.context);
                 index += 1;
                 n -= 1;
             }
             while (n > 0); // n must be greater than 0 here also
         }
 
-        var delta = System.getTimer() - self.lastTime;
+        var delta = System.getTimer() - currentTime;
         self.averageRenderMs = (self.averageRenderMs + delta) / 2;
     }
 }

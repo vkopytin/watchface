@@ -5,7 +5,7 @@ function stressSensorComponentCreate() as StressSensorComponent {
 }
 
 class StressSensorComponent {
-    var color = Graphics.COLOR_GREEN;
+    var color = 0x005555;
     var position = [0, 80];
     
     var value = 0;

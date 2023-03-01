@@ -1,16 +1,16 @@
 using Toybox.Lang;
 
-function polygonRenderSystemCreate(components) as PolygonRenderSystem {
-    var inst = new PolygonRenderSystem(components);
+class RenderPolygonSystem {
+    static function create(components) as RenderPolygonSystem {
+        var inst = new RenderPolygonSystem(components);
 
-    return inst;
-}
+        return inst;
+    }
 
-function polygonRenderSystemCreateIsCompatible(entity) {
-    return entity.hasKey(:polygon);
-}
+    static function isCompatible(entity) {
+        return entity.hasKey(:polygon);
+    }
 
-class PolygonRenderSystem {
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 

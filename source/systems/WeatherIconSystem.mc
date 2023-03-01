@@ -3,16 +3,6 @@ using Toybox.System;
 using Toybox.Application;
 using Toybox.Weather;
 
-function weatherIconRenderSystemCreate(components) as WeatherIconRenderSystem {
-    var inst = new WeatherIconRenderSystem(components);
-
-    return inst;
-}
-
-function weatherIconRenderSystemIsCompatible(entity) {
-    return entity.hasKey(:weather);
-}
-
 function weatherConditionToChar(condition) {
     switch (condition) {
         case Weather.CONDITION_CLEAR:
@@ -131,7 +121,17 @@ function temperatureInCelcius(temperature) {
     return (temperature * 9/5) + 32; 
 }
 
-class WeatherIconRenderSystem {
+class WeatherIconSystem {
+    static function create(components) as WeatherIconSystem {
+        var inst = new WeatherIconSystem(components);
+
+        return inst;
+    }
+
+    static function isCompatible(entity) {
+        return entity.hasKey(:weather);
+    }
+
     var engine as Engine;
     var weather as WeatherComponent;
     var stats as PerformanceStatisticsComponent;
@@ -159,10 +159,6 @@ class WeatherIconRenderSystem {
 
         self.accumulatedTime = self.fastUpdate;
 
-        var screenCenterPoint = self.engine.centerPoint;
-        var moveMatrix = [screenCenterPoint];
-        self.weather.point = add([self.weather.position], moveMatrix)[0];
-
         var cond = Toybox.Weather.getCurrentConditions();
         if (cond == null) {
             return;
@@ -182,20 +178,29 @@ class WeatherIconRenderSystem {
     }
 
     function render(dc, context) {
-        var point = self.weather.point;
-
         dc.setColor(self.weather.color, Graphics.COLOR_TRANSPARENT);
 
         if (self.weather.weatherChar != "-") {
-            dc.drawText(point[0], point[1], self.weatherFont, self.weather.weatherChar, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(self.weather.position[0], self.weather.position[1],
+                self.weatherFont, self.weather.weatherChar, Graphics.TEXT_JUSTIFY_CENTER
+            );
         }
 
         if (self.weather.temperatureChar != "-") {
-            dc.drawText(point[0] - 10, point[1] + 28, self.weatherFont, self.weather.temperatureChar, Graphics.TEXT_JUSTIFY_RIGHT);
+            dc.drawText(
+                self.weather.position[0] - 10, self.weather.position[1] + 28,
+                self.weatherFont, self.weather.temperatureChar, Graphics.TEXT_JUSTIFY_RIGHT
+            );
         }
 
-        dc.drawText(point[0] + 10, point[1] + 28, self.weatherFont, self.weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(point[0] + 1, point[1] + 30, Graphics.FONT_SYSTEM_TINY, self.weather.temperature, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(
+            self.weather.position[0] + 10, self.weather.position[1] + 28,
+            self.weatherFont, self.weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT
+        );
+        dc.drawText(
+            self.weather.position[0] + 1, self.weather.position[1] + 30,
+            Graphics.FONT_SYSTEM_TINY, self.weather.temperature, Graphics.TEXT_JUSTIFY_CENTER
+        );
     }
 }
 

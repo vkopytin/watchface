@@ -6,4 +6,5 @@
     <font id="weather64" filename="weather64.fnt" antialias="true" />
     <font id="lcdDisplay" filename="lcd-display-16.fnt" antialias="true" />
     <font id="lcdDisplay12" filename="lcd-display-12.fnt" antialias="true" />
+    <font id="system12" filename="system-12.fnt" antialias="true" />
 </fonts>

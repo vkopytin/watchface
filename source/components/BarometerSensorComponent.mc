@@ -5,8 +5,8 @@ function barometerSensorComponentCreate() as BarometerSensorComponent {
 }
 
 class BarometerSensorComponent {
-    var color = Graphics.COLOR_GREEN;
-    var position = [40, -72];
+    var color = 0x005555;
+    var position = [40, -91];
     
     var pressure = 1000.0;
     var pressureStr = "--.-";

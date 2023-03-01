@@ -1,9 +1,9 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-class MinutesRulerRenderSystem {
-    static function create(components) as MinutesRulerRenderSystem {
-        return new MinutesRulerRenderSystem(components);
+class RenderMinutesRulerSystem {
+    static function create(components) as RenderMinutesRulerSystem {
+        return new RenderMinutesRulerSystem(components);
     }
 
     static function isCompatible(entity) {
@@ -31,7 +31,7 @@ class MinutesRulerRenderSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0, Graphics.COLOR_BLACK);
+        dc.setColor(0xaaffff, 0xaaffff);
         dc.setClip(146, 77, 73, 76);
         dc.clear();
         dc.drawBitmap(146, self.ruler.deltaIndex, self.minutesOncesRuler);

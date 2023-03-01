@@ -1,8 +1,8 @@
-using Toybox.Lang;
+import Toybox.Lang;
 
-class RenderDigitalTimeSystem {
-    static function create(components) as RenderDigitalTimeSystem {
-        var inst = new RenderDigitalTimeSystem(components);
+class DigitalTimeSystem {
+    static function create(components) as DigitalTimeSystem {
+        var inst = new DigitalTimeSystem(components);
 
         return inst;
     }
@@ -17,6 +17,9 @@ class RenderDigitalTimeSystem {
     var digitalTime as DigitalTimeComponent;
     var lcdDisplayFont;
 
+    var fastUpdate = 500 as Long; // keep fast updates for minute
+    var accumulatedTime = 0 as Long;
+
     function initialize(components) {
         self.components = components;
         self.engine = components[:engine];
@@ -29,7 +32,18 @@ class RenderDigitalTimeSystem {
     }
 
     function update(deltaTime) {
-        self.digitalTime.timeTitle = Lang.format("$1$:$2$:$3$", [
+        self.accumulatedTime -= deltaTime;
+        if (self.accumulatedTime > 0) {
+            return;
+        }
+
+        self.accumulatedTime = self.fastUpdate;
+
+        var timeFormat = "$1$:$2$:$3$";
+        if (self.time.secondsNumber % 2 == 0) {
+            timeFormat = "$1$:$2$ $3$";
+        }
+        self.digitalTime.timeTitle = Lang.format(timeFormat, [
             self.time.hours.format("%02d"),
             self.time.minutes.format("%02d"),
             self.time.seconds.format("%02d")
@@ -44,7 +58,7 @@ class RenderDigitalTimeSystem {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        self.engine.clipArea[0][0] = 105;
+        self.engine.clipArea[0][0] = 75;
         self.engine.clipArea[0][1] = 141;
         self.engine.clipArea[1][0] = 31;
         self.engine.clipArea[1][1] = 16;

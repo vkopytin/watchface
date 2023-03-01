@@ -1,9 +1,9 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-class SecondsRulerRenderSystem {
-    static function create(components) as SecondsRulerRenderSystem {
-        return new SecondsRulerRenderSystem(components);
+class RenderSecondsRulerSystem {
+    static function create(components) as RenderSecondsRulerSystem {
+        return new RenderSecondsRulerSystem(components);
     }
 
     static function isCompatible(entity) {
@@ -29,7 +29,7 @@ class SecondsRulerRenderSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0, Graphics.COLOR_BLACK);
+        dc.setColor(0xaaffff, 0xaaffff);
         dc.setClip(58, 180, 166, 16);
         dc.clear();
         dc.drawBitmap(ruler.deltaIndex, 180, self.rulerRes);

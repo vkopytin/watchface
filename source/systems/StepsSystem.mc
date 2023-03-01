@@ -29,7 +29,7 @@ class StepsSystem {
     }
 
     function init() {
-        
+        self.steps.distanceUnits = System.getDeviceSettings().distanceUnits;
     }
 
     function update(deltaTime as Long) {
@@ -41,25 +41,26 @@ class StepsSystem {
         self.accumulatedTime = self.fastUpdate;
 
         var activityInfo = ActivityMonitor.getInfo();
-        var distStr = activityInfo.steps;
+        if (activityInfo == null) {
+            return;
+        }
 
+        var distStr = activityInfo.steps;
         self.steps.value = distStr;
 
-        var distanceMetric = System.getDeviceSettings().distanceUnits;
 		var stepDistance = activityInfo.distance;//.toString();
-		var unit = "";
-        
+		var unit = "?";
+
 		if (stepDistance != null) {
-			if (distanceMetric == System.UNIT_METRIC) {
-					unit = " km";
-					stepDistance = stepDistance * 0.00001;
+			if (self.steps.distanceUnits == System.UNIT_METRIC) {
+                unit = " km";
+                stepDistance = stepDistance * 0.00001;
 			} else {
-					unit = " mi";
-					stepDistance = stepDistance * 0.00001 * 0.621371;
+                unit = " mi";
+                stepDistance = stepDistance * 0.00001 * 0.621371;
 			}
 		} else {
 			stepDistance = 0;
-			unit = "?";
 		}
 
 		if (stepDistance >= 100) {

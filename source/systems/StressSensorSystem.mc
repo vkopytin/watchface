@@ -39,10 +39,6 @@ class StressSensorSystem {
 
         self.accumulatedTime = self.fastUpdate;
 
-        var screenCenterPoint = self.engine.centerPoint;
-        var moveMatrix = [screenCenterPoint];
-        self.stress.point = add([self.stress.position], moveMatrix)[0];
-
         var stressIterator = Toybox.SensorHistory.getStressHistory({ :period => 1 });
 		var sample = stressIterator.next();
         if (sample == null) {

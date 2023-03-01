@@ -56,17 +56,17 @@ class CurrentTimeSystem {
     }
 
     function update(deltaTime as Long) {
+        var delta = deltaTime.toFloat() / 1000.0;
         self.accumulatedTime -= deltaTime;
+        self.time.secondsNumber = (self.time.seconds + delta).toNumber();
         if (self.accumulatedTime > 0) {
-            var delta = deltaTime.toFloat() / 1000.0;
+            if (self.time.secondsNumber > 59) {
+                self.time.secondsNumber = 0;
+            }
+
             self.time.seconds = self.time.seconds + delta;
             self.time.minutes = self.time.minutes + delta / 60.0;
             self.time.hours = (self.time.hours + delta / 60.0 / 60.0);
-            self.engine.timeSec = self.time.seconds;
-
-            if (self.time.seconds > 59) {
-                self.accumulatedTime = 0;
-            }
 
             return;
         }
@@ -76,9 +76,9 @@ class CurrentTimeSystem {
 
         self.time.hours = clockTime.hour.toFloat();
         self.time.minutes = clockTime.min.toFloat();
+        self.time.secondsNumber = clockTime.sec;
         self.time.seconds = clockTime.sec.toFloat();
-        self.time.offset = clockTime.timeZoneOffset;;
-        self.engine.timeSec = self.time.seconds;
+        self.time.offset = clockTime.timeZoneOffset;
     }
 
     function render(dc, context) {

@@ -5,12 +5,11 @@ function weatherComponentCreate() as WeatherComponent {
 }
 
 class WeatherComponent {
-    var color = Graphics.COLOR_GREEN;
-    var position = [0, -120];
+    var color = 0x005555;
+    var position = [130, 10];
 
     var weatherChar = "-";
     var temperature = 0;
     var temperatureChar = "-";
     var temperatureUnitChar = "L";
-    var point = [0, -100];
 }

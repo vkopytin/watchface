@@ -5,7 +5,7 @@ class DigitalTimeComponent {
         return new DigitalTimeComponent();
     }
 
-    var color = Graphics.COLOR_GREEN;
-    var position = [92, 140];
+    var color = 0x005555;
+    var position = [62, 140];
     var timeTitle = "00:00:00";
 }

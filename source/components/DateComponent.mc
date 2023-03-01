@@ -8,13 +8,12 @@ function dateComponentCreate() {
 }
 
 class DateComponent {
-    var color = 0x00ff00;
+    var color = 0x005555;
     var dayOfWeek = 0;
     var month = 0;
     var day = 0;
     var year = 0;
-    var position = [-50, -72];
+    var position = [60, 39];
 
-    var point = [0, 0];
     var strValue = "";
 }

@@ -43,18 +43,13 @@ class CurrentDateSystem {
         self.date.month = info.month;
         self.date.day = info.day;
 
-        var screenCenterPoint = self.engine.centerPoint;
-        var moveMatrix = [screenCenterPoint];
-        self.date.point = add([self.date.position], moveMatrix)[0];
         self.date.strValue = Lang.format("$1$, $3$", [
             self.date.dayOfWeek, self.date.month, self.date.day
         ]);
     }
 
     function render(dc, context) {
-        var point = self.date.point;
-
         dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(point[0], point[1], Graphics.FONT_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(self.date.position[0], self.date.position[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

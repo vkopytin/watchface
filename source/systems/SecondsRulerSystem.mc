@@ -44,9 +44,11 @@ class SecondsRulerSystem {
 
         self.pid.setTarget(self.time.seconds);
         if (self.time.seconds < self.ruler.lastStep) {
-            self.pid.reset();            
+            self.pid.reset();
+            self.ruler.lastStep = self.time.seconds - 2;
+        } else {
+            self.ruler.lastStep = self.time.seconds;
         }
-        self.ruler.lastStep = self.time.seconds;
     }
 
     function render(dc, context) {

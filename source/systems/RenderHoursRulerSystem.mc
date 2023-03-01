@@ -1,9 +1,9 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-class HoursRulerRenderSystem {
-    static function create(components) as HoursRulerRenderSystem {
-        return new HoursRulerRenderSystem(components);
+class RenderHoursRulerSystem {
+    static function create(components) as RenderHoursRulerSystem {
+        return new RenderHoursRulerSystem(components);
     }
 
     static function isCompatible(entity) {
@@ -29,7 +29,7 @@ class HoursRulerRenderSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0, Graphics.COLOR_BLACK);
+        dc.setColor(0xaaffff, 0xaaffff);
         dc.setClip(56, 77, 80, 62);
         dc.clear();
         dc.drawBitmap(56, self.ruler.deltaIndex, self.rulerRes);

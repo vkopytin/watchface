@@ -24,10 +24,6 @@ class RenderSecondsRulerSystem {
         self.rulerRes = WatchUi.loadResource(Rez.Drawables.ruler);
     }
 
-    function update(deltaTime) {
-
-    }
-
     function render(dc, context) {
         dc.setColor(0xaaffff, 0xaaffff);
         dc.setClip(58, 180, 166, 16);

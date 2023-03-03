@@ -23,9 +23,6 @@ class MultilineRenderSystem {
         
     }
 
-    function update(deltaTime) {
-    }
-    
     function render(dc, context) {
         dc.setColor(0xaaffaa, Graphics.COLOR_TRANSPARENT);
         var length = self.polygon.mesh.size();
@@ -50,6 +47,5 @@ function drawMultiLine(dc, polygon as Lang.Array<Lang.Array<Lang.Numeric>>) as V
         dc.drawLine(pointFrom[0], pointFrom[1], pointTo[0], pointTo[1]);
     }
 
-    dc.setPenWidth(1);
     dc.drawLine(pointTo[0], pointTo[1], polygon[0][0], polygon[0][1]);
 }

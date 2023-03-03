@@ -20,8 +20,8 @@ class MinutesRulerSystem {
     var fastUpdate = 5 * 1000 as Long; // skip updates for 5 secs
     var accumulatedTime = 0 as Long;
 
-    var pid = Controller.create(0.03, 0.1, 0.1, 0.05);
-    var pidDec = Controller.create(0.03, 0.1, 0.1, 0.05);
+    var pid = Controller.create(0.03, 0.1, 0.1);
+    var pidDec = Controller.create(0.03, 0.1, 0.1);
 
     function initialize(components) {
         self.components = components;
@@ -55,8 +55,8 @@ class MinutesRulerSystem {
         self.ruler.lastStep = self.pid.update(self.ruler.lastStep);
         self.ruler.lastDecStep = self.pidDec.update(self.ruler.lastDecStep);
 
-        self.ruler.deltaIndex = 5 - self.ruler.lastStep * 48.9;
-        self.ruler.deltaDecIndex = -110 - self.ruler.lastDecStep * 7.1;
+        self.ruler.deltaIndex = 25 - self.ruler.lastStep * 48.9;
+        self.ruler.deltaDecIndex = -90 - self.ruler.lastDecStep * 7.1;
 
         self.accumulatedTime -= deltaTime;
         if (self.accumulatedTime > 0) {
@@ -84,9 +84,5 @@ class MinutesRulerSystem {
         } else {
             self.ruler.lastDecStep = minutesDec;
         }
-    }
-
-    function render(dc, context) {
-
     }
 }

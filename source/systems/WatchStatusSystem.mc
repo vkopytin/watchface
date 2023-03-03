@@ -40,19 +40,31 @@ class WatchStatusSystem {
         self.accumulatedTime = self.fastUpdate;
 
         var stats = System.getSystemStats();
-        self.watchStatus.battery = stats.battery;
-        self.watchStatus.solarIntensity = stats.solarIntensity;
-        self.watchStatus.isSolarCharging = stats.solarIntensity > 0;
-        if (self.watchStatus.isSolarCharging) {
-            self.watchStatus.color = self.watchStatus.enabledColor;
-            self.watchStatus.solarStatusIcon = "7";
-        } else {
-            self.watchStatus.color = self.watchStatus.disabledColor;
-            self.watchStatus.solarStatusIcon = "6";
+        if (stats != null) {
+            self.watchStatus.battery = stats.battery;
+            self.watchStatus.solarIntensity = stats.solarIntensity;
+            self.watchStatus.isSolarCharging = stats.solarIntensity > 0;
+            if (self.watchStatus.solarIntensity > 49) {
+                self.watchStatus.color = self.watchStatus.enabledColor;
+                self.watchStatus.solarStatusIcon = "7";
+            } else if (self.watchStatus.solarIntensity > 24) {
+                self.watchStatus.color = self.watchStatus.enabledColor;
+                self.watchStatus.solarStatusIcon = "6";
+            } else if (self.watchStatus.solarIntensity > 0) {
+                self.watchStatus.color = self.watchStatus.enabledColor;
+                self.watchStatus.solarStatusIcon = "5";
+            } else {
+                self.watchStatus.color = self.watchStatus.disabledColor;
+                self.watchStatus.solarStatusIcon = "5";
+            }
         }
-    }
 
-    function render(dc, context) {
-
+        var settings = System.getDeviceSettings();
+        if (settings == null) {
+            return;
+        }
+        self.watchStatus.phoneConnected = settings.phoneConnected;
+        self.watchStatus.vibrateOn = settings.vibrateOn;
+        self.watchStatus.tonesOn = settings.tonesOn;
     }
 }

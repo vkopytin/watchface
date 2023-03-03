@@ -6,6 +6,6 @@ class DigitalTimeComponent {
     }
 
     var color = 0x005555;
-    var position = [62, 140];
+    var position = [64, 60];
     var timeTitle = "00:00:00";
 }

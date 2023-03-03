@@ -13,7 +13,7 @@ class DateComponent {
     var month = 0;
     var day = 0;
     var year = 0;
-    var position = [60, 39];
+    var position = [130, 76];
 
     var strValue = "";
 }

@@ -65,8 +65,4 @@ class HoursHandSystem {
         self.polygon.color = self.hand.color;
         self.polygon.mesh = [result];
     }
-
-    function render(dc, context) {
-
-    }
 }

@@ -1,5 +1,6 @@
 import Toybox.Math;
 import Toybox.Lang;
+import Toybox.Graphics;
 
 class RenderHoursRulerSystem {
     static function create(components) as RenderHoursRulerSystem {
@@ -24,13 +25,9 @@ class RenderHoursRulerSystem {
         self.rulerRes = WatchUi.loadResource(Rez.Drawables.hoursRuler);
     }
 
-    function update(deltaTime) {
-
-    }
-
     function render(dc, context) {
         dc.setColor(0xaaffff, 0xaaffff);
-        dc.setClip(56, 77, 80, 62);
+        dc.setClip(56, 97, 80, 62);
         dc.clear();
         dc.drawBitmap(56, self.ruler.deltaIndex, self.rulerRes);
         dc.clearClip();

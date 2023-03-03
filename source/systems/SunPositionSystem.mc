@@ -16,13 +16,14 @@ class SunPositionSystem {
     }
 
     static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:sunPosition);
+        return entity.hasKey(:sunPosition) and entity.hasKey(:time);
     }
 
     private const ONE_DAY = new Time.Duration(Time.Gregorian.SECONDS_PER_DAY);
     var api as API_Functions;
 
     var engine as Engine;
+    var time as TimeComponent;
     var sunPosition as SunPositionComponent;
 
     var chargeAmount;
@@ -33,6 +34,7 @@ class SunPositionSystem {
     function initialize(components, api) {
         self.api = api;
         self.engine = components[:engine] as Engine;
+        self.time = components[:time] as TimeComponent;
         self.sunPosition = components[:sunPosition] as SunPositionComponent;
     }
 
@@ -64,20 +66,32 @@ class SunPositionSystem {
         var now = Time.now();
         var lat = self.sunPosition.locationDegrees[0];
 		var lng = self.sunPosition.locationDegrees[1];
-        var timesToday = self.api.calculate(today, new Position.Location({
-            :latitude => lat,
-            :longitude => lng,
-            :format => :degrees
-        }).toRadians(), SUNSET);
-        var timesTomorrow = self.api.calculate(today.add(ONE_DAY), new Position.Location({
+        var sunriseToday = self.api.calculate(today, new Position.Location({
             :latitude => lat,
             :longitude => lng,
             :format => :degrees
         }).toRadians(), SUNRISE);
-        var sunSetInfo = Gregorian.info(timesToday, Time.FORMAT_MEDIUM);
-        var sunRiseInfo = Gregorian.info(timesTomorrow, Time.FORMAT_MEDIUM);
+        var sunsetToday = self.api.calculate(today, new Position.Location({
+            :latitude => lat,
+            :longitude => lng,
+            :format => :degrees
+        }).toRadians(), SUNSET);
+        var sunriseTomorrow = self.api.calculate(today.add(ONE_DAY), new Position.Location({
+            :latitude => lat,
+            :longitude => lng,
+            :format => :degrees
+        }).toRadians(), SUNRISE);
+        var sunSetInfo = Gregorian.info(sunsetToday, Time.FORMAT_MEDIUM);
+        var sunRiseInfo = Gregorian.info(sunriseTomorrow, Time.FORMAT_MEDIUM);
         self.sunPosition.sunset = sunSetInfo.hour + ":" + sunSetInfo.min.format("%02d");
         self.sunPosition.sunrise = sunRiseInfo.hour + ":" + sunRiseInfo.min.format("%02d");
+        if (sunriseToday.compare(now) > 0) {
+            self.sunPosition.isDay = false;
+        } else if (sunsetToday.compare(now) > 0) {
+            self.sunPosition.isDay = true;
+        } else if (sunriseTomorrow.compare(now) > 0) {
+            self.sunPosition.isDay = false;
+        }
     }
 
     function render(dc, context) {

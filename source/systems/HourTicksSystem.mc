@@ -70,8 +70,4 @@ class HourTicksSystem {
         self.polygon.color = self.hourTicks.color;
         self.polygon.mesh = polygons;
     }
-
-    function render(dc, context) {
-
-    }
 }

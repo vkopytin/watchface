@@ -28,7 +28,7 @@ class BarometerSensorSystem {
     }
 
     function init() {
-        
+        self.barometer.temperatureUnits = System.getDeviceSettings().temperatureUnits;
     }
 
     function update(deltaTime as Long) {
@@ -57,7 +57,7 @@ class BarometerSensorSystem {
             }
         }
 
-        if (System.getDeviceSettings().temperatureUnits == System.UNIT_METRIC) {
+        if (self.barometer.temperatureUnits == System.UNIT_METRIC) {
             pressure = pressure / 100.0;
         } else {
             pressure = pressure / 100.0 * 0.02953; // inches of mercury
@@ -75,7 +75,7 @@ class BarometerSensorSystem {
 
         var point2 = self.engine.centerPoint;
         var degrees = 1.0 * self.barometer.pressure;
-        var radius = 120;
+        var radius = 130;
 
         //drawGauge(dc, point2, degrees, 125, 170, 60, self.barometer.ranges, self.barometer.colors);
         drawArrow(dc, point2, degrees, radius);
@@ -88,11 +88,11 @@ function drawArrow(dc, point, value, radius) {
     var maxValue = 1070.0;
     var range = maxValue - minValue;
     var gaugeArrowCoords = [
+        [-3, radius + 2],
         [-3, radius - 2],
-        [-3, radius],
-        [0, radius + 5],
-        [3, radius],
+        [0, radius - 7],
         [3, radius - 2],
+        [3, radius + 2],
     ];
     var arrowLength = gaugeArrowCoords.size();
     var arrowDegree = -88 -maxRangeDegree / range * (value - minValue);

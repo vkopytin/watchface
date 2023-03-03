@@ -93,8 +93,4 @@ class SecondsHandSystem {
         self.engine.clipArea[1][0] = min(self.engine.width, maxX - self.engine.clipArea[0][0] + 15);
         self.engine.clipArea[1][1] = min(self.engine.height, maxY - self.engine.clipArea[0][1] + 15);
     }
-
-    function render(dc, context) {
-        
-    }
 }

@@ -46,6 +46,10 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = HoursRulerSystem.create(entity);
             systems.add(system);
         }
+        if (RenderBackgroundAlphaSystem.isCompatible(entity)) {
+            var system = RenderBackgroundAlphaSystem.create(entity);
+            systems.add(system);
+        }
         if (RenderBackgroundSystem.isCompatible(entity)) {
             var system = RenderBackgroundSystem.create(entity);
             systems.add(system);
@@ -146,6 +150,10 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = RenderWatchStatusSystem.create(entity, api);
             systems.add(system);
         }
+        if (RenderHeartRateGraphSystem.isCompatible(entity)) {
+            var system = RenderHeartRateGraphSystem.create(entity, api);
+            systems.add(system);
+        }
     }
 
     return systems;
@@ -157,6 +165,19 @@ function systemsFilter(arr, byProp) {
     for (var index = 0; index < length; index++) {
         var item = arr[index];
         if (item has :components && item.components.hasKey(byProp)) {
+            res.add(item);
+        }
+    }
+
+    return res;
+}
+
+function systemsFilterByMember(arr, byMember) {
+    var res = [];
+    var length = arr.size();
+    for (var index = 0; index < length; index++) {
+        var item = arr[index];
+        if (item has byMember) {
             res.add(item);
         }
     }
@@ -179,6 +200,8 @@ class Engine {
     var sharedTimeComponent = timeComponentCreate();
     var sharedDateComponent = dateComponentCreate();
     var sharedWatchStatus = WatchStatusComponent.create();
+    var sharedSunPositionComponent = SunPositionComponent.create();
+    var sharedHeartRateComponent = HeartRateComponent.create();
 
     var entities = [{
         :name => "update time",
@@ -191,16 +214,15 @@ class Engine {
         :engine => self,
         :watchStatus => sharedWatchStatus,
     }, {
-        :name => "seconds ruler",
-        :engine => self,
-        :time => sharedTimeComponent,
-        :ruler => RulerComponent.create(),
-        :light => {},
-    }, {
         :name => "charge battery",
         :engine => self,
         :watchStatus => sharedWatchStatus,
         :charge => ChargeComponent.create(),
+    }, {
+        :name => "background",
+        :engine => self,
+        :backgroundOff => {},
+        :light => {},
     }, {
         :name => "minutes ruler",
         :engine => self,
@@ -214,13 +236,30 @@ class Engine {
         :hoursRuler => RulerComponent.create(),
         :light => {},
     }, {
+        :name => "seconds ruler",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :ruler => RulerComponent.create(),
+        :light => {},
+    }, {
         :name => "background",
         :engine => self,
         :background => {},
         :light => {},
     }, {
+        :name => "background alpha",
+        :engine => self,
+        :backgroundAlphaOff => {},
+        :light => {},
+    }, {
+        :name => "sun position",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :sunPosition => sharedSunPositionComponent,
+    }, {
         :name => "weather",
         :engine => self,
+        :sunPosition => sharedSunPositionComponent,
         :weather => weatherComponentCreate(),
     }, {
         :name => "current date",
@@ -245,10 +284,6 @@ class Engine {
         :digitalTime => DigitalTimeComponent.create(),
         :light => {},
     }, {
-        :name => "sun position",
-        :engine => self,
-        :sunPosition => SunPositionComponent.create(),
-    }, {
         :name => "alt time in New York",
         :engine => self,
         :time => sharedTimeComponent,
@@ -267,7 +302,7 @@ class Engine {
     }, {
         :name => "heart rate",
         :engine => self,
-        :heartRate => HeartRateComponent.create(),
+        :heartRate => sharedHeartRateComponent,
     }, {
         :name => "watch status render",
         :engine => self,
@@ -276,8 +311,21 @@ class Engine {
     }];
 
     var systemsAll = makeSystemsFromEntites(entities, self.api);
+    var updateSystemsAll = systemsFilterByMember(self.systemsAll, :update);
+    var renderSystemsAll = systemsFilterByMember(self.systemsAll, :render);
+    var updateSystemsAllLength = self.updateSystemsAll.size();
+    var renderSystemsAllLength = self.renderSystemsAll.size();
+
     var systemsLight = systemsFilter(self.systemsAll, :light);
-    var systems = self.systemsAll;
+    var updateSystemsLight = systemsFilterByMember(self.systemsLight, :update);
+    var renderSystemsLight = systemsFilterByMember(self.systemsLight, :render);
+    var updateSystemsLightLength = self.updateSystemsLight.size();
+    var renderSystemsLightLength = self.renderSystemsLight.size();
+
+    var updateSystems = self.updateSystemsAll;
+    var renderSystems = self.renderSystemsAll;
+    var updateSystemsLength = self.updateSystemsAllLength;
+    var renderSystemsLength = self.renderSystemsAllLength;
 
     function init(width, height) {
         self.width = width;
@@ -296,20 +344,25 @@ class Engine {
     }
 
     function switchToLight() {
-        self.systems = self.systemsLight;
-        self.systemsLength = self.systems.size();
+        self.updateSystems = self.updateSystemsLight;
+        self.renderSystems = self.renderSystemsLight;
+        self.updateSystemsLength = self.updateSystemsLightLength;
+        self.renderSystemsLength = self.renderSystemsLightLength;
     }
 
     function switchToNormal() {
-        self.systems = self.systemsAll;
-        self.systemsLength = self.systems.size();
+        self.updateSystems = self.updateSystemsAll;
+        self.renderSystems = self.renderSystemsAll;
+        self.updateSystemsLength = self.updateSystemsAllLength;
+        self.renderSystemsLength = self.renderSystemsAllLength;
     }
 
     function tick() {
         var currentTime = System.getTimer();
         var deltaTime = currentTime - self.lastTime;
         self.lastTime = currentTime;
-        var length = self.systemsLength;
+        var length = self.updateSystemsLength;
+        var systems = self.updateSystems;
         var index = 0;
         var n = length % 8;
 
@@ -361,7 +414,8 @@ class Engine {
 
     function render(dc) {
         var currentTime = System.getTimer();
-        var length = self.systemsLength;
+        var length = self.renderSystemsLength;
+        var systems = self.renderSystems;
         var index = 0;
         var n = length % 8;
 

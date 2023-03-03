@@ -78,10 +78,5 @@ class CurrentTimeSystem {
         self.time.minutes = clockTime.min.toFloat();
         self.time.secondsNumber = clockTime.sec;
         self.time.seconds = clockTime.sec.toFloat();
-        self.time.offset = clockTime.timeZoneOffset;
-    }
-
-    function render(dc, context) {
-
     }
 }

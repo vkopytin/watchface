@@ -58,8 +58,8 @@ class DigitalTimeSystem {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        self.engine.clipArea[0][0] = 75;
-        self.engine.clipArea[0][1] = 141;
+        self.engine.clipArea[0][0] = self.digitalTime.position[0] + 13;
+        self.engine.clipArea[0][1] = self.digitalTime.position[1] + 1;
         self.engine.clipArea[1][0] = 31;
         self.engine.clipArea[1][1] = 16;
     }

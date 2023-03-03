@@ -26,13 +26,9 @@ class RenderMinutesRulerSystem {
         self.minutesDescRuler = WatchUi.loadResource(Rez.Drawables.minutesDescRuler);
     }
 
-    function update(deltaTime) {
-
-    }
-
     function render(dc, context) {
         dc.setColor(0xaaffff, 0xaaffff);
-        dc.setClip(146, 77, 73, 76);
+        dc.setClip(146, 97, 73, 76);
         dc.clear();
         dc.drawBitmap(146, self.ruler.deltaIndex, self.minutesOncesRuler);
         dc.drawBitmap(150, self.ruler.deltaDecIndex, self.minutesDescRuler);

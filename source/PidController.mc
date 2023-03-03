@@ -2,8 +2,8 @@ import Toybox.Math;
 import Toybox.System;
 
 class Controller {
-    static function create(kP, kI, kD, dt) {
-        return new Controller(kP, kI, kD, dt, 0);
+    static function create(kP, kI, kD) {
+        return new Controller(kP, kI, kD, 0, 0);
     }
 
     static function createWithMax(kP, kI, kD, dt, max) {

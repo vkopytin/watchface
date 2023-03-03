@@ -15,7 +15,7 @@ class SecondsRulerSystem {
     var time;
     var ruler;
     var rulerRes;
-    var pid = Controller.create(0.03, 0.1, 0.1, 0.05);
+    var pid = Controller.create(0.03, 0.1, 0.1);
 
     var fastUpdate = 1000 as Long; // skip updates for 5 secs
     var accumulatedTime = 0 as Long;
@@ -45,13 +45,9 @@ class SecondsRulerSystem {
         self.pid.setTarget(self.time.seconds);
         if (self.time.seconds < self.ruler.lastStep) {
             self.pid.reset();
-            self.ruler.lastStep = self.time.seconds - 2;
+            self.ruler.lastStep = self.time.seconds - 2.0;
         } else {
             self.ruler.lastStep = self.time.seconds;
         }
-    }
-
-    function render(dc, context) {
-
     }
 }

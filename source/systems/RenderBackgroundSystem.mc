@@ -23,10 +23,6 @@ class RenderBackgroundSystem {
         self.background = WatchUi.loadResource(Rez.Drawables.watchBackground);
     }
 
-    function update(deltaTime) {
-
-    }
-
     function render(dc, context) {
         dc.drawBitmap(0, 0, self.background);
     }

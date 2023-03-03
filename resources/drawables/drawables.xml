@@ -4,22 +4,22 @@
     <bitmap id="watchBackground" filename="watch-background.png" />
     <bitmap id="ruler" filename="ruler.png">
         <palette>
-            <color>005555</color>
+            <color>000000</color>
         </palette>
     </bitmap>
     <bitmap id="minutesOncesRuler" filename="minutes-onces-ruler.png">
         <palette>
-            <color>005555</color>
+            <color>000000</color>
         </palette>
     </bitmap>
     <bitmap id="minutesDescRuler" filename="minutes-dec-ruler.png">
         <palette>
-            <color>005555</color>
+            <color>000000</color>
         </palette>
     </bitmap>
     <bitmap id="hoursRuler" filename="hours-ruler.png">
         <palette>
-            <color>005555</color>
+            <color>000000</color>
         </palette>
     </bitmap>
     <bitmap id="chargeAmount" filename="battery-ruler.png">
@@ -29,12 +29,6 @@
             <color>ffffff</color>
         </palette>
     </bitmap>
-    <bitmap id="stressRuler" filename="stress-ruler.png">
-        <palette>
-            <color>000000</color>
-            <color>0055aa</color>
-            <color>ffffff</color>
-        </palette>
-    </bitmap>
+    <bitmap id="stressRuler" filename="stress-ruler.png" />
     <bitmap id="chargeAmountV" filename="charge-amount-v.png" />
 </drawables>

@@ -23,10 +23,6 @@ class RenderPolygonSystem {
         
     }
 
-    function update(deltaTime) {
-
-    }
-    
     function render(dc, context) {
         dc.setColor(self.polygon.color, Graphics.COLOR_TRANSPARENT);
         var length = self.polygon.mesh.size();

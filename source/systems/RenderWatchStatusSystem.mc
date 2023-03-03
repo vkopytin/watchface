@@ -28,15 +28,24 @@ class RenderWatchStatusSystem {
         self.statusIcons = WatchUi.loadResource(Rez.Fonts.system12);
     }
 
-    function update(deltaTime as Long) {
-
-    }
-
     function render(dc, context) {
         dc.setColor(self.watchStatus.color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             self.watchStatus.position[0], self.watchStatus.position[1],
             self.statusIcons, self.watchStatus.solarStatusIcon, Graphics.TEXT_JUSTIFY_LEFT
         );
+        if (self.watchStatus.phoneConnected) {
+            dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                self.watchStatus.position[0], self.watchStatus.position[1] - 12,
+                self.statusIcons, "2", Graphics.TEXT_JUSTIFY_LEFT
+            );
+        } else {
+            dc.setColor(0x55ffff, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                self.watchStatus.position[0], self.watchStatus.position[1] - 12,
+                self.statusIcons, "1", Graphics.TEXT_JUSTIFY_LEFT
+            );
+        }
     }
 }

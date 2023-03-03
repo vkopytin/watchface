@@ -70,8 +70,4 @@ class MinuteTicksSystem {
         self.polygon.color = self.minuteTicks.color;
         self.polygon.mesh = polygons;
     }
-    
-    function render(dc, context) {
-
-    }
 }

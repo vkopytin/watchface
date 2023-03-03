@@ -19,7 +19,7 @@ class HoursRulerSystem {
     var fastUpdate = 10 * 1000 as Long; // skip updates for 5 secs
     var accumulatedTime = 0 as Long;
 
-    var pid = Controller.create(0.03, 0.1, 0.1, 0.05);
+    var pid = Controller.create(0.03, 0.1, 0.1);
 
     function initialize(components) {
         self.components = components;
@@ -35,7 +35,7 @@ class HoursRulerSystem {
     function update(deltaTime) {
         self.ruler.lastStep = self.pid.update(self.ruler.lastStep);
 
-        self.ruler.deltaIndex = -4 -self.ruler.lastStep * 35.45;
+        self.ruler.deltaIndex = 16 -self.ruler.lastStep * 35.45;
 
         self.accumulatedTime -= deltaTime;
         if (self.accumulatedTime > 0) {
@@ -50,9 +50,5 @@ class HoursRulerSystem {
             self.pid.reset();
         }
         self.ruler.lastStep = hours;
-    }
-
-    function render(dc, context) {
-
     }
 }

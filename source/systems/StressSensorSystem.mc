@@ -47,7 +47,7 @@ class StressSensorSystem {
 
         self.stress.value = sample.data;
         var step = 12;
-        var offset = 162;
+        var offset = self.stress.position[1];
 
         if (self.stress.value > 95) {
             self.stress.deltaIndex = offset;
@@ -91,8 +91,10 @@ class StressSensorSystem {
     }
 
     function render(dc, context) {
-        dc.setClip(146, 162, 103, 12);
-        dc.drawBitmap(146, self.stress.deltaIndex, self.stressRuler);
+        dc.setClip(self.stress.position[0], self.stress.position[1], 103, 12);
+        //dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        //dc.drawRectangle(self.stress.position[0], self.stress.position[1], 103, 12);
+        dc.drawBitmap(self.stress.position[0], self.stress.deltaIndex, self.stressRuler);
         dc.clearClip();
     }
 }

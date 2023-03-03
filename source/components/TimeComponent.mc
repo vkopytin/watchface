@@ -9,7 +9,6 @@ function timeComponentCreate() {
     inst.minutes = 1.0 * clockTime.min;
     inst.seconds = 1.0 * clockTime.sec;
     inst.secondsNumber = clockTime.sec;
-    inst.offset = clockTime.timeZoneOffset;
 
     return inst;
 }
@@ -19,5 +18,4 @@ class TimeComponent {
     var minutes = 0.0 as Float;
     var seconds = 0.0 as Float;
     var secondsNumber = 0;
-    var offset = 0;
 }

@@ -79,6 +79,7 @@ class MoonInfoSystem {
 		self.moon.age = days + " days";
         self.moon.description = desc[0];
         self.moon.image = desc[1];
+        self.moon.illum = illum;
     }
 
     function render(dc, context) {
@@ -87,7 +88,7 @@ class MoonInfoSystem {
         dc.setColor(self.moon.color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(self.moon.position[0] + 24, self.moon.position[1] + 18,
             Graphics.FONT_SYSTEM_XTINY,
-            self.moon.description,
+            self.moon.age,
             Graphics.TEXT_JUSTIFY_LEFT
         );
     }

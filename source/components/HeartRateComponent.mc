@@ -7,6 +7,6 @@ class HeartRateComponent {
     var data = [];
     var dataLength = 0;
     var color = 0x005555;
-    var position = [36, 196];
+    var position = [16, 90];
     var value = "--";
 }

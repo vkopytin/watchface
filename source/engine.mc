@@ -154,6 +154,10 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = RenderHeartRateGraphSystem.create(entity, api);
             systems.add(system);
         }
+        if (MoonInfoSystem.isCompatible(entity)) {
+            var system = MoonInfoSystem.create(entity, api);
+            systems.add(system);
+        }
     }
 
     return systems;
@@ -308,6 +312,12 @@ class Engine {
         :engine => self,
         :watchStatus => sharedWatchStatus,
         :render => {},
+    }, {
+        :name => "moon info",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :date => sharedDateComponent,
+        :moon => MoonInfoComponent.create(),
     }];
 
     var systemsAll = makeSystemsFromEntites(entities, self.api);

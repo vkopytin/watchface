@@ -58,12 +58,17 @@ class MinutesHandSystem {
 
         var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            oldPoint[0] = self.hand.coordinates[index];
-            var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
-            result[index] = point[0];
+            var idxLength = self.hand.coordinates[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                oldPoint[0] = self.hand.coordinates[index][1][idx];
+                var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+                res[idx] = point[0];
+            }
+            result[index] = [self.hand.coordinates[index][0], res];
         }
 
         self.polygon.color = self.hand.color;
-        self.polygon.mesh = [result];
+        self.polygon.mesh = result;
     }
 }

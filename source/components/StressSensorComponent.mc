@@ -6,7 +6,7 @@ function stressSensorComponentCreate() as StressSensorComponent {
 
 class StressSensorComponent {
     var color = 0x005555;
-    var position = [128, 66];
+    var position = [70, 210];
     
     var value = 0;
     var width = 100;

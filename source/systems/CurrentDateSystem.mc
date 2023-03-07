@@ -49,7 +49,7 @@ class CurrentDateSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(self.date.position[0], self.date.position[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
+        context.dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(self.date.position[0], self.date.position[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

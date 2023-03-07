@@ -84,9 +84,9 @@ class MoonInfoSystem {
 
     function render(dc, context) {
         var bitmap = self.images[self.moon.image];
-       	dc.drawBitmap(self.moon.position[0], self.moon.position[1], bitmap);
-        dc.setColor(self.moon.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(self.moon.position[0] + 24, self.moon.position[1] + 18,
+       	context.dc.drawBitmap(self.moon.position[0], self.moon.position[1], bitmap);
+        context.dc.setColor(self.moon.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(self.moon.position[0] + 26, self.moon.position[1],
             Graphics.FONT_SYSTEM_XTINY,
             self.moon.age,
             Graphics.TEXT_JUSTIFY_LEFT

@@ -11,31 +11,16 @@ function secondsHandSystemIsCompatible(entity) {
     return entity.hasKey(:time) and entity.hasKey(:secondsHand) and entity.hasKey(:polygon);
 }
 
-function max(left, right) {
-    if (left > right) {
-        return left;
-    }
-    return right;
-}
-
-function min(left, right) {
-    if (left < right) {
-        return left;
-    }
-    return right;
-}
-
 class SecondsHandSystem {
+    var components;
     var engine as Engine;
     var time as TimeComponent;
     var hand as HandComponent;
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (1 * 1000) as Long; // keep fast updates for 1 secs
-    var accumulatedTime = 0 as Long;
-
     function initialize(components) {
+        self.components = components;
         self.engine = components[:engine];
         self.time = components[:time];
         self.hand = components[:secondsHand];
@@ -55,6 +40,28 @@ class SecondsHandSystem {
         var length = self.hand.coordinates.size();
         var result = new [length];
 
+        if (self.polygon.mesh.size() > 1) {
+            var minX = self.engine.width;
+            var minY = self.engine.height;
+            var maxX = 0;
+            var maxY = 0;
+            for (var index = 0; index < length; index += 1) {
+                var idxLength = self.polygon.mesh[index][1].size();
+                var res = new [idxLength];
+                for (var idx = 0; idx < idxLength; idx++) {
+                    var point = self.polygon.mesh[index][1][idx];
+                    minX = min(minX, point[0]);
+                    minY = min(minY, point[1]);
+                    maxX = max(maxX, point[0]);
+                    maxY = max(maxY, point[1]);
+                }
+            }
+            self.engine.clipArea[0][0] = max(0, minX - 10);
+            self.engine.clipArea[0][1] = max(0, minY - 10);
+            self.engine.clipArea[1][0] = min(self.engine.width, maxX - self.engine.clipArea[0][0] + 10);
+            self.engine.clipArea[1][1] = min(self.engine.height, maxY - self.engine.clipArea[0][1] + 10);
+        }
+
         var sinCos = [Math.cos(angle), Math.sin(angle)];
         var transformMatrix = [
             sinCos,
@@ -63,34 +70,17 @@ class SecondsHandSystem {
         var moveMatrix = [screenCenterPoint];
         var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            oldPoint[0] = self.hand.coordinates[index];
-            var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
-            result[index] = point[0];
+            var idxLength = self.hand.coordinates[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                oldPoint[0] = self.hand.coordinates[index][1][idx];
+                var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+                res[idx] = point[0];
+            }
+            result[index] = [self.hand.coordinates[index][0], res];
         }
 
         self.polygon.color = self.hand.color;
-        self.polygon.mesh = [result];
-
-        self.accumulatedTime -= deltaTime;
-        if (self.accumulatedTime > 0) {
-            return;
-        }
-        self.accumulatedTime = self.fastUpdate;
-
-        var minX = self.engine.width;
-        var minY = self.engine.height;
-        var maxX = 0;
-        var maxY = 0;
-        for (var index = 0; index < length; index += 1) {
-            var point = self.polygon.mesh[0][index];
-            minX = min(minX, point[0]);
-            minY = min(minY, point[1]);
-            maxX = max(maxX, point[0]);
-            maxY = max(maxY, point[1]);
-        }
-        self.engine.clipArea[0][0] = max(0, minX - 15);
-        self.engine.clipArea[0][1] = max(0, minY - 15);
-        self.engine.clipArea[1][0] = min(self.engine.width, maxX - self.engine.clipArea[0][0] + 15);
-        self.engine.clipArea[1][1] = min(self.engine.height, maxY - self.engine.clipArea[0][1] + 15);
+        self.polygon.mesh = result;
     }
 }

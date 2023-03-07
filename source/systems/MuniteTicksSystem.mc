@@ -64,7 +64,7 @@ class MinuteTicksSystem {
                 var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
                 result[index] = point[0];
             }
-            polygons[i] = result;
+            polygons[i] = [self.minuteTicks.color, result];
         }
 
         self.polygon.color = self.minuteTicks.color;

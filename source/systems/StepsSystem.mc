@@ -72,14 +72,14 @@ class StepsSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.steps.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.steps.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.steps.position[0], self.steps.position[1],
             Graphics.FONT_SYSTEM_XTINY,
             self.steps.value,
             Graphics.TEXT_JUSTIFY_LEFT
         );
-        dc.drawText(
+        context.dc.drawText(
             self.steps.position[0], self.steps.position[1] + 14,
             Graphics.FONT_SYSTEM_XTINY,
             self.steps.distance,

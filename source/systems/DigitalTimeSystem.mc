@@ -28,7 +28,8 @@ class DigitalTimeSystem {
     }
 
     function init() {
-        self.lcdDisplayFont = WatchUi.loadResource(Rez.Fonts.lcdDisplay);
+        self.lcdDisplayFont = WatchUi.loadResource(Rez.Fonts.lcdDisplay24);
+        //self.lcdDisplayFont = Graphics.FONT_LARGE;
     }
 
     function update(deltaTime) {
@@ -39,28 +40,27 @@ class DigitalTimeSystem {
 
         self.accumulatedTime = self.fastUpdate;
 
-        var timeFormat = "$1$:$2$:$3$";
+        var timeFormat = "$1$:$2$";
         if (self.time.secondsNumber % 2 == 0) {
-            timeFormat = "$1$:$2$ $3$";
+            timeFormat = "$1$ $2$";
         }
         self.digitalTime.timeTitle = Lang.format(timeFormat, [
             self.time.hours.format("%02d"),
-            self.time.minutes.format("%02d"),
-            self.time.seconds.format("%02d")
+            self.time.minutes.format("%02d")
         ]);
     }
-    
+
     function render(dc, context) {
-        dc.setColor(self.digitalTime.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.digitalTime.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.digitalTime.position[0], self.digitalTime.position[1],
             self.lcdDisplayFont, self.digitalTime.timeTitle,
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        self.engine.clipArea[0][0] = self.digitalTime.position[0] + 13;
-        self.engine.clipArea[0][1] = self.digitalTime.position[1] + 1;
-        self.engine.clipArea[1][0] = 31;
-        self.engine.clipArea[1][1] = 16;
+        //self.engine.clipArea[0][0] = self.digitalTime.position[0] + 13;
+        //self.engine.clipArea[0][1] = self.digitalTime.position[1] + 1;
+        //self.engine.clipArea[1][0] = 31;
+        //self.engine.clipArea[1][1] = 16;
     }
 }

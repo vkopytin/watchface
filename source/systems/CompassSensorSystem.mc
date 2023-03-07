@@ -45,6 +45,6 @@ class CompassSensorSystem {
 
     function render(dc, context) {
         var point = self.compass.point;
-        dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.compass.spStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font
+        context.dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.compass.spStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font
     }
 }

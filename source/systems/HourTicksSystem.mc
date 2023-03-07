@@ -8,7 +8,7 @@ function hourTicksSystemCreate(components) {
 }
 
 function hourTicksSystemIsCompatible(entity) {
-    return entity.hasKey(:hourTicks);
+    return entity.hasKey(:hourTicks) and entity.hasKey(:polygon);
 }
 
 class HourTicksSystem {
@@ -64,7 +64,7 @@ class HourTicksSystem {
                 var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
                 result[index] = point[0];
             }
-            polygons[i] = result;
+            polygons[i] = [self.hourTicks.color, result];
         }
 
         self.polygon.color = self.hourTicks.color;

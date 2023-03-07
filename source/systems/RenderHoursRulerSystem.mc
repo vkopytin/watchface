@@ -26,10 +26,10 @@ class RenderHoursRulerSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0xaaffff, 0xaaffff);
-        dc.setClip(56, 97, 80, 62);
-        dc.clear();
-        dc.drawBitmap(56, self.ruler.deltaIndex, self.rulerRes);
-        dc.clearClip();
+        context.dc.setColor(0xaaffff, 0xaaffff);
+        context.dc.setClip(56, 97, 80, 62);
+        context.dc.clear();
+        context.dc.drawBitmap(56, self.ruler.deltaIndex, self.rulerRes);
+        context.dc.clearClip();
     }
 }

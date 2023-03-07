@@ -97,14 +97,14 @@ class StressSensorSystem {
         //dc.drawRectangle(self.stress.position[0], self.stress.position[1], 103, 12);
         //dc.drawBitmap(self.stress.position[0], self.stress.deltaIndex, self.stressRuler);
         //dc.clearClip();
-        dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(
+        context.dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
+        context.dc.fillRectangle(
             self.stress.position[0], self.stress.position[1],
             self.stress.currentWidth,
             self.stress.height
         );
-        dc.setColor(0xaaffff, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(
+        context.dc.setColor(0x55ffff, Graphics.COLOR_TRANSPARENT);
+        context.dc.fillRectangle(
             self.stress.position[0] + self.stress.currentWidth, self.stress.position[1],
             self.stress.width - self.stress.currentWidth,
             self.stress.height

@@ -72,7 +72,7 @@ class ChargeSystem {
 
     function render(dc, context) {
         //dc.setClip(13, 162, 115, 12);
-        dc.drawBitmap(self.charge.deltaIndex, self.charge.position[1], self.chargeAmount);
-        dc.clearClip();
+        context.dc.drawBitmap(self.charge.deltaIndex, self.charge.position[1], self.chargeAmount);
+        context.dc.clearClip();
     }
 }

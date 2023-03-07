@@ -1,5 +1,6 @@
 import Toybox.Math;
 import Toybox.Lang;
+import Toybox.Graphics;
 
 class RenderBackgroundSystem {
     static function create(components) as RenderBackgroundSystem {
@@ -24,6 +25,6 @@ class RenderBackgroundSystem {
     }
 
     function render(dc, context) {
-        dc.drawBitmap(0, 0, self.background);
+        context.dc.drawBitmap(0, 0, self.background);
     }
 }

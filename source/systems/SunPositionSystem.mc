@@ -95,15 +95,15 @@ class SunPositionSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.sunPosition.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.sunPosition.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.sunPosition.position[0], self.sunPosition.position[1],
             Graphics.FONT_SYSTEM_XTINY,
             self.sunPosition.sunset,
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.drawText(
-            self.sunPosition.position[0] + 90, self.sunPosition.position[1],
+        context.dc.drawText(
+            self.sunPosition.position[0] + 40, self.sunPosition.position[1],
             Graphics.FONT_SYSTEM_XTINY,
             self.sunPosition.sunrise,
             Graphics.TEXT_JUSTIFY_CENTER

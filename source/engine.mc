@@ -196,7 +196,7 @@ class Engine {
     var centerPoint = [120, 120];
     var lastTime = System.getTimer();
     var systemsLength = 0;
-    var clipArea = [[100,100],[200,200]];
+    var clipArea = [[155,138],[89,90]];
     var averageTickMs = 0;
     var averageRenderMs = 0;
 
@@ -226,36 +226,43 @@ class Engine {
         :name => "background",
         :engine => self,
         :backgroundOff => {},
-        :light => {},
     }, {
         :name => "minutes ruler",
         :engine => self,
         :time => sharedTimeComponent,
-        :minutesRuler => RulerComponent.create(),
+        :xminutesRuler => RulerComponent.create(),
         :light => {},
     }, {
         :name => "hours ruler",
         :engine => self,
         :time => sharedTimeComponent,
-        :hoursRuler => RulerComponent.create(),
+        :xhoursRuler => RulerComponent.create(),
         :light => {},
     }, {
         :name => "seconds ruler",
         :engine => self,
         :time => sharedTimeComponent,
-        :ruler => RulerComponent.create(),
+        :xruler => RulerComponent.create(),
         :light => {},
     }, {
         :name => "background",
         :engine => self,
         :background => {},
-        :light => {},
     }, {
         :name => "background alpha",
         :engine => self,
         :backgroundAlphaOff => {},
-        :light => {},
+/*    }, {
+        :name => "minutes ticks",
+        :engine => self,
+        :minuteTicks => minuteTicksCreate(),
+        :polygon => shapeComponentCreate(),
     }, {
+        :name => "hour ticks",
+        :engine => self,
+        :hourTicks => hourTicksCreate(),
+        :polygon => shapeComponentCreate(),
+*/    }, {
         :name => "sun position",
         :engine => self,
         :time => sharedTimeComponent,
@@ -286,7 +293,6 @@ class Engine {
         :engine => self,
         :time => sharedTimeComponent,
         :digitalTime => DigitalTimeComponent.create(),
-        :light => {},
     }, {
         :name => "alt time in New York",
         :engine => self,
@@ -318,6 +324,26 @@ class Engine {
         :time => sharedTimeComponent,
         :date => sharedDateComponent,
         :moon => MoonInfoComponent.create(),
+    }, {
+        :name => "hours hand",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :hoursHand => hoursHandComponentCreate(),
+        :polygon => shapeComponentCreate(),
+    }, {
+        :name => "minutes hand",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :minutesHand => minutesHandComponentCreate(),
+        :polygon => shapeComponentCreate(),
+    }, {
+        :name => "seconds hand",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :secondsHand => secondsHandComponentCreate(),
+        :polygon => shapeComponentCreate(),
+        :buffer => false,
+        :light => {},
     }];
 
     var systemsAll = makeSystemsFromEntites(entities, self.api);
@@ -470,6 +496,13 @@ class Engine {
             }
             while (n > 0); // n must be greater than 0 here also
         }
+
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_DK_GRAY);
+		dc.fillCircle(130, 130, 10);
+		dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_LT_GRAY);
+		dc.fillCircle(130, 130, 9);
+		dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_LT_GRAY);
+		dc.fillCircle(130, 130, 4);
 
         var delta = System.getTimer() - currentTime;
         self.averageRenderMs = (self.averageRenderMs + delta) / 2;

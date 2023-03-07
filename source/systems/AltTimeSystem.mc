@@ -23,6 +23,8 @@ class AltTimeSystem {
     var altTime as AltTimeComponent;
 
     var lcdDisplayFont;
+    var timezoneDiffDuration;
+    var where;
 
     var fastUpdate = (60 * 1000) as Long; // keep fast updates for minute
     var accumulatedTime = 0 as Long;
@@ -37,6 +39,14 @@ class AltTimeSystem {
 
     function init() {
         self.lcdDisplayFont = WatchUi.loadResource(Rez.Fonts.lcdDisplay12);
+        self.where = new Position.Location({
+            :latitude  =>  self.altTime.location[0],
+            :longitude => self.altTime.location[1],
+            :format    => :degrees,
+        });
+
+        var timezoneDiffSecs = self.api.getLocationTimeOffset(where);
+        self.timezoneDiffDuration = new Time.Duration(timezoneDiffSecs.toNumber());
     }
 
     function update(deltaTime as Long) {
@@ -47,27 +57,22 @@ class AltTimeSystem {
 
         self.accumulatedTime = self.fastUpdate;
 
-        var where = new Position.Location({
-            :latitude  =>  self.altTime.location[0],
-            :longitude => self.altTime.location[1],
-            :format    => :degrees,
-        });
-
-        var timezoneDiffSecs = self.api.getLocationTimeOffset(where);
-        var timezoneDiffDuration = new Time.Duration(timezoneDiffSecs.toNumber());
-
         // Based on today's time offset at this location, calculate the local
         // time, by adding the offset to the current UTC time.
         var epochTimeNow = Time.now();
-        var secondaryTimeNow = epochTimeNow.add(timezoneDiffDuration);
+        //var epochTimeNow = Gregorian.moment({
+        //    :year => self.date.year, :month => self.date.month, :day => self.date.day,
+        //    :hour => self.time.hours, :minute => self.time.minutes, :second => self.time.seconds
+        //});
+        var secondaryTimeNow = epochTimeNow.add(self.timezoneDiffDuration);
         var info = Time.Gregorian.utcInfo(secondaryTimeNow, Time.FORMAT_MEDIUM);
 
         self.altTime.value = self.api.timeFormat(self.altTime.format, info);
     }
 
     function render(dc, context) {
-        dc.setColor(self.altTime.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.altTime.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.altTime.position[0], self.altTime.position[1],
             self.lcdDisplayFont,
             self.altTime.value,

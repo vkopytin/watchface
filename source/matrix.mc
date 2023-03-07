@@ -40,3 +40,17 @@ function add(left as Lang.Array<Lang.Array<Lang.Numeric>>, right as Lang.Array<L
     }
     return result;
 }
+
+function max(left, right) {
+    if (left > right) {
+        return left;
+    }
+    return right;
+}
+
+function min(left, right) {
+    if (left < right) {
+        return left;
+    }
+    return right;
+}

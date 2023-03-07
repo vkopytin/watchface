@@ -8,15 +8,21 @@ class RenderPolygonSystem {
     }
 
     static function isCompatible(entity) {
-        return entity.hasKey(:polygon);
+        return entity.hasKey(:engine) and entity.hasKey(:polygon);
     }
 
+    var components;
+    var engine as Engine;
     var polygon as ShapeComponent;
-    var stats as PerformanceStatisticsComponent;
+    var buffer = true;
 
     function initialize(components) {
+        self.components = components;
+        self.engine = components[:engine];
         self.polygon = components[:polygon];
-        self.stats = components[:stats];
+        if (components.hasKey(:buffer)) {
+            self.buffer = components[:buffer];
+        }
     }
 
     function init() {
@@ -24,11 +30,20 @@ class RenderPolygonSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.polygon.color, Graphics.COLOR_TRANSPARENT);
         var length = self.polygon.mesh.size();
-        for (var index = 0; index < length; index += 1) {
-            var mesh = self.polygon.mesh[index];
-            dc.fillPolygon(mesh);
+        if (self.buffer) {
+            for (var index = 0; index < length; index += 1) {
+                var mesh = self.polygon.mesh[index];
+                context.dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);
+                context.dc.fillPolygon(mesh[1]);
+            }
+        } else {
+            dc.drawBitmap(0, 0, self.engine.context.buffer);
+            for (var index = 0; index < length; index += 1) {
+                var mesh = self.polygon.mesh[index];
+                dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);
+                dc.fillPolygon(mesh[1]);
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         self.engine.render(dc);
 
-        //self.debugClipArea(dc);
+        self.debugClipArea(dc);
 
         var stats = Lang.format("u$1$-r$2$", [
             self.engine.averageTickMs, self.engine.averageRenderMs

@@ -24,7 +24,7 @@ class RenderBackgroundAlphaSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0xaaffff, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(0, 0, self.background, "6", Graphics.TEXT_JUSTIFY_LEFT);
+        context.dc.setColor(0xaaffff, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(0, 0, self.background, "6", Graphics.TEXT_JUSTIFY_LEFT);
     }
 }

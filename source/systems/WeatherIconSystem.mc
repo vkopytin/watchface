@@ -245,26 +245,26 @@ class WeatherIconSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.weather.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.setColor(self.weather.color, Graphics.COLOR_TRANSPARENT);
 
         if (self.weather.weatherChar != "-") {
-            dc.drawText(self.weather.position[0], self.weather.position[1],
+            context.dc.drawText(self.weather.position[0], self.weather.position[1],
                 self.weatherFont, self.weather.weatherChar, Graphics.TEXT_JUSTIFY_CENTER
             );
         }
 
         if (self.weather.temperatureChar != "-") {
-            dc.drawText(
+            context.dc.drawText(
                 self.weather.position[0] - 10, self.weather.position[1] + 28,
                 self.weatherFont, self.weather.temperatureChar, Graphics.TEXT_JUSTIFY_RIGHT
             );
         }
 
-        dc.drawText(
+        context.dc.drawText(
             self.weather.position[0] + 10, self.weather.position[1] + 28,
             self.weatherFont, self.weather.temperatureUnitChar, Graphics.TEXT_JUSTIFY_LEFT
         );
-        dc.drawText(
+        context.dc.drawText(
             self.weather.position[0] + 1, self.weather.position[1] + 30,
             Graphics.FONT_SYSTEM_TINY, self.weather.temperature, Graphics.TEXT_JUSTIFY_CENTER
         );

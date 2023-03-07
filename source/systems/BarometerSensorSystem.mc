@@ -70,15 +70,15 @@ class BarometerSensorSystem {
     function render(dc, context) {
         var point = self.barometer.point;
 
-        dc.setColor(self.barometer.color, Graphics.COLOR_TRANSPARENT);
-		dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.barometer.pressureStr, Graphics.TEXT_JUSTIFY_LEFT); // pressure in hPa
+        context.dc.setColor(self.barometer.color, Graphics.COLOR_TRANSPARENT);
+		context.dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.barometer.pressureStr, Graphics.TEXT_JUSTIFY_LEFT); // pressure in hPa
 
         var point2 = self.engine.centerPoint;
         var degrees = 1.0 * self.barometer.pressure;
         var radius = 130;
 
         //drawGauge(dc, point2, degrees, 125, 170, 60, self.barometer.ranges, self.barometer.colors);
-        drawArrow(dc, point2, degrees, radius);
+        drawArrow(context.dc, point2, degrees, radius);
     }
 }
 

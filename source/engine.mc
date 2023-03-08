@@ -8,181 +8,13 @@ function EngineCreate() {
     return inst;
 }
 
-function makeSystemsFromEntites(entities, api as API_Functions) {
-    var systems = [];
-    var length = entities.size();
-
-    /*systems.add(minuteTicksSystemCreate(entities[0]));
-    systems.add(hourTicksSystemCreate(entities[1]));
-    systems.add(weatherIconRenderSystemCreate(entities[2]));
-    systems.add(currentTimeSystemCreate(entities[3]));
-    systems.add(currentTimeSystemCreate(entities[4]));
-    systems.add(currentTimeSystemCreate(entities[5]));
-    systems.add(hoursHandSystemCreate(entities[3]));
-    systems.add(minutesHandSystemCreate(entities[4]));
-    systems.add(secondsHandSystemCreate(entities[5]));
-    systems.add(polygonRenderSystemCreate(entities[3]));
-    systems.add(multilineRenderSystemCreate(entities[3]));
-    systems.add(polygonRenderSystemCreate(entities[4]));
-    systems.add(multilineRenderSystemCreate(entities[4]));
-    systems.add(polygonRenderSystemCreate(entities[5]));
-*/
-
-    for (var index = 0; index < length; index++) {
-        var entity = entities[index];
-        if (currentTymeSystemIsCompatible(entity)) {
-            var system = currentTimeSystemCreate(entity);
-            systems.add(system);
-        }
-        if (SecondsRulerSystem.isCompatible(entity)) {
-            var system = SecondsRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (MinutesRulerSystem.isCompatible(entity)) {
-            var system = MinutesRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (HoursRulerSystem.isCompatible(entity)) {
-            var system = HoursRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderBackgroundAlphaSystem.isCompatible(entity)) {
-            var system = RenderBackgroundAlphaSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderBackgroundSystem.isCompatible(entity)) {
-            var system = RenderBackgroundSystem.create(entity);
-            systems.add(system);
-        }
-        if (DigitalTimeSystem.isCompatible(entity)) {
-            var system = DigitalTimeSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderSecondsRulerSystem.isCompatible(entity)) {
-            var system = RenderSecondsRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderMinutesRulerSystem.isCompatible(entity)) {
-            var system = RenderMinutesRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderHoursRulerSystem.isCompatible(entity)) {
-            var system = RenderHoursRulerSystem.create(entity);
-            systems.add(system);
-        }
-        if (WeatherIconSystem.isCompatible(entity)) {
-            var system = WeatherIconSystem.create(entity);
-            systems.add(system);
-        }
-        if (currentDateSystemIsCompatible(entity)) {
-            var system = currentDateSystemCreate(entity);
-            systems.add(system);
-        }
-        if (stressSensorSystemIsCompatible(entity)) {
-            var system = stressSensorSystemCreate(entity);
-            systems.add(system);
-        }
-        if (barometerSensorSystemIsCompatible(entity)) {
-            var system = barometerSensorSystemCreate(entity);
-            systems.add(system);
-        }
-        if (BodyBatterySystem.isCompatible(entity)) {
-            var system = BodyBatterySystem.create(entity);
-            systems.add(system);
-        }
-        if (compassSensorSystemIsCompatible(entity)) {
-            var system = compassSensorSystemCreate(entity);
-            systems.add(system);
-        }
-        if (minuteTicksSystemIsCompatible(entity)) {
-            var system = minuteTicksSystemCreate(entity);
-            systems.add(system);
-        }
-        if (hourTicksSystemIsCompatible(entity)) {
-            var system = hourTicksSystemCreate(entity);
-            systems.add(system);
-        }
-        if (hoursHandSystemIsCompatible(entity)) {
-            var system = hoursHandSystemCreate(entity);
-            systems.add(system);
-        }
-        if (minutesHandSystemIsCompatible(entity)) {
-            var system = minutesHandSystemCreate(entity);
-            systems.add(system);
-        }
-        if (secondsHandSystemIsCompatible(entity)) {
-            var system = secondsHandSystemCreate(entity);
-            systems.add(system);
-        }
-        if (RenderPolygonSystem.isCompatible(entity)) {
-            var system = RenderPolygonSystem.create(entity);
-            systems.add(system);
-        }
-        if (multilineRenderSystemIsCompatible(entity)) {
-            var system = multilineRenderSystemCreate(entity);
-            systems.add(system);
-        }
-        if (SunPositionSystem.isCompatible(entity)) {
-            var system = SunPositionSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (ChargeSystem.isCompatible(entity)) {
-            var system = ChargeSystem.create(entity);
-            systems.add(system);
-        }
-        if (AltTimeSystem.isCompatible(entity)) {
-            var system = AltTimeSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (StepsSystem.isCompatible(entity)) {
-            var system = StepsSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (HeartRateSystem.isCompatible(entity)) {
-            var system = HeartRateSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (WatchStatusSystem.isCompatible(entity)) {
-            var system = WatchStatusSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (RenderWatchStatusSystem.isCompatible(entity)) {
-            var system = RenderWatchStatusSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (RenderHeartRateGraphSystem.isCompatible(entity)) {
-            var system = RenderHeartRateGraphSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (MoonInfoSystem.isCompatible(entity)) {
-            var system = MoonInfoSystem.create(entity, api);
-            systems.add(system);
-        }
-    }
-
-    return systems;
-}
-
-function systemsFilter(arr, byProp) {
-    var res = [];
-    var length = arr.size();
-    for (var index = 0; index < length; index++) {
-        var item = arr[index];
-        if (item has :components && item.components.hasKey(byProp)) {
-            res.add(item);
-        }
-    }
-
-    return res;
-}
-
 function systemsFilterByMember(arr, byMember) {
     var res = [];
     var length = arr.size();
     for (var index = 0; index < length; index++) {
-        var item = arr[index];
-        if (item has byMember) {
-            res.add(item);
+        var item = arr[index][0];
+        if (item.hasKey(byMember)) {
+            res.add(arr[index]);
         }
     }
 
@@ -194,6 +26,7 @@ class Engine {
     var width = 240;
     var height = 240;
     var centerPoint = [120, 120];
+    var screenCenterPoint = [[120, 120]];
     var lastTime = System.getTimer();
     var systemsLength = 0;
     var clipArea = [[155,138],[89,90]];
@@ -206,26 +39,40 @@ class Engine {
     var sharedWatchStatus = WatchStatusComponent.create();
     var sharedSunPositionComponent = SunPositionComponent.create();
     var sharedHeartRateComponent = HeartRateComponent.create();
+    var sharedChargeComponent = ChargeComponent.create();
+    var sharedWeatherComponent = weatherComponentCreate();
+    var sharedStepsComponent = StepsComponent.create();
+    var sharedBarometerSensorComponent = barometerSensorComponentCreate();
 
     var entities = [{
         :name => "update time",
         :engine => self,
         :time => sharedTimeComponent,
         :oneTime => {},
+        :update => {},
         :light => {},
     }, {
         :name => "watch status",
         :engine => self,
         :watchStatus => sharedWatchStatus,
+        :update => {},
     }, {
         :name => "charge battery",
         :engine => self,
         :watchStatus => sharedWatchStatus,
-        :charge => ChargeComponent.create(),
+        :charge => sharedChargeComponent,
+        :update => {},
+    }, {
+        :name => "charge battery",
+        :engine => self,
+        :watchStatus => sharedWatchStatus,
+        :charge => sharedChargeComponent,
+        :render => {},
     }, {
         :name => "background",
         :engine => self,
         :backgroundOff => {},
+        :render => {},
     }, {
         :name => "minutes ruler",
         :engine => self,
@@ -248,6 +95,8 @@ class Engine {
         :name => "background",
         :engine => self,
         :background => {},
+        :render => {},
+        :light => {},
     }, {
         :name => "background alpha",
         :engine => self,
@@ -267,15 +116,29 @@ class Engine {
         :engine => self,
         :time => sharedTimeComponent,
         :sunPosition => sharedSunPositionComponent,
+        :update => {},
     }, {
         :name => "weather",
         :engine => self,
         :sunPosition => sharedSunPositionComponent,
-        :weather => weatherComponentCreate(),
+        :weather => sharedWeatherComponent,
+        :render => {},
+    }, {
+        :name => "weather",
+        :engine => self,
+        :sunPosition => sharedSunPositionComponent,
+        :weather => sharedWeatherComponent,
+        :update => {},
     }, {
         :name => "current date",
         :engine => self,
         :date => sharedDateComponent,
+        :update => {},
+    }, {
+        :name => "current date",
+        :engine => self,
+        :date => sharedDateComponent,
+        :render => {},
     }, {
         :name => "body battery",
         :engine => self,
@@ -287,7 +150,13 @@ class Engine {
     }, {
         :name => "barometer",
         :engine => self,
-        :barometer => barometerSensorComponentCreate(),
+        :barometer => sharedBarometerSensorComponent,
+        :update => {},
+    }, {
+        :name => "barometer",
+        :engine => self,
+        :barometer => sharedBarometerSensorComponent,
+        :render => {},
     }, {
         :name => "digital time",
         :engine => self,
@@ -308,7 +177,13 @@ class Engine {
     }, {
         :name => "steps count",
         :engine => self,
-        :steps => StepsComponent.create(),
+        :steps => sharedStepsComponent,
+        :update => {},
+    }, {
+        :name => "steps count",
+        :engine => self,
+        :steps => sharedStepsComponent,
+        :render => {},
     }, {
         :name => "heart rate",
         :engine => self,
@@ -343,6 +218,7 @@ class Engine {
         :secondsHand => secondsHandComponentCreate(),
         :polygon => shapeComponentCreate(),
         :buffer => false,
+        :render => {},
         :light => {},
     }];
 
@@ -352,7 +228,7 @@ class Engine {
     var updateSystemsAllLength = self.updateSystemsAll.size();
     var renderSystemsAllLength = self.renderSystemsAll.size();
 
-    var systemsLight = systemsFilter(self.systemsAll, :light);
+    var systemsLight = systemsFilterByMember(self.systemsAll, :light);
     var updateSystemsLight = systemsFilterByMember(self.systemsLight, :update);
     var renderSystemsLight = systemsFilterByMember(self.systemsLight, :render);
     var updateSystemsLightLength = self.updateSystemsLight.size();
@@ -367,15 +243,20 @@ class Engine {
         self.width = width;
         self.height = height;
         self.centerPoint = [width / 2, height / 2];
+        self.screenCenterPoint = [self.centerPoint];
         self.systemsLength = self.systemsAll.size();
         for (var index = 0; index < self.systemsLength; index += 1) {
             var current = systemsAll[index];
-            current.init();
+            if (current.size() == 3) {
+                current[2].invoke(current[0], self.api);
+            }
         }
         var length = self.systemsLight.size();
         for (var index = 0; index < length; index += 1) {
             var current = systemsLight[index];
-            current.init();
+            if (current.size() == 3) {
+                current[2].invoke(current[0], self.api);
+            }
         }
     }
 
@@ -405,7 +286,10 @@ class Engine {
         if (n > 0) {
             do {
                 var current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 n -= 1;
             }
@@ -416,28 +300,52 @@ class Engine {
         if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
             do {
                 var current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.update(deltaTime);
+                current[0][:dc] = null;
+                current[0][:context] = self.context;
+                current[0][:deltaTime] = deltaTime;
+                current[1].invoke(current[0]);
                 index += 1;
                 n -= 1;
             }
@@ -454,11 +362,14 @@ class Engine {
         var systems = self.renderSystems;
         var index = 0;
         var n = length % 8;
+        self.context.dc = dc;
 
         if (n > 0) {
             do {
                 var current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 n -= 1;
             }
@@ -469,28 +380,44 @@ class Engine {
         if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
             do {
                 var current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 current = systems[index];
-                current.render(dc, self.context);
+                current[0][:dc] = dc;
+                current[0][:context] = self.context;
+                current[1].invoke(current[0]);
                 index += 1;
                 n -= 1;
             }

@@ -71,3 +71,7 @@ class MinuteTicksSystem {
         self.polygon.mesh = polygons;
     }
 }
+
+function setupMinuteTicksSystem(systems, components) {
+
+}

@@ -1,4 +1,5 @@
 import Toybox.Graphics;
+import Toybox.Lang;
 
 class AltTimeComponent {
     function createInNewYork() as AltTimeComponent {
@@ -26,4 +27,12 @@ class AltTimeComponent {
     var position = [50, 200];
     var location = [40.730610, -73.935242]; // New York
     var value = "00:00";
+
+    var lcdDisplayFont;
+    var timezoneDiffDuration;
+    var where;
+
+    var fastUpdate = (60 * 1000) as Long; // keep fast updates for minute
+    var accumulatedTime = 0 as Long;
+    var api;
 }

@@ -13,8 +13,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
-
-        self.font = WatchUi.loadResource(Rez.Fonts.weather32) as FontResource;
     }
 
     // Load your resources here

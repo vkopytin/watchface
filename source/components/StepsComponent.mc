@@ -1,5 +1,6 @@
 import Toybox.Graphics;
 import Toybox.System;
+using Toybox.Lang;
 
 class StepsComponent {
     static function create() as StepsComponent {
@@ -12,4 +13,7 @@ class StepsComponent {
     var value = "0000";
     var distance = "0000";
     var distanceUnits = System.UNIT_METRIC;
+
+    var fastUpdate = (2 * 1000) as Lang.Long; // keep fast updates for minute
+    var accumulatedTime = 0 as Lang.Long;
 }

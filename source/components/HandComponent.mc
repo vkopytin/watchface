@@ -37,7 +37,6 @@ function secondsHandComponentCreate() {
         ]],
     ];
     inst.color = 0xff5500;
-    inst.mesh = inst.coordinates;
 
     return inst;
 }
@@ -86,7 +85,6 @@ function minutesHandComponentCreate() {
         ]],
     ];
     inst.color = Graphics.COLOR_DK_GREEN;
-    inst.mesh = inst.coordinates;
 
     return inst;
 }
@@ -135,13 +133,14 @@ function hoursHandComponentCreate() {
         ]],
     ];
     inst.color = Graphics.COLOR_DK_GREEN;
-    inst.mesh = inst.coordinates;
 
     return inst;
 }
 
 class HandComponent {
-    var mesh = [] as Lang.Array<Lang.Array<Lang.Numeric>>;
     var coordinates = [] as Lang.Array<Lang.Array<Lang.Numeric>>;
     var color = Graphics.COLOR_YELLOW;
+
+    var fastUpdate = (5 * 60 * 1000) as Long; // skip updates for 5 mins
+    var accumulatedTime = 0 as Long;
 }

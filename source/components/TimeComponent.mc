@@ -18,4 +18,7 @@ class TimeComponent {
     var minutes = 0.0 as Float;
     var seconds = 0.0 as Float;
     var secondsNumber = 0;
+
+    var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 secs
+    var accumulatedTime = 0 as Long;
 }

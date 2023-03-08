@@ -86,3 +86,7 @@ class MinutesRulerSystem {
         }
     }
 }
+
+function setupMinutesRulerSystem(systems, components) {
+
+}

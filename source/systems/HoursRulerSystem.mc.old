@@ -52,3 +52,7 @@ class HoursRulerSystem {
         self.ruler.lastStep = hours;
     }
 }
+
+function setupHoursRulerSystem(systems, components) {
+
+}

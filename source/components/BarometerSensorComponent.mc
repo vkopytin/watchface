@@ -1,4 +1,5 @@
 import Toybox.System;
+using Toybox.Lang;
 
 function barometerSensorComponentCreate() as BarometerSensorComponent {
     var inst = new BarometerSensorComponent();
@@ -18,4 +19,7 @@ class BarometerSensorComponent {
     var gaugeMesh = [];
     var ranges = [950.0, 966.0, 984.0, 1000.0, 1027.0, 1041.0, 1055.0, 1070.0];
     var colors = [Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLUE, Graphics.COLOR_DK_BLUE, Graphics.COLOR_YELLOW, Graphics.COLOR_ORANGE, Graphics.COLOR_RED, Graphics.COLOR_PINK];
+
+    var fastUpdate = (60 * 1000) as Lang.Long; // keep fast updates for min
+    var accumulatedTime = 0 as Lang.Long;
 }

@@ -2,17 +2,17 @@ import Toybox.Lang;
 import Toybox.Math;
 import Toybox.WatchUi;
 
-function stressSensorSystemCreate(components) as StressSensorSystem {
-    var inst = new StressSensorSystem(components);
-
-    return inst;
-}
-
-function stressSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:stress);
-}
-
 class StressSensorSystem {
+    function create(components) as StressSensorSystem {
+        var inst = new StressSensorSystem(components);
+
+        return inst;
+    }
+
+    function isCompatible(entity) as Boolean {
+        return entity.hasKey(:stress);
+    }
+
     var engine as Engine;
     var stress as StressSensorComponent;
     var stats as PerformanceStatisticsComponent;

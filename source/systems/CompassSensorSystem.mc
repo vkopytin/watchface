@@ -2,17 +2,17 @@ import Toybox.Lang;
 import Toybox.Math;
 using Toybox.Sensor;
 
-function compassSensorSystemCreate(components) as CompassSensorSystem {
-    var inst = new CompassSensorSystem(components);
-
-    return inst;
-}
-
-function compassSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:compass);
-}
-
 class CompassSensorSystem {
+    function create(components) as CompassSensorSystem {
+        var inst = new CompassSensorSystem(components);
+
+        return inst;
+    }
+
+    function isCompatible(entity) as Boolean {
+        return entity.hasKey(:compass);
+    }
+
     var engine as Engine;
     var compass as CompassSensorComponent;
     var stats as PerformanceStatisticsComponent;

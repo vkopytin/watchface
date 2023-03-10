@@ -8,15 +8,15 @@ function renderContextCreate() as RenderContext {
 
 class RenderContext {
     var lastColor = [Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT];
-    var buffer as Graphics.BufferedBitmapReference;
+    var buffer as Graphics.BufferedBitmap;
     var dc;
 
     function initialize() {
         self.buffer = Graphics.createBufferedBitmap({
             :width => 260,
             :height => 260,
-        });
-        self.dc = self.buffer.get().getDc();
+        }).get();
+        self.dc = self.buffer.getDc();
     }
 
     function setColor(dc, foreColor, backColor) {

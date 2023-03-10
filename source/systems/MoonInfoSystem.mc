@@ -4,12 +4,10 @@ import Toybox.Time;
 import Toybox.Time.Gregorian;
 
 class MoonInfoSystem {
-    static function create(components, api) as MoonInfoSystem {
-        return new MoonInfoSystem(components, api);
-    }
-
-    static function isCompatible(entity) {
-        return entity.hasKey(:time) and entity.hasKey(:date) and entity.hasKey(:moon);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:time) and entity.hasKey(:date) and entity.hasKey(:moon)) {
+            systems.add(new MoonInfoSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

@@ -34,7 +34,7 @@ class MinutesRulerSystem {
         self.minutesOncesRuler = WatchUi.loadResource(Rez.Drawables.minutesOncesRuler);
         self.minutesDescRuler = WatchUi.loadResource(Rez.Drawables.minutesDescRuler);
     }
-
+/*
     function modulus(value) {
         if (value > 50) {
             return value - 50;
@@ -50,7 +50,7 @@ class MinutesRulerSystem {
             return value;
         }
     }
-
+*/
     function update(deltaTime) {
         self.ruler.lastStep = self.pid.update(self.ruler.lastStep);
         self.ruler.lastDecStep = self.pidDec.update(self.ruler.lastDecStep);

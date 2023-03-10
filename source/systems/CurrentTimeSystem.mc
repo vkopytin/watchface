@@ -1,16 +1,7 @@
 import Toybox.Lang;
 import Toybox.Math;
 
-function currentTimeSystemCreate(components) as CurrentTimeSystem {
-    var inst = new CurrentTimeSystem(components);
-
-    return inst;
-}
-
-function currentTymeSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:time) and entity.hasKey(:oneTime);
-}
-
+/*
 function remainder(a as Float, b as Float) as Float {
     // Handling negative values
     if (a < 0) {
@@ -34,14 +25,20 @@ function remainder(a as Float, b as Float) as Float {
     
     return mod;
 }
-
+*/
 class CurrentTimeSystem {
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:time) and entity.hasKey(:oneTime)) {
+            systems.add(new CurrentTimeSystem(entity));
+        }
+    }
+
     var components;
     var engine as Engine;
     var time as TimeComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (5 * 1000) as Long; // keep fast updates for 5 secs
+    var fastUpdate = (60 * 1000) as Long; // keep fast updates for 5 secs
     var accumulatedTime = 0 as Long;
 
     function initialize(components) {
@@ -56,14 +53,14 @@ class CurrentTimeSystem {
     }
 
     function update(deltaTime as Long) {
-        var delta = deltaTime.toFloat() / 1000.0;
         self.accumulatedTime -= deltaTime;
-        self.time.secondsNumber = (self.time.seconds + delta).toNumber();
         if (self.accumulatedTime > 0) {
+            var delta = deltaTime * 0.001;
+            self.time.secondsNumber = (self.time.seconds + delta).toNumber();
             if (self.time.secondsNumber > 59) {
                 self.time.secondsNumber = 0;
+                self.time.seconds = 0;
             }
-
             self.time.seconds = self.time.seconds + delta;
             self.time.minutes = self.time.minutes + delta / 60.0;
             self.time.hours = (self.time.hours + delta / 60.0 / 60.0);

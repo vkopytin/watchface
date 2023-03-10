@@ -5,14 +5,10 @@ import Toybox.Graphics;
 import Toybox.ActivityMonitor;
 
 class StepsSystem {
-    static function create(components, api as API_Functions) as StepsSystem {
-        var inst = new StepsSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:steps);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:steps)) {
+            systems.add(new StepsSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

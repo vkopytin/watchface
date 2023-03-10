@@ -1,17 +1,17 @@
 import Toybox.Lang;
 import Toybox.Math;
 
-function hourTicksSystemCreate(components) {
-    var inst = new HourTicksSystem(components);
-
-    return inst;
-}
-
-function hourTicksSystemIsCompatible(entity) {
-    return entity.hasKey(:hourTicks) and entity.hasKey(:polygon);
-}
-
 class HourTicksSystem {
+    function create(components) {
+        var inst = new HourTicksSystem(components);
+
+        return inst;
+    }
+
+    function isCompatible(entity) {
+        return entity.hasKey(:hourTicks) and entity.hasKey(:polygon);
+    }
+
     var engine;
     var hourTicks as HourTicksComponent;
     var polygon as ShapeComponent;
@@ -67,7 +67,6 @@ class HourTicksSystem {
             polygons[i] = [self.hourTicks.color, result];
         }
 
-        self.polygon.color = self.hourTicks.color;
         self.polygon.mesh = polygons;
     }
 }

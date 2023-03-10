@@ -5,14 +5,10 @@ import Toybox.Graphics;
 import Toybox.ActivityMonitor;
 
 class HeartRateSystem {
-    static function create(components, api as API_Functions) as HeartRateSystem {
-        var inst = new HeartRateSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:heartRate);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:heartRate)) {
+            systems.add(new HeartRateSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

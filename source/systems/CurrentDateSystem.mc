@@ -1,17 +1,13 @@
 import Toybox.Lang;
 import Toybox.Math;
 
-function currentDateSystemCreate(components) as CurrentDateSystem {
-    var inst = new CurrentDateSystem(components);
-
-    return inst;
-}
-
-function currentDateSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:date);
-}
-
 class CurrentDateSystem {
+    function setup(systems, entity, api) {
+        if (entity.hasKey(:date)) {
+            systems.add(new CurrentDateSystem(entity));
+        }
+    }
+
     var engine as Engine;
     var date as DateComponent;
     var stats as PerformanceStatisticsComponent;

@@ -6,14 +6,10 @@ import Toybox.Time;
 import Toybox.Time.Gregorian;
 
 class AltTimeSystem {
-    static function create(components, api as API_Functions) as AltTimeSystem {
-        var inst = new AltTimeSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:altTime) and entity.hasKey(:time);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:altTime) and entity.hasKey(:time)) {
+            systems.add(new AltTimeSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

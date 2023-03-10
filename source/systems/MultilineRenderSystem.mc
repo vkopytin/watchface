@@ -1,16 +1,18 @@
 using Toybox.Lang;
 
-function multilineRenderSystemCreate(components) as MultilineRenderSystem {
-    var inst = new MultilineRenderSystem(components);
-
-    return inst;
-}
-
-function multilineRenderSystemIsCompatible(entity) {
-    return entity.hasKey(:polygon) and entity.hasKey(:multiline);
-}
-
 class MultilineRenderSystem {
+    function create(components) as MultilineRenderSystem {
+        var inst = new MultilineRenderSystem(components);
+
+        return inst;
+    }
+
+    function setup(systems, entity, api) {
+        if (entity.hasKey(:polygon) and entity.hasKey(:multiline)) {
+            systems.add(new MultilineRenderSystem(entity));
+        }
+    }
+
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 

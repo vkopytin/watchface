@@ -4,14 +4,10 @@ import Toybox.System;
 using Toybox.Sensor;
 
 class ChargeSystem {
-    static function create(components) as ChargeSystem {
-        var inst = new ChargeSystem(components);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:charge) and entity.hasKey(:watchStatus);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:charge) and entity.hasKey(:watchStatus)) {
+            systems.add(new ChargeSystem(entity));
+        }
     }
 
     var engine as Engine;

@@ -30,10 +30,7 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
 
     for (var index = 0; index < length; index++) {
         var entity = entities[index];
-        if (currentTymeSystemIsCompatible(entity)) {
-            var system = currentTimeSystemCreate(entity);
-            systems.add(system);
-        }
+        CurrentTimeSystem.setup(systems, entity, api);
         if (SecondsRulerSystem.isCompatible(entity)) {
             var system = SecondsRulerSystem.create(entity);
             systems.add(system);
@@ -58,10 +55,7 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = DigitalTimeSystem.create(entity);
             systems.add(system);
         }
-        if (RenderSecondsRulerSystem.isCompatible(entity)) {
-            var system = RenderSecondsRulerSystem.create(entity);
-            systems.add(system);
-        }
+        RenderSecondsRulerSystem.setup(systems, entity, api);
         if (RenderMinutesRulerSystem.isCompatible(entity)) {
             var system = RenderMinutesRulerSystem.create(entity);
             systems.add(system);
@@ -74,90 +68,48 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = WeatherIconSystem.create(entity);
             systems.add(system);
         }
-        if (currentDateSystemIsCompatible(entity)) {
-            var system = currentDateSystemCreate(entity);
+        CurrentDateSystem.setup(systems, entity, api);
+        if (StressSensorSystem.isCompatible(entity)) {
+            var system = StressSensorSystem.create(entity);
             systems.add(system);
         }
-        if (stressSensorSystemIsCompatible(entity)) {
-            var system = stressSensorSystemCreate(entity);
-            systems.add(system);
-        }
-        if (barometerSensorSystemIsCompatible(entity)) {
-            var system = barometerSensorSystemCreate(entity);
-            systems.add(system);
-        }
+        BarometerSensorSystem.setup(systems, entity, api);
         if (BodyBatterySystem.isCompatible(entity)) {
             var system = BodyBatterySystem.create(entity);
             systems.add(system);
         }
-        if (compassSensorSystemIsCompatible(entity)) {
-            var system = compassSensorSystemCreate(entity);
+        if (CompassSensorSystem.isCompatible(entity)) {
+            var system = CompassSensorSystem.create(entity);
             systems.add(system);
         }
-        if (minuteTicksSystemIsCompatible(entity)) {
-            var system = minuteTicksSystemCreate(entity);
+        if (MinuteTicksSystem.isCompatible(entity)) {
+            var system = MinuteTicksSystem.create(entity);
             systems.add(system);
         }
-        if (hourTicksSystemIsCompatible(entity)) {
-            var system = hourTicksSystemCreate(entity);
+        if (HourTicksSystem.isCompatible(entity)) {
+            var system = HourTicksSystem.create(entity);
             systems.add(system);
         }
-        if (hoursHandSystemIsCompatible(entity)) {
-            var system = hoursHandSystemCreate(entity);
+        if (HoursHandSystem.isCompatible(entity)) {
+            var system = HoursHandSystem.create(entity);
             systems.add(system);
         }
-        if (minutesHandSystemIsCompatible(entity)) {
-            var system = minutesHandSystemCreate(entity);
+        if (MinutesHandSystem.isCompatible(entity)) {
+            var system = MinutesHandSystem.create(entity);
             systems.add(system);
         }
-        if (secondsHandSystemIsCompatible(entity)) {
-            var system = secondsHandSystemCreate(entity);
-            systems.add(system);
-        }
-        if (RenderPolygonSystem.isCompatible(entity)) {
-            var system = RenderPolygonSystem.create(entity);
-            systems.add(system);
-        }
-        if (multilineRenderSystemIsCompatible(entity)) {
-            var system = multilineRenderSystemCreate(entity);
-            systems.add(system);
-        }
-        if (SunPositionSystem.isCompatible(entity)) {
-            var system = SunPositionSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (ChargeSystem.isCompatible(entity)) {
-            var system = ChargeSystem.create(entity);
-            systems.add(system);
-        }
-        if (AltTimeSystem.isCompatible(entity)) {
-            var system = AltTimeSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (StepsSystem.isCompatible(entity)) {
-            var system = StepsSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (HeartRateSystem.isCompatible(entity)) {
-            var system = HeartRateSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (WatchStatusSystem.isCompatible(entity)) {
-            var system = WatchStatusSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (RenderWatchStatusSystem.isCompatible(entity)) {
-            var system = RenderWatchStatusSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (RenderHeartRateGraphSystem.isCompatible(entity)) {
-            var system = RenderHeartRateGraphSystem.create(entity, api);
-            systems.add(system);
-        }
-        if (MoonInfoSystem.isCompatible(entity)) {
-            var system = MoonInfoSystem.create(entity, api);
-            systems.add(system);
-        }
+        SecondsHandSystem.setup(systems, entity, api);
+        RenderPolygonSystem.setup(systems, entity, api);
+        MultilineRenderSystem.setup(systems, entity, api);
+        SunPositionSystem.setup(systems, entity, api);
+        ChargeSystem.setup(systems, entity, api);
+        AltTimeSystem.setup(systems, entity, api);
+        StepsSystem.setup(systems, entity, api);
+        HeartRateSystem.setup(systems, entity, api);
+        WatchStatusSystem.setup(systems, entity, api);
+        RenderWatchStatusSystem.setup(systems, entity, api);
+        RenderHeartRateGraphSystem.setup(systems, entity, api);
+        MoonInfoSystem.setup(systems, entity, api);
     }
 
     return systems;
@@ -380,6 +332,9 @@ class Engine {
     }
 
     function switchToLight() {
+        if (self.updateSystems == self.updateSystemsLight) {
+            return;
+        }
         self.updateSystems = self.updateSystemsLight;
         self.renderSystems = self.renderSystemsLight;
         self.updateSystemsLength = self.updateSystemsLightLength;
@@ -387,6 +342,9 @@ class Engine {
     }
 
     function switchToNormal() {
+        if (self.updateSystems == self.updateSystemsAll) {
+            return;
+        }
         self.updateSystems = self.updateSystemsAll;
         self.renderSystems = self.renderSystemsAll;
         self.updateSystemsLength = self.updateSystemsAllLength;

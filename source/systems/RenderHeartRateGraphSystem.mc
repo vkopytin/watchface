@@ -6,12 +6,10 @@ import Toybox.Math;
 import Toybox.Lang;
 
 class RenderHeartRateGraphSystem {
-    static function create(components, api) as RenderHeartRateGraphSystem {
-		return new RenderHeartRateGraphSystem(components);
-	}
-
-    static function isCompatible(entity) {
-        return entity.hasKey(:heartRateGraph);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:heartRateGraph)) {
+			systems.add(new RenderHeartRateGraphSystem(entity));
+		}
     }
 
 	var engine;

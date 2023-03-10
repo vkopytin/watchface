@@ -1,14 +1,10 @@
 import Toybox.Lang;
 
 class RenderWatchStatusSystem {
-    static function create(components, api as API_Functions) as RenderWatchStatusSystem {
-        var inst = new RenderWatchStatusSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:watchStatus) and entity.hasKey(:render);
+    static function setup(system, entity, api) {
+        if (entity.hasKey(:watchStatus) and entity.hasKey(:render)) {
+            system.add(new RenderWatchStatusSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

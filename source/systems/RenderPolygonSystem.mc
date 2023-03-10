@@ -1,14 +1,10 @@
 using Toybox.Lang;
 
 class RenderPolygonSystem {
-    static function create(components) as RenderPolygonSystem {
-        var inst = new RenderPolygonSystem(components);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) {
-        return entity.hasKey(:engine) and entity.hasKey(:polygon);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:engine) and entity.hasKey(:polygon)) {
+            systems.add(new RenderPolygonSystem(entity));
+        }
     }
 
     var components;
@@ -38,7 +34,7 @@ class RenderPolygonSystem {
                 context.dc.fillPolygon(mesh[1]);
             }
         } else {
-            dc.drawBitmap(0, 0, self.engine.context.buffer);
+            dc.drawScaledBitmap(0, 0, self.engine.width, self.engine.height, self.engine.context.buffer);
             for (var index = 0; index < length; index += 1) {
                 var mesh = self.polygon.mesh[index];
                 dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);

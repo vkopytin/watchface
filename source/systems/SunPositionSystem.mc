@@ -9,14 +9,10 @@ import Toybox.Time.Gregorian;
 import Toybox.Position;
 
 class SunPositionSystem {
-    static function create(components, api as API_Functions) as SunPositionSystem {
-        var inst = new SunPositionSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:sunPosition) and entity.hasKey(:time);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:sunPosition) and entity.hasKey(:time)) {
+            systems.add(new SunPositionSystem(entity, api));
+        }
     }
 
     private const ONE_DAY = new Time.Duration(Time.Gregorian.SECONDS_PER_DAY);

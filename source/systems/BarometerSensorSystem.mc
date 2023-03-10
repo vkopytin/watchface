@@ -3,17 +3,13 @@ import Toybox.Math;
 import Toybox.Activity;
 import Toybox.Graphics;
 
-function barometerSensorSystemCreate(components) as BarometerSensorSystem {
-    var inst = new BarometerSensorSystem(components);
-
-    return inst;
-}
-
-function barometerSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:barometer);
-}
-
 class BarometerSensorSystem {
+    function setup(systems, entity, api) {
+        if (entity.hasKey(:barometer)) {
+            systems.add(new BarometerSensorSystem(entity));
+        }
+    }
+
     var engine as Engine;
     var barometer as BarometerSensorComponent;
     var stats as PerformanceStatisticsComponent;

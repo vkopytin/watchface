@@ -8,7 +8,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     private var font as FontResource?;
     private var ruler;
-    private var timer = mainTimerCreate(method(:engineTick));
+    private var timer = MainTimer.create(self);
     private var sleepMode = false;
 
     function initialize() {

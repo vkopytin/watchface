@@ -23,6 +23,8 @@ class RenderBackgroundSystem {
     }
 
     function render(dc, context) {
+        context.dc.setColor(0xaaffff, 0xaaffff);
+        context.dc.clear();
         context.dc.drawBitmap(0, 0, self.background);
     }
 }

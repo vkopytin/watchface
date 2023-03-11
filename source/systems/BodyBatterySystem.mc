@@ -27,7 +27,7 @@ class BodyBatterySystem {
         self.bodyBattery = components[:bodyBattery] as BodyBatteryComponent;
     }
 
-function init() {
+    function init() {
         self.chargeAmount = WatchUi.loadResource(Rez.Drawables.chargeAmount);
     }
 

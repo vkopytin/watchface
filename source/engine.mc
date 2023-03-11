@@ -168,7 +168,7 @@ class Engine {
         :engine => self,
         :watchStatus => sharedWatchStatus,
         :charge => ChargeComponent.create(),
-    }, {
+/*    }, {
         :name => "minutes ruler",
         :engine => self,
         :time => sharedTimeComponent,
@@ -190,7 +190,7 @@ class Engine {
         :name => "background",
         :engine => self,
         :background => {},
-/*    }, {
+    }, {
         :name => "minutes ticks",
         :engine => self,
         :minuteTicks => minuteTicksCreate(),
@@ -230,7 +230,7 @@ class Engine {
         :name => "digital time",
         :engine => self,
         :time => sharedTimeComponent,
-        :xdigitalTime => DigitalTimeComponent.create(),
+        :digitalTime => DigitalTimeComponent.create(),
     }, {
         :name => "alt time in New York",
         :engine => self,
@@ -266,14 +266,14 @@ class Engine {
         :name => "hours hand",
         :engine => self,
         :time => sharedTimeComponent,
-        :xhoursHand => hoursHandComponentCreate(),
-        :xpolygon => shapeComponentCreate(),
+        :hoursHand => hoursHandComponentCreate(),
+        :polygon => shapeComponentCreate(),
     }, {
         :name => "minutes hand",
         :engine => self,
         :time => sharedTimeComponent,
-        :xminutesHand => minutesHandComponentCreate(),
-        :xpolygon => shapeComponentCreate(),
+        :minutesHand => minutesHandComponentCreate(),
+        :polygon => shapeComponentCreate(),
     }, {
         :name => "seconds hand",
         :engine => self,

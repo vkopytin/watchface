@@ -14,8 +14,8 @@ class BarometerSensorSystem {
     var barometer as BarometerSensorComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
-    var accumulatedTime = 0 as Long;
+    var fastUpdate = (60 * 1000) as Number; // keep fast updates for min
+    var accumulatedTime = 0 as Number;
 
     function initialize(components) {
         self.engine = components[:engine] as Engine;

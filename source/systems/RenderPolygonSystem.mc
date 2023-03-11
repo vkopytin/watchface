@@ -34,7 +34,6 @@ class RenderPolygonSystem {
                 context.dc.fillPolygon(mesh[1]);
             }
         } else {
-            dc.drawScaledBitmap(0, 0, self.engine.width, self.engine.height, self.engine.context.buffer);
             for (var index = 0; index < length; index += 1) {
                 var mesh = self.polygon.mesh[index];
                 dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);

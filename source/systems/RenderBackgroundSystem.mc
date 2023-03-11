@@ -3,17 +3,15 @@ import Toybox.Lang;
 import Toybox.Graphics;
 
 class RenderBackgroundSystem {
-    static function create(components) as RenderBackgroundSystem {
-        return new RenderBackgroundSystem(components);
-    }
-
-    static function isCompatible(entity) {
-        return entity.hasKey(:background);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:background)) {
+            systems.add(new RenderBackgroundSystem(entity));
+        }
     }
 
     var components;
     var engine;
-    var background;
+    var background as Graphics.BitmapReference or Null;
 
     function initialize(components) {
         self.components = components;

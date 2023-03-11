@@ -17,7 +17,7 @@ class DigitalTimeSystem {
     var digitalTime as DigitalTimeComponent;
     var lcdDisplayFont;
 
-    var fastUpdate = 500 as Long; // keep fast updates for minute
+    var fastUpdate = 1000 as Long; // keep fast updates for minute
     var accumulatedTime = 0 as Long;
 
     function initialize(components) {
@@ -40,14 +40,11 @@ class DigitalTimeSystem {
 
         self.accumulatedTime = self.fastUpdate;
 
-        var timeFormat = "$1$:$2$";
         if (self.time.secondsNumber % 2 == 0) {
-            timeFormat = "$1$ $2$";
+            self.digitalTime.timeTitle = self.time.hours.format("%02d") + " " + self.time.minutes.format("%02d");
+        } else {
+            self.digitalTime.timeTitle = self.time.hours.format("%02d") + ":" + self.time.minutes.format("%02d");
         }
-        self.digitalTime.timeTitle = Lang.format(timeFormat, [
-            self.time.hours.format("%02d"),
-            self.time.minutes.format("%02d")
-        ]);
     }
 
     function render(dc, context) {

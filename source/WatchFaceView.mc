@@ -58,11 +58,9 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         self.engine.render(dc);
 
-        self.debugClipArea(dc);
+        //self.debugClipArea(dc);
 
-        var stats = Lang.format("u$1$-r$2$", [
-            self.engine.averageTickMs, self.engine.averageRenderMs
-        ]);
+        var stats = self.engine.averageTickMs + "-" + self.engine.averageRenderMs;
         dc.setColor(0x555555, Graphics.COLOR_TRANSPARENT);
         dc.drawText(130, 235, Graphics.FONT_XTINY, stats, Graphics.TEXT_JUSTIFY_CENTER);
     }

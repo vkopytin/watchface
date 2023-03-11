@@ -20,6 +20,7 @@ class SecondsHandSystem {
     var length = 0;
     var cacheClipArea = new [60];
     var transformMatrix = [[0, 0], [0, 0]];
+    var clipAreas;
 
     function initialize(components) {
         self.components = components;
@@ -31,6 +32,7 @@ class SecondsHandSystem {
     }
 
     function init() {
+        self.clipAreas = Application.loadResource(Rez.JsonData.clipAreas);
         var screenCenterPoint = self.engine.centerPoint;
         self.length = self.hand.coordinates.size();
 
@@ -66,31 +68,6 @@ class SecondsHandSystem {
             }
         }
 
-        if (self.cacheClipArea[self.time.secondsNumber] != null) {
-            self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];
-            return;
-        }
-        var minX = self.engine.width;
-        var minY = self.engine.height;
-        var maxX = 0;
-        var maxY = 0;
-        for (var index = 0; index < self.length; index += 1) {
-            var idxLength = self.polygon.mesh[index][1].size();
-            var res = new [idxLength];
-            for (var idx = 0; idx < idxLength; idx++) {
-                var point = self.polygon.mesh[index][1][idx];
-                minX = min(minX, point[0]);
-                minY = min(minY, point[1]);
-                maxX = max(maxX, point[0]);
-                maxY = max(maxY, point[1]);
-            }
-        }
-        self.cacheClipArea[self.time.secondsNumber] = [
-            [max(0, minX - 12),
-            max(0, minY - 12)],
-            [min(self.engine.width - max(0, minX - 12), maxX - self.engine.clipArea[0][0] + 12),
-            min(self.engine.height - max(0, minY - 12), maxY - self.engine.clipArea[0][1] + 12)]
-        ];
-        self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];
+        self.engine.clipArea = self.clipAreas[self.time.secondsNumber];
     }
 }

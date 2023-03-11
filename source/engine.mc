@@ -43,14 +43,8 @@ function makeSystemsFromEntites(entities, api as API_Functions) {
             var system = HoursRulerSystem.create(entity);
             systems.add(system);
         }
-        if (RenderBackgroundAlphaSystem.isCompatible(entity)) {
-            var system = RenderBackgroundAlphaSystem.create(entity);
-            systems.add(system);
-        }
-        if (RenderBackgroundSystem.isCompatible(entity)) {
-            var system = RenderBackgroundSystem.create(entity);
-            systems.add(system);
-        }
+        RenderFromBufferSystem.setup(systems, entity, api);
+        RenderBackgroundSystem.setup(systems, entity, api);
         if (DigitalTimeSystem.isCompatible(entity)) {
             var system = DigitalTimeSystem.create(entity);
             systems.add(system);
@@ -175,10 +169,6 @@ class Engine {
         :watchStatus => sharedWatchStatus,
         :charge => ChargeComponent.create(),
     }, {
-        :name => "background",
-        :engine => self,
-        :backgroundOff => {},
-    }, {
         :name => "minutes ruler",
         :engine => self,
         :time => sharedTimeComponent,
@@ -200,10 +190,6 @@ class Engine {
         :name => "background",
         :engine => self,
         :background => {},
-    }, {
-        :name => "background alpha",
-        :engine => self,
-        :backgroundAlphaOff => {},
 /*    }, {
         :name => "minutes ticks",
         :engine => self,
@@ -244,7 +230,7 @@ class Engine {
         :name => "digital time",
         :engine => self,
         :time => sharedTimeComponent,
-        :digitalTime => DigitalTimeComponent.create(),
+        :xdigitalTime => DigitalTimeComponent.create(),
     }, {
         :name => "alt time in New York",
         :engine => self,
@@ -280,14 +266,14 @@ class Engine {
         :name => "hours hand",
         :engine => self,
         :time => sharedTimeComponent,
-        :hoursHand => hoursHandComponentCreate(),
-        :polygon => shapeComponentCreate(),
+        :xhoursHand => hoursHandComponentCreate(),
+        :xpolygon => shapeComponentCreate(),
     }, {
         :name => "minutes hand",
         :engine => self,
         :time => sharedTimeComponent,
-        :minutesHand => minutesHandComponentCreate(),
-        :polygon => shapeComponentCreate(),
+        :xminutesHand => minutesHandComponentCreate(),
+        :xpolygon => shapeComponentCreate(),
     }, {
         :name => "seconds hand",
         :engine => self,
@@ -324,11 +310,11 @@ class Engine {
             var current = systemsAll[index];
             current.init();
         }
-        var length = self.systemsLight.size();
-        for (var index = 0; index < length; index += 1) {
-            var current = systemsLight[index];
-            current.init();
-        }
+        //var length = self.systemsLight.size();
+        //for (var index = 0; index < length; index += 1) {
+        //    var current = systemsLight[index];
+        //    current.init();
+        //}
     }
 
     function switchToLight() {
@@ -407,6 +393,7 @@ class Engine {
     }
 
     function render(dc) {
+        self.context.dc = dc;
         var currentTime = System.getTimer();
         var length = self.renderSystemsLength;
         var systems = self.renderSystems;

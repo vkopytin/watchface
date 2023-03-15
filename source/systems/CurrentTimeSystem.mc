@@ -38,7 +38,7 @@ class CurrentTimeSystem {
     var time as TimeComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (60 * 1000) as Long; // keep fast updates for 5 secs
+    var fastUpdate = (25 * 1000) as Long; // keep fast updates for 5 secs
     var accumulatedTime = 0 as Number;
 
     function initialize(components) {
@@ -62,8 +62,6 @@ class CurrentTimeSystem {
                 self.time.seconds = 0;
             }
             self.time.seconds = self.time.seconds + delta;
-            self.time.minutes = self.time.minutes + delta / 60.0;
-            self.time.hours = (self.time.hours + delta / 60.0 / 60.0);
 
             return;
         }

@@ -1,5 +1,4 @@
 <fonts>
-    <font id="id_font_black_diamond" filename="blackdiamond.fnt" filter="0123456789" />
     <font id="weather24" filename="weather24.fnt" antialias="true" />
     <font id="weather32" filename="weather32.fnt" antialias="true" />
     <font id="weather36" filename="weather36.fnt" antialias="true" />

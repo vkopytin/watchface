@@ -83,7 +83,7 @@ class SunPositionSystem {
         self.sunPosition.sunrise = sunRiseInfo.hour + ":" + sunRiseInfo.min.format("%02d");
         if (sunriseToday.compare(now) > 0) {
             self.sunPosition.isDay = false;
-        } else if (sunsetToday.compare(now) > 0) {
+        } else if (sunsetToday.compare(now) < 0) {
             self.sunPosition.isDay = true;
         } else if (sunriseTomorrow.compare(now) > 0) {
             self.sunPosition.isDay = false;

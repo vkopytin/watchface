@@ -13,14 +13,14 @@ class SecondsHandSystem {
     var time as TimeComponent;
     var hand as HandComponent;
     var polygon as ShapeComponent;
-    var stats as PerformanceStatisticsComponent;
+    var light = false;
 
     var PIDiv30 = Math.PI / 30.0;
     var oldPoint = new [1];
     var length = 0;
     var cacheClipArea = new [60];
     var transformMatrix = [[0, 0], [0, 0]];
-    var clipAreas;
+    var coordinates;
 
     function initialize(components) {
         self.components = components;
@@ -28,22 +28,22 @@ class SecondsHandSystem {
         self.time = components[:time];
         self.hand = components[:secondsHand];
         self.polygon = components[:polygon];
-        self.stats = components[:stats];
+        self.light = components[:light];
     }
 
     function init() {
-        self.clipAreas = Application.loadResource(Rez.JsonData.clipAreas);
-        var screenCenterPoint = self.engine.centerPoint;
-        self.length = self.hand.coordinates.size();
+        self.hand.clipAreas = self.light ? self.hand.clipAreas : Application.loadResource(Rez.JsonData.clipAreas);
+        self.coordinates = self.light ? self.hand.sleepModeCoordinates : self.hand.coordinates;
+        self.length = coordinates.size();
 
         var result = new [self.length];
         for (var index = 0; index < self.length; index += 1) {
-            var idxLength = self.hand.coordinates[index][1].size();
+            var idxLength = self.coordinates[index][1].size();
             var res = new [idxLength];
             for (var idx = 0; idx < idxLength; idx++) {
                 res[idx] = [0,0];
             }
-            result[index] = [self.hand.coordinates[index][0], res, idxLength];
+            result[index] = [self.coordinates[index][0], res, idxLength];
         }
 
         self.polygon.mesh = result;
@@ -61,13 +61,43 @@ class SecondsHandSystem {
         for (var index = 0; index < self.length; index += 1) {
             var idxLength = self.polygon.mesh[index][2]; //self.hand.coordinates[index][1].size();
             var res = self.polygon.mesh[index][1]; // new [idxLength]
-            var turnedMesh = arrayMultiply(res, self.hand.coordinates[index][1], self.transformMatrix, idxLength, 2, 2);
+            var turnedMesh = arrayMultiply(res, self.coordinates[index][1], self.transformMatrix, idxLength, 2, 2);
             for (var idx = 0; idx < idxLength; idx += 1) {
                 res[idx][0] = turnedMesh[idx][0] + self.engine.centerPoint[0];
                 res[idx][1] = turnedMesh[idx][1] + self.engine.centerPoint[1];
             }
         }
 
-        self.engine.clipArea = self.clipAreas[self.time.secondsNumber];
+        self.engine.clipArea = self.hand.clipAreas[self.time.secondsNumber];
+        /*if (self.light == null) {
+            return;
+        }
+        if (self.cacheClipArea[self.time.secondsNumber] != null) {
+            self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];
+            System.println(self.cacheClipArea);
+            return;
+        }
+        var minX = self.engine.width;
+        var minY = self.engine.height;
+        var maxX = 0;
+        var maxY = 0;
+        for (var index = 0; index < self.length; index += 1) {
+            var idxLength = self.polygon.mesh[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                var point = self.polygon.mesh[index][1][idx];
+                minX = min(minX, point[0]);
+                minY = min(minY, point[1]);
+                maxX = max(maxX, point[0]);
+                maxY = max(maxY, point[1]);
+            }
+        }
+        self.cacheClipArea[self.time.secondsNumber] = [
+            [max(0, minX - 12).toNumber(),
+            max(0, minY - 12).toNumber()],
+            [min(self.engine.width - max(0, minX - 12), maxX - self.engine.clipArea[0][0] + 12).toNumber(),
+            min(self.engine.height - max(0, minY - 12), maxY - self.engine.clipArea[0][1] + 12).toNumber()]
+        ];
+        self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];*/
     }
 }

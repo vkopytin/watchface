@@ -68,6 +68,9 @@ class ChargeSystem {
 
     function render(dc, context) {
         //dc.setClip(13, 162, 115, 12);
+        context.dc.setColor(0xaaffff, 0xaaffff);
+        context.dc.clear();
+        context.dc.setClip(0, self.charge.position[1], 30, 50);
         context.dc.drawBitmap(self.charge.deltaIndex, self.charge.position[1], self.chargeAmount);
         context.dc.clearClip();
     }

@@ -4,6 +4,12 @@ import Toybox.Graphics;
 function secondsHandComponentCreate() {
     var inst = new HandComponent();
 
+    inst.sleepModeCoordinates = [[0xff5500, [
+        [3,-40],
+        [1, -125],
+        [0, -125],
+        [-3,-40],
+    ]]];
     inst.coordinates = [
         [0x000000, [
             [0, 33],
@@ -11,8 +17,8 @@ function secondsHandComponentCreate() {
             [2, 25],
             [2, 10], 
             [0, 10], 
-            [0,-24],
-            [3,-20],
+            [0,-44],
+            [3,-40],
             [4, 0],
             [6, 30],
         ]],
@@ -22,19 +28,12 @@ function secondsHandComponentCreate() {
             [-2,25],
             [-2,10],
             [0, 10],
-            [0,-24],
-            [-3,-20],
+            [0,-44],
+            [-3,-40],
             [-4, 0],
             [-6,30],
         ]],
-        [0xff5500, [
-            [0,-24],
-            [3,-20],
-            [1, -128],
-            [0, -128],
-            [-3,-20],
-            [0,-24],
-        ]],
+        //inst.sleepModeCoordinates[0]
     ];
     inst.color = 0xff5500;
     inst.mesh = inst.coordinates;
@@ -142,6 +141,8 @@ function hoursHandComponentCreate() {
 
 class HandComponent {
     var mesh = [] as Lang.Array<Lang.Array<Lang.Numeric>>;
+    var sleepModeCoordinates = [];
     var coordinates = [] as Lang.Array<Lang.Array<Lang.Numeric>>;
     var color = Graphics.COLOR_YELLOW;
+    var clipAreas;
 }

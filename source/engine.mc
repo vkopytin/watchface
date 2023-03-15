@@ -152,6 +152,7 @@ class Engine {
     var sharedWatchStatus = WatchStatusComponent.create();
     var sharedSunPositionComponent = SunPositionComponent.create();
     var sharedHeartRateComponent = HeartRateComponent.create();
+    var sharedSecondsComponent = secondsHandComponentCreate();
 
     var entities = [{
         :name => "update time",
@@ -186,11 +187,11 @@ class Engine {
         :time => sharedTimeComponent,
         :xruler => RulerComponent.create(),
         :light => {},
-    }, {
+*/    }, {
         :name => "background",
         :engine => self,
         :background => {},
-    }, {
+/*    }, {
         :name => "minutes ticks",
         :engine => self,
         :minuteTicks => minuteTicksCreate(),
@@ -275,13 +276,25 @@ class Engine {
         :minutesHand => minutesHandComponentCreate(),
         :polygon => shapeComponentCreate(),
     }, {
+        :name => "render from buffer",
+        :engine => self,
+        :fromBuffer => {},
+        :light => {},
+    }, {
+        :name => "seconds hand light",
+        :engine => self,
+        :time => sharedTimeComponent,
+        :secondsHand => sharedSecondsComponent,
+        :polygon => shapeComponentCreate(),
+        :buffer => false,
+        :light => true,
+    }, {
         :name => "seconds hand",
         :engine => self,
         :time => sharedTimeComponent,
-        :secondsHand => secondsHandComponentCreate(),
+        :secondsHand => sharedSecondsComponent,
         :polygon => shapeComponentCreate(),
         :buffer => false,
-        :light => {},
     }];
 
     var systemsAll = makeSystemsFromEntites(entities, self.api);
@@ -393,7 +406,7 @@ class Engine {
     }
 
     function render(dc) {
-        self.context.dc = dc;
+        //self.context.dc = dc;
         var currentTime = System.getTimer();
         var length = self.renderSystemsLength;
         var systems = self.renderSystems;

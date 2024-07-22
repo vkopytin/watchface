@@ -68,5 +68,6 @@ class HourTicksSystem {
         }
 
         self.polygon.mesh = polygons;
+        self.polygon.length = polygons.size();
     }
 }

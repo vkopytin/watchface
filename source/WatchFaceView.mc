@@ -19,7 +19,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.WatchFace(dc));
+        //setLayout(Rez.Layouts.WatchFace(dc));
 
         var width = dc.getWidth();
         var height = dc.getHeight();
@@ -50,11 +50,9 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (self.sleepMode) {
             dc.clearClip();
             self.sleepMode = false;
+            self.engine.switchToNormal();
+            self.engine.tickWithDelta(60 * 1000);
         }
-        self.engine.switchToNormal();
-        self.engine.tick();
-
-        //dc.clear();
 
         self.engine.render(dc);
 

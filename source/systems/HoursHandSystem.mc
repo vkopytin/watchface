@@ -45,6 +45,7 @@ class HoursHandSystem {
         }
 
         self.polygon.mesh = result;
+        self.polygon.length = result.size();
     }
 
     function update(deltaTime) {
@@ -56,8 +57,6 @@ class HoursHandSystem {
         self.accumulatedTime = self.fastUpdate;
 
         var angle = Math.PI/6 * (1.0*self.time.hours + self.time.minutes / 60.0);
-
-        var result = self.polygon.mesh;
 
         var sinCos = [Math.cos(angle), Math.sin(angle)];
         var transformMatrix = [
@@ -73,7 +72,6 @@ class HoursHandSystem {
                 res[idx][0] = turnedMesh[idx][0] + self.engine.centerPoint[0];
                 res[idx][1] = turnedMesh[idx][1] + self.engine.centerPoint[1];
             }
-            result[index] = [self.hand.coordinates[index][0], res];
         }
     }
 }

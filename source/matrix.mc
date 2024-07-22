@@ -173,3 +173,20 @@ function min(left, right) {
     }
     return right;
 }
+
+function swapColsWithRows(left) {
+    var rows = left.size();
+    var cols = left[0].size();
+    var result = new [cols];
+    for (var rowIndex = 0; rowIndex < rows; rowIndex++) {
+        var row = left[rowIndex];
+        for (var colIndex = 0; colIndex < cols; colIndex++) {
+            var cell = row[colIndex];
+            if (result[colIndex] == null) {
+                result[colIndex] = new [rows];
+            }
+            result[colIndex][rowIndex] = cell;
+        }
+    }
+    return result;
+}

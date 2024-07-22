@@ -5,10 +5,10 @@ function secondsHandComponentCreate() {
     var inst = new HandComponent();
 
     inst.sleepModeCoordinates = [[0xff5500, [
-        [3,-40],
-        [1, -125],
-        [0, -125],
-        [-3,-40],
+        [3.0,-40.0],
+        [1.0, -125.0],
+        [0.0, -125.0],
+        [-3.0,-40.0],
     ]]];
     inst.coordinates = [
         [0x000000, [

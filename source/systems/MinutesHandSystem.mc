@@ -36,7 +36,6 @@ class MinutesHandSystem {
     }
 
     function init() {
-        var screenCenterPoint = self.engine.centerPoint;
         self.length = self.hand.coordinates.size();
 
         var result = new [self.length];
@@ -50,6 +49,7 @@ class MinutesHandSystem {
         }
 
         self.polygon.mesh = result;
+        self.polygon.length = result.size();
     }
 
     function update(deltaTime) {
@@ -61,8 +61,6 @@ class MinutesHandSystem {
         self.accumulatedTime = self.fastUpdate;
 
         var angle = (self.time.minutes + self.time.seconds / 60.0) * self.PIDiv30;
-
-        var result = self.polygon.mesh;
 
         self.transformMatrix[0][0] = Math.cos(angle);
         self.transformMatrix[0][1] = Math.sin(angle);

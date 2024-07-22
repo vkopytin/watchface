@@ -68,5 +68,6 @@ class MinuteTicksSystem {
         }
 
         self.polygon.mesh = polygons;
+        self.polygon.length = polygons.size();
     }
 }

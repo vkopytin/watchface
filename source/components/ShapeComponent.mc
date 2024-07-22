@@ -6,4 +6,5 @@ function shapeComponentCreate() as ShapeComponent {
 
 class ShapeComponent {
     var mesh = [];
+    var length = 0;
 }

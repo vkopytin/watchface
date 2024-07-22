@@ -350,12 +350,68 @@ class Engine {
         self.renderSystemsLength = self.renderSystemsAllLength;
     }
 
+    function tickWithDelta(deltaTime) {
+        var currentTime = System.getTimer();
+        self.lastTime = currentTime;
+        var length = self.updateSystemsLength;
+        var systems = self.updateSystems;
+
+        var index = 0;
+        var n = length % 8;
+
+        if (n > 0) {
+            do {
+                var current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here
+        }
+
+        n = Math.floor(length / 8);
+        if (n > 0) { // if iterations < 8 an infinite loop, added for safety in second printing
+            do {
+                var current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                current = systems[index];
+                current.update(deltaTime);
+                index += 1;
+                n -= 1;
+            }
+            while (n > 0); // n must be greater than 0 here also
+        }
+
+        var delta = System.getTimer() - currentTime;
+        self.averageTickMs = (self.averageTickMs + delta) / 2;
+    }
+
     function tick() {
         var currentTime = System.getTimer();
         var deltaTime = currentTime - self.lastTime;
         self.lastTime = currentTime;
         var length = self.updateSystemsLength;
         var systems = self.updateSystems;
+
         var index = 0;
         var n = length % 8;
 
@@ -410,6 +466,7 @@ class Engine {
         var currentTime = System.getTimer();
         var length = self.renderSystemsLength;
         var systems = self.renderSystems;
+
         var index = 0;
         var n = length % 8;
 

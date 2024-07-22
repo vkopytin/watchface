@@ -26,7 +26,7 @@ class RenderPolygonSystem {
     }
 
     function render(dc, context) {
-        var length = self.polygon.mesh.size();
+        var length = self.polygon.length;
         if (self.buffer) {
             for (var index = 0; index < length; index += 1) {
                 var mesh = self.polygon.mesh[index];

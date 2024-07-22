@@ -21,6 +21,7 @@ class SecondsHandSystem {
     var cacheClipArea = new [60];
     var transformMatrix = [[0, 0], [0, 0]];
     var coordinates;
+    var idxLength = 0;
 
     function initialize(components) {
         self.components = components;
@@ -47,6 +48,7 @@ class SecondsHandSystem {
         }
 
         self.polygon.mesh = result;
+        self.polygon.length = result.size();
     }
 
     function update(deltaTime) {
@@ -57,14 +59,13 @@ class SecondsHandSystem {
         self.transformMatrix[1][0] = -self.transformMatrix[0][1];
         self.transformMatrix[1][1] = self.transformMatrix[0][0];
 
-        var result = self.polygon.mesh;
         for (var index = 0; index < self.length; index += 1) {
-            var idxLength = self.polygon.mesh[index][2]; //self.hand.coordinates[index][1].size();
-            var res = self.polygon.mesh[index][1]; // new [idxLength]
-            var turnedMesh = arrayMultiply(res, self.coordinates[index][1], self.transformMatrix, idxLength, 2, 2);
+            self.idxLength = self.polygon.mesh[index][2];
+            var res = self.polygon.mesh[index][1];
+            arrayMultiply(res, self.coordinates[index][1], self.transformMatrix, self.idxLength, 2, 2);
             for (var idx = 0; idx < idxLength; idx += 1) {
-                res[idx][0] = turnedMesh[idx][0] + self.engine.centerPoint[0];
-                res[idx][1] = turnedMesh[idx][1] + self.engine.centerPoint[1];
+                res[idx][0] = res[idx][0] + self.engine.centerPoint[0];
+                res[idx][1] = res[idx][1] + self.engine.centerPoint[1];
             }
         }
 

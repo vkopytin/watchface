@@ -56,12 +56,13 @@ class CurrentTimeSystem {
         self.accumulatedTime -= deltaTime;
         if (self.accumulatedTime > 0) {
             var delta = deltaTime * 0.001;
-            self.time.secondsNumber = (self.time.seconds + delta).toNumber();
-            if (self.time.secondsNumber > 59) {
-                self.time.secondsNumber = 0;
-                self.time.seconds = 0;
-            }
             self.time.seconds = self.time.seconds + delta;
+            self.time.secondsNumber = self.time.seconds.toNumber();
+            if (self.time.secondsNumber > 59) {
+                self.time.minutes = self.time.minutes + 1.0;
+                self.time.secondsNumber = 0;
+                self.time.seconds = 0.0;
+            }
 
             return;
         }

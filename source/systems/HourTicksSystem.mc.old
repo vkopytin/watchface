@@ -1,19 +1,19 @@
-import Toybox.Math;
 import Toybox.Lang;
+import Toybox.Math;
 
-function minuteTicksSystemCreate(components) {
-    var inst = new MinuteTicksSystem(components);
+function hourTicksSystemCreate(components) {
+    var inst = new HourTicksSystem(components);
 
     return inst;
 }
 
-function minuteTicksSystemIsCompatible(entity) {
-    return entity.hasKey(:minuteTicks);
+function hourTicksSystemIsCompatible(entity) {
+    return entity.hasKey(:hourTicks) and entity.hasKey(:polygon);
 }
 
-class MinuteTicksSystem {
+class HourTicksSystem {
     var engine;
-    var minuteTicks as MinuteTicksComponent;
+    var hourTicks as HourTicksComponent;
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 
@@ -22,7 +22,7 @@ class MinuteTicksSystem {
 
     function initialize(components) {
         self.engine = components[:engine];
-        self.minuteTicks = components[:minuteTicks];
+        self.hourTicks = components[:hourTicks];
         self.polygon = components[:polygon];
         self.stats = components[:stats];
     }
@@ -40,9 +40,9 @@ class MinuteTicksSystem {
         self.accumulatedTime = self.fastUpdate;
 
         var screenCenterPoint = self.engine.centerPoint;
-        var increment = 1;
+        var coords = self.hourTicks.mesh;
+        var increment = 5;
         var ticksCount = 60 / increment;
-        var coords = self.minuteTicks.mesh;
         var polygons = new [ticksCount];
         var length = coords.size();
 
@@ -64,10 +64,14 @@ class MinuteTicksSystem {
                 var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
                 result[index] = point[0];
             }
-            polygons[i] = result;
+            polygons[i] = [self.hourTicks.color, result];
         }
 
-        self.polygon.color = self.minuteTicks.color;
+        self.polygon.color = self.hourTicks.color;
         self.polygon.mesh = polygons;
     }
+}
+
+function setupHourTicksSystem(systems, components) {
+
 }

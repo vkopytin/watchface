@@ -13,7 +13,10 @@ class DateComponent {
     var month = 0;
     var day = 0;
     var year = 0;
-    var position = [130, 76];
+    var position = [220, 120];
 
     var strValue = "";
+
+    var fastUpdate = (60 * 1000) as Lang.Long; // keep fast updates for min
+    var accumulatedTime = 0 as Lang.Long;
 }

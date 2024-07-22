@@ -1,30 +1,32 @@
+import Toybox.Math;
 import Toybox.Lang;
-using Toybox.Math;
 
-function hoursHandSystemCreate(components) {
-    var inst = new HoursHandSystem(components);
+function minutesHandSystemCreate(components) {
+    var inst = new MinutesHandSystem(components);
 
     return inst;
 }
 
-function hoursHandSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:time) and entity.hasKey(:hoursHand) and entity.hasKey(:polygon);
+function minutesHandSystemIsCompatible(entity) {
+    return entity.hasKey(:time)
+        && entity.hasKey(:minutesHand)
+        && entity.hasKey(:polygon);
 }
 
-class HoursHandSystem {
-    var engine as Engine;
+class MinutesHandSystem {
+    var engine;
     var time as TimeComponent;
     var hand as HandComponent;
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (5 * 60 * 1000) as Long; // skip updates for 5 mins
+    var fastUpdate = (5 * 1000) as Long; // skip updates for 5 secs
     var accumulatedTime = 0 as Long;
 
     function initialize(components) {
         self.engine = components[:engine];
         self.time = components[:time];
-        self.hand = components[:hoursHand];
+        self.hand = components[:minutesHand];
         self.polygon = components[:polygon];
         self.stats = components[:stats];
     }
@@ -40,10 +42,9 @@ class HoursHandSystem {
         }
 
         self.accumulatedTime = self.fastUpdate;
-
         var screenCenterPoint = self.engine.centerPoint;
 
-        var angle = Math.PI/6 * (1.0*self.time.hours + self.time.minutes / 60.0);
+        var angle = (self.time.minutes / 30.0 + self.time.seconds / 60.0 / 30.0) * Math.PI;
 
         var length = self.hand.coordinates.size();
         var result = new [length];
@@ -57,12 +58,21 @@ class HoursHandSystem {
 
         var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            oldPoint[0] = self.hand.coordinates[index];
-            var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
-            result[index] = point[0];
+            var idxLength = self.hand.coordinates[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                oldPoint[0] = self.hand.coordinates[index][1][idx];
+                var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
+                res[idx] = point[0];
+            }
+            result[index] = [self.hand.coordinates[index][0], res];
         }
 
         self.polygon.color = self.hand.color;
-        self.polygon.mesh = [result];
+        self.polygon.mesh = result;
     }
+}
+
+function setupMinutesHandSystem(systems, components) {
+
 }

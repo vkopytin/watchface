@@ -13,8 +13,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
-
-        self.font = WatchUi.loadResource(Rez.Fonts.weather32) as FontResource;
     }
 
     // Load your resources here
@@ -58,7 +56,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
         self.engine.render(dc);
 
-        //self.debugClipArea(dc);
+        self.debugClipArea(dc);
 
         var stats = Lang.format("u$1$-r$2$", [
             self.engine.averageTickMs, self.engine.averageRenderMs

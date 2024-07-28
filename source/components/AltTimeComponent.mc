@@ -1,7 +1,7 @@
 import Toybox.Graphics;
 
 class AltTimeComponent {
-    function createInNewYork() as AltTimeComponent {
+    static function createInNewYork() as AltTimeComponent {
         var inst = new AltTimeComponent();
 
         inst.position = [180, 160];
@@ -11,7 +11,7 @@ class AltTimeComponent {
         return inst;
     }
 
-    function createInKyiv() as AltTimeComponent {
+    static function createInKyiv() as AltTimeComponent {
         var inst = new AltTimeComponent();
 
         inst.position = [180, 140];

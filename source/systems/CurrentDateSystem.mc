@@ -2,7 +2,7 @@ import Toybox.Lang;
 import Toybox.Math;
 
 class CurrentDateSystem {
-    function setup(systems, entity, api) {
+    static function setup(systems, entity, api) {
         if (entity.hasKey(:date)) {
             systems.add(new CurrentDateSystem(entity));
         }
@@ -22,7 +22,7 @@ class CurrentDateSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime as Long) {

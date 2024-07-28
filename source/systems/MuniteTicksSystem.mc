@@ -2,13 +2,13 @@ import Toybox.Math;
 import Toybox.Lang;
 
 class MinuteTicksSystem {
-    function create(components) {
+    static function create(components) {
         var inst = new MinuteTicksSystem(components);
 
         return inst;
     }
 
-    function isCompatible(entity) {
+    static function isCompatible(entity) {
         return entity.hasKey(:minuteTicks);
     }
 
@@ -28,7 +28,7 @@ class MinuteTicksSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime) {

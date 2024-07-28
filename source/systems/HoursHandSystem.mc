@@ -2,13 +2,13 @@ import Toybox.Lang;
 using Toybox.Math;
 
 class HoursHandSystem {
-    function create(components) {
+    static function create(components) {
         var inst = new HoursHandSystem(components);
 
         return inst;
     }
 
-    function isCompatible(entity) as Boolean {
+    static function isCompatible(entity) as Boolean {
         return entity.hasKey(:time) and entity.hasKey(:hoursHand) and entity.hasKey(:polygon);
     }
 

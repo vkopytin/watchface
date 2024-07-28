@@ -3,13 +3,13 @@ import Toybox.Math;
 using Toybox.Sensor;
 
 class CompassSensorSystem {
-    function create(components) as CompassSensorSystem {
+    static function create(components) as CompassSensorSystem {
         var inst = new CompassSensorSystem(components);
 
         return inst;
     }
 
-    function isCompatible(entity) as Boolean {
+    static function isCompatible(entity) as Boolean {
         return entity.hasKey(:compass);
     }
 
@@ -27,7 +27,7 @@ class CompassSensorSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime as Long) {

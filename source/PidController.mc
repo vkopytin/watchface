@@ -60,7 +60,7 @@ class Controller {
             self.lastTime = currentTime;
         }
         if (dt == 0) {
-            dt = 1;
+            dt = 3.0;
         }
 
         var error = (self.target - self.currentValue);

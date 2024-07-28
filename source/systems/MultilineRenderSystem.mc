@@ -1,13 +1,13 @@
 using Toybox.Lang;
 
 class MultilineRenderSystem {
-    function create(components) as MultilineRenderSystem {
+    static function create(components) as MultilineRenderSystem {
         var inst = new MultilineRenderSystem(components);
 
         return inst;
     }
 
-    function setup(systems, entity, api) {
+    static function setup(systems, entity, api) {
         if (entity.hasKey(:polygon) and entity.hasKey(:multiline)) {
             systems.add(new MultilineRenderSystem(entity));
         }
@@ -22,7 +22,7 @@ class MultilineRenderSystem {
     }
 
     function init() {
-        
+
     }
 
     function render(dc, context) {

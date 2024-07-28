@@ -4,7 +4,7 @@ import Toybox.Activity;
 import Toybox.Graphics;
 
 class BarometerSensorSystem {
-    function setup(systems, entity, api) {
+    static function setup(systems, entity, api) {
         if (entity.hasKey(:barometer)) {
             systems.add(new BarometerSensorSystem(entity));
         }
@@ -93,7 +93,7 @@ function drawArrow(dc, point, value, radius) {
     var arrowLength = gaugeArrowCoords.size();
     var arrowDegree = -88 -maxRangeDegree / range * (value - minValue);
     var angle = Math.PI * arrowDegree / 180;
-    
+
     var sinCos = [Math.cos(angle), Math.sin(angle)];
     var transformMatrix = [
         sinCos,

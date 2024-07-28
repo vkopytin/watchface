@@ -2,7 +2,7 @@ import Toybox.System;
 import Toybox.Timer;
 
 class MainTimer {
-    function create(instWithEngineTick) {
+    static function create(instWithEngineTick) {
         var inst = new MainTimer(instWithEngineTick);
 
         return inst;

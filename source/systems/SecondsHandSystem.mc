@@ -2,7 +2,7 @@ import Toybox.Math;
 import Toybox.Lang;
 
 class SecondsHandSystem {
-    function setup(systems, entity, api) {
+    static function setup(systems, entity, api) {
         if (entity.hasKey(:time) and entity.hasKey(:secondsHand) and entity.hasKey(:polygon)) {
             systems.add(new SecondsHandSystem(entity));
         }

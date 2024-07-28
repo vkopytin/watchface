@@ -3,13 +3,13 @@ import Toybox.Math;
 import Toybox.WatchUi;
 
 class StressSensorSystem {
-    function create(components) as StressSensorSystem {
+    static function create(components) as StressSensorSystem {
         var inst = new StressSensorSystem(components);
 
         return inst;
     }
 
-    function isCompatible(entity) as Boolean {
+    static function isCompatible(entity) as Boolean {
         return entity.hasKey(:stress);
     }
 

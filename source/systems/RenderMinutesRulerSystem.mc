@@ -27,11 +27,11 @@ class RenderMinutesRulerSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(0xaaffff, 0xaaffff);
-        dc.setClip(146, 97, 73, 76);
-        dc.clear();
-        dc.drawBitmap(146, self.ruler.deltaIndex, self.minutesOncesRuler);
-        dc.drawBitmap(150, self.ruler.deltaDecIndex, self.minutesDescRuler);
-        dc.clearClip();
+        context.dc.setColor(0xaaffff, 0xaaffff);
+        context.dc.setClip(146, 97, 73, 76);
+        context.dc.clear();
+        context.dc.drawBitmap(146, self.ruler.deltaIndex, self.minutesOncesRuler);
+        context.dc.drawBitmap(150, self.ruler.deltaDecIndex, self.minutesDescRuler);
+        context.dc.clearClip();
     }
 }

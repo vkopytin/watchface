@@ -1,14 +1,10 @@
 import Toybox.Lang;
 
 class RenderWatchStatusSystem {
-    static function create(components, api as API_Functions) as RenderWatchStatusSystem {
-        var inst = new RenderWatchStatusSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:watchStatus) and entity.hasKey(:render);
+    static function setup(system, entity, api) {
+        if (entity.hasKey(:watchStatus) and entity.hasKey(:render)) {
+            system.add(new RenderWatchStatusSystem(entity, api));
+        }
     }
 
     var api as API_Functions;
@@ -29,20 +25,20 @@ class RenderWatchStatusSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.watchStatus.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.watchStatus.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.watchStatus.position[0], self.watchStatus.position[1],
             self.statusIcons, self.watchStatus.solarStatusIcon, Graphics.TEXT_JUSTIFY_LEFT
         );
         if (self.watchStatus.phoneConnected) {
-            dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
+            context.dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
+            context.dc.drawText(
                 self.watchStatus.position[0], self.watchStatus.position[1] - 12,
                 self.statusIcons, "2", Graphics.TEXT_JUSTIFY_LEFT
             );
         } else {
-            dc.setColor(0x55ffff, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
+            context.dc.setColor(0x55ffff, Graphics.COLOR_TRANSPARENT);
+            context.dc.drawText(
                 self.watchStatus.position[0], self.watchStatus.position[1] - 12,
                 self.statusIcons, "1", Graphics.TEXT_JUSTIFY_LEFT
             );

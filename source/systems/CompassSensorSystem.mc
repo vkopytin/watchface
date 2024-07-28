@@ -2,17 +2,17 @@ import Toybox.Lang;
 import Toybox.Math;
 using Toybox.Sensor;
 
-function compassSensorSystemCreate(components) as CompassSensorSystem {
-    var inst = new CompassSensorSystem(components);
-
-    return inst;
-}
-
-function compassSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:compass);
-}
-
 class CompassSensorSystem {
+    static function create(components) as CompassSensorSystem {
+        var inst = new CompassSensorSystem(components);
+
+        return inst;
+    }
+
+    static function isCompatible(entity) as Boolean {
+        return entity.hasKey(:compass);
+    }
+
     var engine as Engine;
     var compass as CompassSensorComponent;
     var stats as PerformanceStatisticsComponent;
@@ -27,7 +27,7 @@ class CompassSensorSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime as Long) {
@@ -45,6 +45,6 @@ class CompassSensorSystem {
 
     function render(dc, context) {
         var point = self.compass.point;
-        dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.compass.spStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font
+        context.dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.compass.spStr, Graphics.TEXT_JUSTIFY_CENTER); // Using Font
     }
 }

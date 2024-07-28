@@ -1,14 +1,10 @@
 import Toybox.Lang;
 
 class WatchStatusSystem {
-    static function create(components, api as API_Functions) as WatchStatusSystem {
-        var inst = new WatchStatusSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:watchStatus);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:watchStatus)) {
+            systems.add(new WatchStatusSystem(entity, api));
+        }
     }
 
     var api as API_Functions;

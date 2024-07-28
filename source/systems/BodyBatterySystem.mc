@@ -27,7 +27,7 @@ class BodyBatterySystem {
         self.bodyBattery = components[:bodyBattery] as BodyBatteryComponent;
     }
 
-function init() {
+    function init() {
         self.chargeAmount = WatchUi.loadResource(Rez.Drawables.chargeAmount);
     }
 
@@ -51,7 +51,7 @@ function init() {
 
         var pwr = sample.data;
         var step = 12;
-        var offset = 162;
+        var offset = self.bodyBattery.position[1];
 
         if (pwr > 95) {
             self.bodyBattery.deltaIndex = offset;
@@ -97,8 +97,8 @@ function init() {
     }
 
     function render(dc, context) {
-        dc.setClip(13, 162, 115, 12);
-        dc.drawBitmap(13, self.bodyBattery.deltaIndex, self.chargeAmount);
-        dc.clearClip();
+        context.dc.setClip(self.bodyBattery.position[0], self.bodyBattery.position[1], 115, 12);
+        context.dc.drawBitmap(self.bodyBattery.position[0], self.bodyBattery.deltaIndex, self.chargeAmount);
+        context.dc.clearClip();
     }
 }

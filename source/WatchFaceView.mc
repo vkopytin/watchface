@@ -8,7 +8,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     private var font as FontResource?;
     private var ruler;
-    private var timer = mainTimerCreate(method(:engineTick));
+    private var timer = MainTimer.create(self);
     private var sleepMode = false;
 
     function initialize() {
@@ -19,7 +19,7 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.WatchFace(dc));
+        //setLayout(Rez.Layouts.WatchFace(dc));
 
         var width = dc.getWidth();
         var height = dc.getHeight();
@@ -50,19 +50,15 @@ class WatchFaceView extends WatchUi.WatchFace {
         if (self.sleepMode) {
             dc.clearClip();
             self.sleepMode = false;
+            self.engine.switchToNormal();
+            self.engine.tickWithDelta(60 * 1000);
         }
-        self.engine.switchToNormal();
-        self.engine.tick();
-
-        //dc.clear();
 
         self.engine.render(dc);
 
         //self.debugClipArea(dc);
 
-        var stats = Lang.format("u$1$-r$2$", [
-            self.engine.averageTickMs, self.engine.averageRenderMs
-        ]);
+        var stats = self.engine.averageTickMs + "-" + self.engine.averageRenderMs;
         dc.setColor(0x555555, Graphics.COLOR_TRANSPARENT);
         dc.drawText(130, 235, Graphics.FONT_XTINY, stats, Graphics.TEXT_JUSTIFY_CENTER);
     }

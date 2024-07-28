@@ -2,12 +2,10 @@ import Toybox.Math;
 import Toybox.Lang;
 
 class RenderSecondsRulerSystem {
-    static function create(components) as RenderSecondsRulerSystem {
-        return new RenderSecondsRulerSystem(components);
-    }
-
-    static function isCompatible(entity) {
-        return entity.hasKey(:ruler);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:ruler)) {
+            systems.add(new RenderSecondsRulerSystem(entity));
+        }
     }
 
     var engine;

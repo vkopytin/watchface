@@ -1,17 +1,13 @@
 import Toybox.Lang;
 import Toybox.Math;
 
-function currentDateSystemCreate(components) as CurrentDateSystem {
-    var inst = new CurrentDateSystem(components);
-
-    return inst;
-}
-
-function currentDateSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:date);
-}
-
 class CurrentDateSystem {
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:date)) {
+            systems.add(new CurrentDateSystem(entity));
+        }
+    }
+
     var engine as Engine;
     var date as DateComponent;
     var stats as PerformanceStatisticsComponent;
@@ -26,7 +22,7 @@ class CurrentDateSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime as Long) {
@@ -49,7 +45,7 @@ class CurrentDateSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(self.date.position[0], self.date.position[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
+        context.dc.setColor(self.date.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(self.date.position[0], self.date.position[1], Graphics.FONT_SYSTEM_XTINY, self.date.strValue, Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

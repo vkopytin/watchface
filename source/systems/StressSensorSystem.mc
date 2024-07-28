@@ -2,17 +2,17 @@ import Toybox.Lang;
 import Toybox.Math;
 import Toybox.WatchUi;
 
-function stressSensorSystemCreate(components) as StressSensorSystem {
-    var inst = new StressSensorSystem(components);
-
-    return inst;
-}
-
-function stressSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:stress);
-}
-
 class StressSensorSystem {
+    static function create(components) as StressSensorSystem {
+        var inst = new StressSensorSystem(components);
+
+        return inst;
+    }
+
+    static function isCompatible(entity) as Boolean {
+        return entity.hasKey(:stress);
+    }
+
     var engine as Engine;
     var stress as StressSensorComponent;
     var stats as PerformanceStatisticsComponent;
@@ -97,14 +97,14 @@ class StressSensorSystem {
         //dc.drawRectangle(self.stress.position[0], self.stress.position[1], 103, 12);
         //dc.drawBitmap(self.stress.position[0], self.stress.deltaIndex, self.stressRuler);
         //dc.clearClip();
-        dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(
+        context.dc.setColor(0x005555, Graphics.COLOR_TRANSPARENT);
+        context.dc.fillRectangle(
             self.stress.position[0], self.stress.position[1],
             self.stress.currentWidth,
             self.stress.height
         );
-        dc.setColor(0xaaffff, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(
+        context.dc.setColor(0x55ffff, Graphics.COLOR_TRANSPARENT);
+        context.dc.fillRectangle(
             self.stress.position[0] + self.stress.currentWidth, self.stress.position[1],
             self.stress.width - self.stress.currentWidth,
             self.stress.height

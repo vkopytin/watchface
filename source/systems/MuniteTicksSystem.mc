@@ -1,17 +1,17 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-function minuteTicksSystemCreate(components) {
-    var inst = new MinuteTicksSystem(components);
-
-    return inst;
-}
-
-function minuteTicksSystemIsCompatible(entity) {
-    return entity.hasKey(:minuteTicks);
-}
-
 class MinuteTicksSystem {
+    static function create(components) {
+        var inst = new MinuteTicksSystem(components);
+
+        return inst;
+    }
+
+    static function isCompatible(entity) {
+        return entity.hasKey(:minuteTicks);
+    }
+
     var engine;
     var minuteTicks as MinuteTicksComponent;
     var polygon as ShapeComponent;
@@ -28,7 +28,7 @@ class MinuteTicksSystem {
     }
 
     function init() {
-        
+
     }
 
     function update(deltaTime) {
@@ -64,10 +64,10 @@ class MinuteTicksSystem {
                 var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
                 result[index] = point[0];
             }
-            polygons[i] = result;
+            polygons[i] = [self.minuteTicks.color, result];
         }
 
-        self.polygon.color = self.minuteTicks.color;
         self.polygon.mesh = polygons;
+        self.polygon.length = polygons.size();
     }
 }

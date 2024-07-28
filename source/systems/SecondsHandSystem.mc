@@ -1,96 +1,104 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-function secondsHandSystemCreate(components) {
-    var inst = new SecondsHandSystem(components);
-
-    return inst;
-}
-
-function secondsHandSystemIsCompatible(entity) {
-    return entity.hasKey(:time) and entity.hasKey(:secondsHand) and entity.hasKey(:polygon);
-}
-
-function max(left, right) {
-    if (left > right) {
-        return left;
-    }
-    return right;
-}
-
-function min(left, right) {
-    if (left < right) {
-        return left;
-    }
-    return right;
-}
-
 class SecondsHandSystem {
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:time) and entity.hasKey(:secondsHand) and entity.hasKey(:polygon)) {
+            systems.add(new SecondsHandSystem(entity));
+        }
+    }
+
+    var components;
     var engine as Engine;
     var time as TimeComponent;
     var hand as HandComponent;
     var polygon as ShapeComponent;
-    var stats as PerformanceStatisticsComponent;
+    var light = false;
 
-    var fastUpdate = (1 * 1000) as Long; // keep fast updates for 1 secs
-    var accumulatedTime = 0 as Long;
+    var PIDiv30 = Math.PI / 30.0;
+    var oldPoint = new [1];
+    var length = 0;
+    var cacheClipArea = new [60];
+    var transformMatrix = [[0, 0], [0, 0]];
+    var coordinates;
+    var idxLength = 0;
 
     function initialize(components) {
+        self.components = components;
         self.engine = components[:engine];
         self.time = components[:time];
         self.hand = components[:secondsHand];
         self.polygon = components[:polygon];
-        self.stats = components[:stats];
+        self.light = components[:light];
     }
 
     function init() {
-        
+        self.hand.clipAreas = self.light ? self.hand.clipAreas : Application.loadResource(Rez.JsonData.clipAreas);
+        self.coordinates = self.light ? self.hand.sleepModeCoordinates : self.hand.coordinates;
+        self.length = coordinates.size();
+
+        var result = new [self.length];
+        for (var index = 0; index < self.length; index += 1) {
+            var idxLength = self.coordinates[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                res[idx] = [0,0];
+            }
+            result[index] = [self.coordinates[index][0], res, idxLength];
+        }
+
+        self.polygon.mesh = result;
+        self.polygon.length = result.size();
     }
 
     function update(deltaTime) {
-        var screenCenterPoint = self.engine.centerPoint;
+        var angle = self.time.seconds * self.PIDiv30;
 
-        var angle = (self.time.seconds / 30.0) * Math.PI;
+        self.transformMatrix[0][0] = Math.cos(angle);
+        self.transformMatrix[0][1] = Math.sin(angle);
+        self.transformMatrix[1][0] = -self.transformMatrix[0][1];
+        self.transformMatrix[1][1] = self.transformMatrix[0][0];
 
-        var length = self.hand.coordinates.size();
-        var result = new [length];
-
-        var sinCos = [Math.cos(angle), Math.sin(angle)];
-        var transformMatrix = [
-            sinCos,
-            [-sinCos[1], sinCos[0]],
-        ];
-        var moveMatrix = [screenCenterPoint];
-        var oldPoint = new [1];
-        for (var index = 0; index < length; index += 1) {
-            oldPoint[0] = self.hand.coordinates[index];
-            var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
-            result[index] = point[0];
+        for (var index = 0; index < self.length; index += 1) {
+            self.idxLength = self.polygon.mesh[index][2];
+            var res = self.polygon.mesh[index][1];
+            arrayMultiply(res, self.coordinates[index][1], self.transformMatrix, self.idxLength, 2, 2);
+            for (var idx = 0; idx < idxLength; idx += 1) {
+                res[idx][0] = res[idx][0] + self.engine.centerPoint[0];
+                res[idx][1] = res[idx][1] + self.engine.centerPoint[1];
+            }
         }
 
-        self.polygon.color = self.hand.color;
-        self.polygon.mesh = [result];
-
-        self.accumulatedTime -= deltaTime;
-        if (self.accumulatedTime > 0) {
+        self.engine.clipArea = self.hand.clipAreas[self.time.secondsNumber];
+        /*if (self.light == null) {
             return;
         }
-        self.accumulatedTime = self.fastUpdate;
-
+        if (self.cacheClipArea[self.time.secondsNumber] != null) {
+            self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];
+            System.println(self.cacheClipArea);
+            return;
+        }
         var minX = self.engine.width;
         var minY = self.engine.height;
         var maxX = 0;
         var maxY = 0;
-        for (var index = 0; index < length; index += 1) {
-            var point = self.polygon.mesh[0][index];
-            minX = min(minX, point[0]);
-            minY = min(minY, point[1]);
-            maxX = max(maxX, point[0]);
-            maxY = max(maxY, point[1]);
+        for (var index = 0; index < self.length; index += 1) {
+            var idxLength = self.polygon.mesh[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                var point = self.polygon.mesh[index][1][idx];
+                minX = min(minX, point[0]);
+                minY = min(minY, point[1]);
+                maxX = max(maxX, point[0]);
+                maxY = max(maxY, point[1]);
+            }
         }
-        self.engine.clipArea[0][0] = max(0, minX - 15);
-        self.engine.clipArea[0][1] = max(0, minY - 15);
-        self.engine.clipArea[1][0] = min(self.engine.width, maxX - self.engine.clipArea[0][0] + 15);
-        self.engine.clipArea[1][1] = min(self.engine.height, maxY - self.engine.clipArea[0][1] + 15);
+        self.cacheClipArea[self.time.secondsNumber] = [
+            [max(0, minX - 12).toNumber(),
+            max(0, minY - 12).toNumber()],
+            [min(self.engine.width - max(0, minX - 12), maxX - self.engine.clipArea[0][0] + 12).toNumber(),
+            min(self.engine.height - max(0, minY - 12), maxY - self.engine.clipArea[0][1] + 12).toNumber()]
+        ];
+        self.engine.clipArea = self.cacheClipArea[self.time.secondsNumber];*/
     }
 }

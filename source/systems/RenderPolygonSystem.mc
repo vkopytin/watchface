@@ -1,22 +1,24 @@
 using Toybox.Lang;
 
 class RenderPolygonSystem {
-    static function create(components) as RenderPolygonSystem {
-        var inst = new RenderPolygonSystem(components);
-
-        return inst;
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:engine) and entity.hasKey(:polygon)) {
+            systems.add(new RenderPolygonSystem(entity));
+        }
     }
 
-    static function isCompatible(entity) {
-        return entity.hasKey(:polygon);
-    }
-
+    var components;
+    var engine as Engine;
     var polygon as ShapeComponent;
-    var stats as PerformanceStatisticsComponent;
+    var buffer = true;
 
     function initialize(components) {
+        self.components = components;
+        self.engine = components[:engine];
         self.polygon = components[:polygon];
-        self.stats = components[:stats];
+        if (components.hasKey(:buffer)) {
+            self.buffer = components[:buffer];
+        }
     }
 
     function init() {
@@ -24,11 +26,19 @@ class RenderPolygonSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.polygon.color, Graphics.COLOR_TRANSPARENT);
-        var length = self.polygon.mesh.size();
-        for (var index = 0; index < length; index += 1) {
-            var mesh = self.polygon.mesh[index];
-            dc.fillPolygon(mesh);
+        var length = self.polygon.length;
+        if (self.buffer) {
+            for (var index = 0; index < length; index += 1) {
+                var mesh = self.polygon.mesh[index];
+                context.dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);
+                context.dc.fillPolygon(mesh[1]);
+            }
+        } else {
+            for (var index = 0; index < length; index += 1) {
+                var mesh = self.polygon.mesh[index];
+                dc.setColor(mesh[0], Graphics.COLOR_TRANSPARENT);
+                dc.fillPolygon(mesh[1]);
+            }
         }
     }
 }

@@ -1,19 +1,19 @@
 import Toybox.Math;
 import Toybox.Lang;
 
-function minutesHandSystemCreate(components) {
-    var inst = new MinutesHandSystem(components);
-
-    return inst;
-}
-
-function minutesHandSystemIsCompatible(entity) {
-    return entity.hasKey(:time)
-        && entity.hasKey(:minutesHand)
-        && entity.hasKey(:polygon);
-}
-
 class MinutesHandSystem {
+    static function create(components) {
+        var inst = new MinutesHandSystem(components);
+
+        return inst;
+    }
+
+    static function isCompatible(entity) {
+        return entity.hasKey(:time)
+            && entity.hasKey(:minutesHand)
+            && entity.hasKey(:polygon);
+    }
+
     var engine;
     var time as TimeComponent;
     var hand as HandComponent;
@@ -22,6 +22,10 @@ class MinutesHandSystem {
 
     var fastUpdate = (5 * 1000) as Long; // skip updates for 5 secs
     var accumulatedTime = 0 as Long;
+
+    var PIDiv30 = Math.PI / 30.0;
+    var length = 0;
+    var transformMatrix = [[0, 0], [0, 0]];
 
     function initialize(components) {
         self.engine = components[:engine];
@@ -32,7 +36,20 @@ class MinutesHandSystem {
     }
 
     function init() {
-        
+        self.length = self.hand.coordinates.size();
+
+        var result = new [self.length];
+        for (var index = 0; index < self.length; index += 1) {
+            var idxLength = self.hand.coordinates[index][1].size();
+            var res = new [idxLength];
+            for (var idx = 0; idx < idxLength; idx++) {
+                res[idx] = [0,0];
+            }
+            result[index] = [self.hand.coordinates[index][0], res, idxLength];
+        }
+
+        self.polygon.mesh = result;
+        self.polygon.length = result.size();
     }
 
     function update(deltaTime) {
@@ -42,28 +59,22 @@ class MinutesHandSystem {
         }
 
         self.accumulatedTime = self.fastUpdate;
-        var screenCenterPoint = self.engine.centerPoint;
 
-        var angle = (self.time.minutes / 30.0 + self.time.seconds / 60.0 / 30.0) * Math.PI;
+        var angle = (self.time.minutes + self.time.seconds / 60.0) * self.PIDiv30;
 
-        var length = self.hand.coordinates.size();
-        var result = new [length];
+        self.transformMatrix[0][0] = Math.cos(angle);
+        self.transformMatrix[0][1] = Math.sin(angle);
+        self.transformMatrix[1][0] = -self.transformMatrix[0][1];
+        self.transformMatrix[1][1] = self.transformMatrix[0][0];
 
-        var sinCos = [Math.cos(angle), Math.sin(angle)];
-        var transformMatrix = [
-            sinCos,
-            [-sinCos[1], sinCos[0]],
-        ];
-        var moveMatrix = [screenCenterPoint];
-
-        var oldPoint = new [1];
         for (var index = 0; index < length; index += 1) {
-            oldPoint[0] = self.hand.coordinates[index];
-            var point = add(multiply(oldPoint, transformMatrix), moveMatrix);
-            result[index] = point[0];
+            var idxLength = self.polygon.mesh[index][2]; // self.hand.coordinates[index][1].size();
+            var res = self.polygon.mesh[index][1];
+            var turnedMesh = arrayMultiply(res, self.hand.coordinates[index][1], transformMatrix, idxLength, 2, 2);
+            for (var idx = 0; idx < idxLength; idx++) {
+                res[idx][0] = turnedMesh[idx][0] + self.engine.centerPoint[0];
+                res[idx][1] = turnedMesh[idx][1] + self.engine.centerPoint[1];
+            }
         }
-
-        self.polygon.color = self.hand.color;
-        self.polygon.mesh = [result];
     }
 }

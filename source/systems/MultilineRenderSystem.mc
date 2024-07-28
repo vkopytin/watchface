@@ -1,16 +1,18 @@
 using Toybox.Lang;
 
-function multilineRenderSystemCreate(components) as MultilineRenderSystem {
-    var inst = new MultilineRenderSystem(components);
-
-    return inst;
-}
-
-function multilineRenderSystemIsCompatible(entity) {
-    return entity.hasKey(:polygon) and entity.hasKey(:multiline);
-}
-
 class MultilineRenderSystem {
+    static function create(components) as MultilineRenderSystem {
+        var inst = new MultilineRenderSystem(components);
+
+        return inst;
+    }
+
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:polygon) and entity.hasKey(:multiline)) {
+            systems.add(new MultilineRenderSystem(entity));
+        }
+    }
+
     var polygon as ShapeComponent;
     var stats as PerformanceStatisticsComponent;
 
@@ -20,15 +22,15 @@ class MultilineRenderSystem {
     }
 
     function init() {
-        
+
     }
 
     function render(dc, context) {
-        dc.setColor(0xaaffaa, Graphics.COLOR_TRANSPARENT);
+        context.dc.setColor(0xaaffaa, Graphics.COLOR_TRANSPARENT);
         var length = self.polygon.mesh.size();
         for (var index = 0; index < length; index += 1) {
             var mesh = self.polygon.mesh[index];
-            drawMultiLine(dc, mesh);
+            drawMultiLine(context.dc, mesh);
         }
     }
 }

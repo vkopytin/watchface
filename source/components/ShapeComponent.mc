@@ -5,7 +5,6 @@ function shapeComponentCreate() as ShapeComponent {
 }
 
 class ShapeComponent {
-    var color = Graphics.COLOR_GREEN;
-
-    var mesh = [[[0, 0], [10, 10]]];
+    var mesh = [];
+    var length = 0;
 }

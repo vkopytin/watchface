@@ -3,23 +3,19 @@ import Toybox.Math;
 import Toybox.Activity;
 import Toybox.Graphics;
 
-function barometerSensorSystemCreate(components) as BarometerSensorSystem {
-    var inst = new BarometerSensorSystem(components);
-
-    return inst;
-}
-
-function barometerSensorSystemIsCompatible(entity) as Boolean {
-    return entity.hasKey(:barometer);
-}
-
 class BarometerSensorSystem {
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:barometer)) {
+            systems.add(new BarometerSensorSystem(entity));
+        }
+    }
+
     var engine as Engine;
     var barometer as BarometerSensorComponent;
     var stats as PerformanceStatisticsComponent;
 
-    var fastUpdate = (60 * 1000) as Long; // keep fast updates for min
-    var accumulatedTime = 0 as Long;
+    var fastUpdate = (60 * 1000) as Number; // keep fast updates for min
+    var accumulatedTime = 0 as Number;
 
     function initialize(components) {
         self.engine = components[:engine] as Engine;
@@ -70,15 +66,15 @@ class BarometerSensorSystem {
     function render(dc, context) {
         var point = self.barometer.point;
 
-        dc.setColor(self.barometer.color, Graphics.COLOR_TRANSPARENT);
-		dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.barometer.pressureStr, Graphics.TEXT_JUSTIFY_LEFT); // pressure in hPa
+        context.dc.setColor(self.barometer.color, Graphics.COLOR_TRANSPARENT);
+		context.dc.drawText(point[0], point[1], Graphics.FONT_SYSTEM_XTINY, self.barometer.pressureStr, Graphics.TEXT_JUSTIFY_LEFT); // pressure in hPa
 
         var point2 = self.engine.centerPoint;
         var degrees = 1.0 * self.barometer.pressure;
         var radius = 130;
 
         //drawGauge(dc, point2, degrees, 125, 170, 60, self.barometer.ranges, self.barometer.colors);
-        drawArrow(dc, point2, degrees, radius);
+        drawArrow(context.dc, point2, degrees, radius);
     }
 }
 
@@ -97,7 +93,7 @@ function drawArrow(dc, point, value, radius) {
     var arrowLength = gaugeArrowCoords.size();
     var arrowDegree = -88 -maxRangeDegree / range * (value - minValue);
     var angle = Math.PI * arrowDegree / 180;
-    
+
     var sinCos = [Math.cos(angle), Math.sin(angle)];
     var transformMatrix = [
         sinCos,

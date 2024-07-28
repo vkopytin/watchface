@@ -5,14 +5,10 @@ import Toybox.Graphics;
 import Toybox.ActivityMonitor;
 
 class HeartRateSystem {
-    static function create(components, api as API_Functions) as HeartRateSystem {
-        var inst = new HeartRateSystem(components, api);
-
-        return inst;
-    }
-
-    static function isCompatible(entity) as Boolean {
-        return entity.hasKey(:heartRate);
+    static function setup(systems, entity, api) {
+        if (entity.hasKey(:heartRate)) {
+            systems.add(new HeartRateSystem(entity, api));
+        }
     }
 
     var api as API_Functions;
@@ -57,8 +53,8 @@ class HeartRateSystem {
     }
 
     function render(dc, context) {
-        dc.setColor(self.heartRate.color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
+        context.dc.setColor(self.heartRate.color, Graphics.COLOR_TRANSPARENT);
+        context.dc.drawText(
             self.heartRate.position[0], self.heartRate.position[1],
             Graphics.FONT_SYSTEM_XTINY,
             self.heartRate.value,

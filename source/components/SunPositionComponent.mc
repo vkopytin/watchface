@@ -6,7 +6,7 @@ class SunPositionComponent {
     }
     var isDay = true;
     var color = 0x005555;
-    var position = [85, 15];
+    var position = [60, 40];
     var sunset = "-:--";
     var sunrise = "-:--";
     var locationDegrees = [51.107883, 17.038538];
